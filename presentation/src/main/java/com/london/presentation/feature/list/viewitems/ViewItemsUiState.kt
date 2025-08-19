@@ -10,6 +10,7 @@ data class ViewItemsUiState(
     val listTitle: String = "",
     val error: ErrorState? = null,
     val isSnackBarSuccessVisible: Boolean = false,
+    val isSnackBarErrorVisible: Boolean = false,
     val isLoading: Boolean = false,
     val isDeleteBottomSheetVisible: Boolean = false,
     val listItems: Flow<PagingData<Movie>> = flow {},

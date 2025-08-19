@@ -13,7 +13,7 @@ import com.london.data.mapper.details.tvshow.toEpisodesEntity
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toReviewEntity
-import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
@@ -121,12 +121,12 @@ class TvShowRepositoryImplTest {
     fun `getTvShowDetailsById should throw ValidationException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowDetailsById(123)
-        } throws NetworkException.ValidationException(
+        } throws ResponseException(
             message = "validation error",
-            status = 422
+            code = 422
         )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.getTvShowDetailsById(123)
         }
     }
@@ -135,12 +135,12 @@ class TvShowRepositoryImplTest {
     fun `getTvShowImagesById should throw TimeoutException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowImagesById(123)
-        } throws NetworkException.TimeoutException(
+        } throws ResponseException(
             message = "timeout error",
-            status = 408
+            code = 408
         )
 
-        assertThrows<NetworkException.TimeoutException> {
+        assertThrows<ResponseException> {
             repository.getImagesTvShowById(123)
         }
     }
@@ -151,12 +151,12 @@ class TvShowRepositoryImplTest {
             remoteDataSource.getTvShowSeasonEpisodes(
                 seasonNumber = 0, id = 123
             )
-        } throws NetworkException.HttpLockedException(
+        } throws ResponseException(
             message = "HttpLocked error",
-            status = 423
+            code = 423
         )
 
-        assertThrows<NetworkException.HttpLockedException> {
+        assertThrows<ResponseException> {
             repository.getTvShowSeasonEpisodes(123, 0)
         }
     }
@@ -168,12 +168,12 @@ class TvShowRepositoryImplTest {
                 remoteDataSource.getEpisodeDetails(
                     tvShowId = 123, seasonNumber = 0, episodeNumber = 0
                 )
-            } throws NetworkException.ServerErrorException(
+            } throws ResponseException(
                 message = "server error",
-                status = 500
+                code = 500
             )
 
-            assertThrows<NetworkException.ServerErrorException> {
+            assertThrows<ResponseException> {
                 repository.getTvShowEpisodeByPosition(123, 0, 0)
             }
         }
@@ -305,9 +305,9 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getEpisodeVideos should throw NetworkException when remote call fails`() = runTest {
         // Given
-        val networkException = NetworkException.ServerErrorException(
+        val networkException = ResponseException(
             message = "Server error",
-            status = 500
+            code = 500
         )
 
         coEvery {
@@ -317,7 +317,7 @@ class TvShowRepositoryImplTest {
         }.throws(networkException)
 
         // When & Then
-        val actualException = assertThrows<NetworkException.ServerErrorException> {
+        val actualException = assertThrows<ResponseException> {
             repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
         }
 
@@ -331,12 +331,12 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.UnAuthorizedException(
+        } throws ResponseException(
             message = "401 Unauthorized",
-            status = 401
+            code = 401
         )
 
-        assertThrows<NetworkException.UnAuthorizedException> {
+        assertThrows<ResponseException> {
             repository.getTvShowReviews(tvShowId, page)
         }
     }
@@ -348,12 +348,12 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.TimeoutException(
+        } throws ResponseException(
             message = "Request timed out",
-            status = 408
+            code = 408
         )
 
-        assertThrows<NetworkException.TimeoutException> {
+        assertThrows<ResponseException> {
             repository.getTvShowReviews(tvShowId, page)
         }
     }
@@ -365,12 +365,12 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.HttpLockedException(
+        } throws ResponseException(
             message = "Resource locked",
-            status = 423
+            code = 423
         )
 
-        assertThrows<NetworkException.HttpLockedException> {
+        assertThrows<ResponseException> {
             repository.getTvShowReviews(tvShowId, page)
         }
     }
@@ -382,12 +382,12 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.ValidationException(
+        } throws ResponseException(
             message = "Invalid data",
-            status = 422
+            code = 422
         )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.getTvShowReviews(tvShowId, page)
         }
     }
@@ -527,12 +527,12 @@ class TvShowRepositoryImplTest {
         val seasonNumber = 1
         coEvery {
             remoteDataSource.getTvSeasonTrailer(tvShowId, seasonNumber)
-        } throws NetworkException.ValidationException(
+        } throws ResponseException(
             message = "validation error",
-            status = 422
+            code = 422
         )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.getTvSeasonTrailer(tvShowId, seasonNumber)
         }
     }
@@ -701,13 +701,13 @@ class TvShowRepositoryImplTest {
                     any(), PAGE_NUMBER
                 )
             } returns Result.failure(
-                NetworkException.HttpLockedException(
+                ResponseException(
                     message = "Resource locked",
-                    status = 423
+                    code = 423
                 )
             )
             //When //Then
-            assertThrows<NetworkException.HttpLockedException> {
+            assertThrows<ResponseException> {
                 repository.getTvShowsByGenre(
                     TvShowGenre.WESTERN, PAGE_NUMBER
                 )
@@ -989,15 +989,15 @@ class TvShowRepositoryImplTest {
     fun `getPopularTvShows - when network throws HttpLockedException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.HttpLockedException(
+            val exception = ResponseException(
                 message = "Resource locked",
-                status = 423
+                code = 423
             )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { remoteDataSource.getPopularTvShows() } throws exception
 
             // When & Then
-            assertThrows<NetworkException.HttpLockedException> {
+            assertThrows<ResponseException> {
                 repository.getPopularTvShows()
             }
 
@@ -1009,15 +1009,15 @@ class TvShowRepositoryImplTest {
     fun `getPopularTvShows - when network throws ValidationException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.ValidationException(
+            val exception = ResponseException(
                 message = "Invalid data",
-                status = 422
+                code = 422
             )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { remoteDataSource.getPopularTvShows() } throws exception
 
             // When & Then
-            assertThrows<NetworkException.ValidationException> {
+            assertThrows<ResponseException> {
                 repository.getPopularTvShows()
             }
 
@@ -1197,7 +1197,6 @@ class TvShowRepositoryImplTest {
         private const val GUSET_SESSION = "mockGuestSessionId"
         private const val USER_SESSION = "mockUserSessionId"
         private const val PAGE = 1
-        private const val CATEGORY_ID = 2
 
         fun fakeTvShowEpisodeResponse(
             id: Int = 1,
@@ -1278,6 +1277,7 @@ class TvShowRepositoryImplTest {
             id = actorId,
             cast = cast
         )
+
         private val mediaStatesDto = AccountStatesResponse(
             id = 1,
             favorite = true,
@@ -1388,7 +1388,7 @@ class TvShowRepositoryImplTest {
                 posterPath = "test_poster.jpg",
                 genreIds = listOf(18, 35)
             )
-            return ApiResponse<TrendingResponse>(
+            return ApiResponse(
                 totalPages = 10,
                 currentPage = 1,
                 items = listOf(mockTrendingItem),
