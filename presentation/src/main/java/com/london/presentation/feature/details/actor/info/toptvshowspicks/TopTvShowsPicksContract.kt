@@ -4,5 +4,4 @@ interface TopTvShowsPicksContract {
     fun onBackClick()
     fun onRetryClick()
     fun onTvShowClick(tvShowId: Int)
-    fun onSaveTvShowClick(tvShowId: Int)
 }

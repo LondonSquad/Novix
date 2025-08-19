@@ -50,8 +50,7 @@ private fun Content(
             items = state.tvShowDetails.mediaItems,
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
-            onItemClick = { contract.onTvShowClick(it.id) },
-            onSavedClick = { contract.onSaveTvShowClick(it.id) },
+            onItemClick = { contract.onTvShowClick(it.id) }
         )
     }
 }
