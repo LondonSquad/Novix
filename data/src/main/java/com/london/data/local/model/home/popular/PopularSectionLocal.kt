@@ -1,7 +1,7 @@
 package com.london.data.local.model.home.popular
 
 import androidx.room.Entity
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 @Entity(
     tableName = "popular_section_table",

@@ -1,7 +1,6 @@
 package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.entity.recent.MediaType
 
 interface ListContract {
 

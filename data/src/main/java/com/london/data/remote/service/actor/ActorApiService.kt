@@ -2,11 +2,11 @@ package com.london.data.remote.service.actor
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
-import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
-import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
-import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.data.remote.model.details.actor.ActorDetailsResponse
+import com.london.data.remote.model.details.actor.image.ActorImageResponse
+import com.london.data.remote.model.details.movie.cast.MovieCastResponse
+import com.london.data.remote.model.details.tvshow.TvShowCastRemoteResponse
+import com.london.data.remote.model.trending.TrendingResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,26 +1,22 @@
-@file:KoverIgnore
-
 package com.london.data.mapper.home.popular
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.popular.PopularMovieResponse
+import com.london.data.remote.model.popular.PopularMovieResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
-fun PopularMovieResponse.toPopularMovie(): PopularMedia {
-    return PopularMedia(
-        id = id.orZero(),
-        name = title.orEmpty(),
-        posterUrl = posterPath.asImageUrlOrEmpty(),
-        rating = voteAverage.orZero().roundToDecimal(),
-        mediaType = MediaType.Movie
-    )
-}
+fun PopularMovieResponse.toPopularMovie(): PopularMedia = PopularMedia(
+    id = id.orZero(),
+    name = title.orEmpty(),
+    posterUrl = posterPath.asImageUrlOrEmpty(),
+    rating = voteAverage.orZero().roundToDecimal(),
+    mediaType = MediaType.Movie
+)
+
 
 fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMedia> =
     items.map { it.toPopularMovie() }

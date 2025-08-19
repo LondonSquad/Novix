@@ -63,7 +63,7 @@ fun TopRatedScreen(
     val topRatedTvShowFlow = state.tvSeries.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = topRatedTvShowFlow.isLoading() && topRatedMovieFlow.isLoading(),
+        isLoading = state.isLoading,
         isError = topRatedMovieFlow.loadState.refresh is LoadState.Error
             && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBackClicked,

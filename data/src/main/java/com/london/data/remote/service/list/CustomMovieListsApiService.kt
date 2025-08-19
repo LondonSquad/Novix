@@ -1,5 +1,6 @@
 package com.london.data.remote.service.list
 
+import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.list.CreateCustomListBody
 import com.london.data.remote.model.list.CreateCustomListResponse
@@ -17,39 +18,39 @@ import retrofit2.http.Query
 
 interface CustomMovieListsApiService {
 
-    @POST("3/list")
+    @POST(ApiConstants.CREATE_CUSTOM_LIST_PATH)
     suspend fun create(
         @Query("session_id") sessionId: String?,
         @Body createCustomListBody: CreateCustomListBody
     ): Response<CreateCustomListResponse>
 
-    @DELETE("3/list/{list_id}")
+    @DELETE(ApiConstants.DELETE_CUSTOM_LIST_PATH)
     suspend fun delete(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String?
     ): Response<CustomListResponse>
 
-    @GET("3/list/{list_id}")
+    @GET(ApiConstants.GET_LIST_DETAILS_PATH)
     suspend fun getDetails(
         @Path("list_id") listId: Int,
         @Query("page") page: Int
     ): Response<ListDetailsResponse>
 
-    @POST("3/list/{list_id}/add_item")
+    @POST(ApiConstants.ADD_MOVIE_TO_LIST_PATH)
     suspend fun addMovieToList(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String?,
         @Body movieAdditionBody: ListMovieBody
     ): Response<CustomListResponse>
 
-    @POST("3/list/{list_id}/remove_item")
+    @POST(ApiConstants.REMOVE_MOVIE_FROM_LIST_PATH)
     suspend fun removeMovieFromList(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String?,
         @Body movieDeletionBody: ListMovieBody
     ): Response<CustomListResponse>
 
-    @GET("3/account/0/lists")
+    @GET(ApiConstants.GET_ACCOUNT_LISTS_PATH)
     suspend fun getAllUserLists(
         @Query("session_id") sessionId: String?,
         @Query("page") page: Int

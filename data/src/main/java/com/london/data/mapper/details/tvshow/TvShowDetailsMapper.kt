@@ -1,6 +1,6 @@
 package com.london.data.mapper.details.tvshow
 
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal

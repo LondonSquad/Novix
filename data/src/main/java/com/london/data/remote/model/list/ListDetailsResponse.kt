@@ -1,6 +1,6 @@
 package com.london.data.remote.model.list
 
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +13,5 @@ data class ListDetailsResponse(
     @SerialName("name")
     val name: String? = null,
     @SerialName("items")
-    val items: List<MovieRemote>? = null,
+    val items: List<SearchMovieRemote>? = null,
 )

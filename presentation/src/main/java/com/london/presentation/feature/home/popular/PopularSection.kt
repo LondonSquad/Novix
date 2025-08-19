@@ -31,8 +31,8 @@ import androidx.compose.ui.util.lerp
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.recent.MediaType.Companion.isMovie
+import com.london.domain.entity.shared.MediaType
+import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection.CARD_HORIZONTAL_PADDING_DP
 import com.london.presentation.feature.home.popular.PopularSection.CARD_WIDTH_DP

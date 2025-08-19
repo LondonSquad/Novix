@@ -53,10 +53,10 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.recent.MediaType.Companion.isMovie
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.shared.MediaType
+import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.HomeCard

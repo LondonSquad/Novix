@@ -1,5 +1,3 @@
-@file:KoverIgnore
-
 package com.london.data.local.database.dao.recent.viewed
 
 import androidx.room.Dao
@@ -10,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.london.data.local.database.dao.recent.RecentDao
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
-import com.london.domain.KoverIgnore
 
 @Dao
 interface RecentViewedDao : RecentDao<RecentViewedLocal> {

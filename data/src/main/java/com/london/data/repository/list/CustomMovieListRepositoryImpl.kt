@@ -12,11 +12,11 @@ import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.orZero
-import com.london.domain.AppPreferencesService
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieList
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.CustomMovieListRepository
+import com.london.domain.service.AppPreferencesService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

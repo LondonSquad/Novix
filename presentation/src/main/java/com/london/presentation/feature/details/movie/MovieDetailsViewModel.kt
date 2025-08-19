@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieDetails
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
