@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -82,6 +84,7 @@ fun <T> NavBar(
             .fillMaxWidth()
             .topBorder(navBarColors.topBorderColor, 1.dp)
             .background(color = navBarColors.backgroundColor)
+            .navigationBarsPadding()
             .padding(vertical = 7.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically

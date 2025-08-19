@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -58,7 +57,6 @@ fun NavHostGraph() {
                 exit = slideOutVertically(animationSpec = tween(), targetOffsetY = { it })
             ) {
                 NavBar(
-                    modifier = Modifier.navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
