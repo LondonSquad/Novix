@@ -30,7 +30,6 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 
-
 @Composable
 fun CategoriesItem(
     categoryName: String,
@@ -138,7 +137,6 @@ fun CategoryGridPreview() {
     }
 }
 
-// Fake Data class to represent a category item
 data class CategoryItem(
     val categoryName: String,
     val categoryImage: String,
