@@ -72,6 +72,7 @@ import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isNotZeroRate
@@ -158,12 +159,7 @@ private fun Content(
 
         TopBar(
             onBackClick = movieDetailsContract::onBackClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )

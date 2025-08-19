@@ -53,7 +53,7 @@ import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.episodeTopBar
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.headerDetailsCard
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
@@ -122,7 +122,7 @@ private fun Content(
     ) {
         TopBar(
             onBackClick = contract::onBackClick,
-            modifier = Modifier.episodeTopBar(backgroundAlpha),
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
