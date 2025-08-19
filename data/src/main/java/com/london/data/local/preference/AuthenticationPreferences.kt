@@ -8,49 +8,28 @@ import javax.inject.Inject
 class AuthenticationPreferences @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) {
-    fun getAuthKey(): String {
-        return BuildConfig.AUTHORIZATION_KEY
-    }
+    fun getAuthenticationKey(): String = BuildConfig.AUTHORIZATION_KEY
 
-    fun saveSessionId(id: String) {
-        sharedPreferences.edit { putString(SESSION_ID, id) }
-    }
+    fun saveSessionId(id: String) = sharedPreferences.edit { putString(SESSION_ID, id) }
 
-    fun getSessionId(): String? {
-        return sharedPreferences.getString(SESSION_ID, null)
-    }
+    fun getSessionId(): String? = sharedPreferences.getString(SESSION_ID, null)
 
-    fun saveRequestToken(token: String?) {
-        sharedPreferences.edit { putString(REQUEST_TOKEN, token) }
-    }
+    fun saveRequestToken(token: String?) = sharedPreferences.edit { putString(REQUEST_TOKEN, token) }
 
-    fun saveUsername(username: String) {
-        sharedPreferences.edit { putString(USERNAME, username) }
-    }
+    fun saveUsername(username: String) = sharedPreferences.edit { putString(USERNAME, username) }
 
-    fun saveAccountId(accountId: Int) {
-        sharedPreferences.edit { putInt(ACCOUNT_ID, accountId) }
-    }
+    fun saveAccountId(accountId: Int) = sharedPreferences.edit { putInt(ACCOUNT_ID, accountId) }
 
-    fun getAccountId(): Int {
-        return sharedPreferences.getInt(ACCOUNT_ID, 0)
-    }
+    fun getAccountId(): Int = sharedPreferences.getInt(ACCOUNT_ID, 0)
 
-    fun setGuestMode(isGuest: Boolean) {
-        sharedPreferences.edit { putBoolean(IS_GUEST, isGuest) }
-    }
+    fun setGuestMode(isGuest: Boolean) = sharedPreferences.edit { putBoolean(IS_GUEST, isGuest) }
 
-    fun isGuestMode(): Boolean {
-        return sharedPreferences.getBoolean(IS_GUEST, false)
-    }
 
-    fun saveGuestSessionId(id: String) {
-        sharedPreferences.edit { putString(GUEST_SESSION_ID, id) }
-    }
+    fun isGuestMode(): Boolean = sharedPreferences.getBoolean(IS_GUEST, false)
 
-    fun getGuestSessionId(): String? {
-        return sharedPreferences.getString(GUEST_SESSION_ID, null)
-    }
+    fun saveGuestSessionId(id: String) = sharedPreferences.edit { putString(GUEST_SESSION_ID, id) }
+
+    fun getGuestSessionId(): String? = sharedPreferences.getString(GUEST_SESSION_ID, null)
 
     fun clearAuthentication() {
         sharedPreferences.edit {
@@ -63,9 +42,7 @@ class AuthenticationPreferences @Inject constructor(
         }
     }
 
-    fun isLoggedIn(): Boolean {
-        return getSessionId() != null || getGuestSessionId() != null
-    }
+    fun isLoggedIn(): Boolean = getSessionId() != null || getGuestSessionId() != null
 
     companion object {
         private const val SESSION_ID = "session_id"

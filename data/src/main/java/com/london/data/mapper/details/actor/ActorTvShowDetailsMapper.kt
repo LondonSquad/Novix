@@ -12,7 +12,7 @@ import com.london.domain.entity.actor.cast.ActorMediaItems
 
 fun ActorTvShowDetailsResponse.toEntity(): ActorMediaDetails =
     ActorMediaDetails(
-        mediaItems = cast?.map { it.toEntity() }.orEmpty(),
+        mediaItems = cast?.map { it.toEntity() }.orEmpty()
     )
 
 
