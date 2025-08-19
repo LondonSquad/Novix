@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
@@ -52,7 +53,14 @@ private fun Content(
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },
-            onSavedClick = { contract.onSaveMovieClick(it.id) },
+            onSavedClick = { contract.onManageBookmarkClicked(it.id) },
+            hasSaveIcon = true
+        )
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = state.isBookmarkSheetVisible,
+            bookmarkedMovieId = state.bookmarkedMovieId
         )
     }
 }

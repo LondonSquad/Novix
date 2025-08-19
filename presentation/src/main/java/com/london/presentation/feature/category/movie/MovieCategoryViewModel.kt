@@ -53,6 +53,7 @@ class MovieCategoryViewModel @Inject constructor(
             )
         }
     }
+
     private fun initializeMovies(genreUi: MovieGenreUi) {
         tryToExecute(
             onStart = { onInitializeMoviesStarted(genre = genreUi) },
