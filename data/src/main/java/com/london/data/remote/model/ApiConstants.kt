@@ -51,4 +51,12 @@ object ApiConstants {
     const val CREATE_NEW_SESSION = "authentication/session/new"
     const val CREATE_SESSION = "authentication/session"
     const val CREATE_NEW_TOKEN_AFTER_LOGIN = "authentication/token/validate_with_login"
+    const val GET_ACCOUNT_DETAILS = "account"
+    const val CREATE_CUSTOM_LIST_PATH = "list"
+    const val DELETE_CUSTOM_LIST_PATH = "list/{list_id}"
+    const val GET_LIST_DETAILS_PATH = "list/{list_id}"
+    const val ADD_MOVIE_TO_LIST_PATH = "list/{list_id}/add_item"
+    const val REMOVE_MOVIE_FROM_LIST_PATH = "list/{list_id}/remove_item"
+    const val GET_ACCOUNT_LISTS_PATH = "account/{account_id}/lists"
+
 }
