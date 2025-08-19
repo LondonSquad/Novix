@@ -33714,7 +33714,18 @@
         "url": "https://github.com/yusufnasserdev"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "first_comment_at": "2025-08-19T21:20:42Z",
+        "last_comment_at": "2025-08-19T21:36:23Z",
+        "count": 3
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
