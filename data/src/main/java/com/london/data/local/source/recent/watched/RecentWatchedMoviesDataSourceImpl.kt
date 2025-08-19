@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 
-class RecentWatchedMoviesDataSource @Inject constructor(
+class RecentWatchedMoviesDataSourceImpl @Inject constructor(
     private val recentWatchedMoviesDao: RecentWatchedMoviesDao
 ) : RecentWatchedDataSource<RecentWatchedMovieLocal> {
 
