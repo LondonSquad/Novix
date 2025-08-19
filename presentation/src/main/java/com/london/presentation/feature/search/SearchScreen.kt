@@ -58,12 +58,12 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
-import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.container.ActorsLayout
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
