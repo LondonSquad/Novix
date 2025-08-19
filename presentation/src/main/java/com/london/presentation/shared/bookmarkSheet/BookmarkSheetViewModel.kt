@@ -39,7 +39,7 @@ class BookmarkSheetViewModel @Inject constructor(
     }
 
     override fun onAddToLists(bookmarkedId: Int) {
-        val listsToAdd = state.value.selectedLists.toList() // Capture current selection
+        val listsToAdd = state.value.selectedLists.toList()
 
         tryToExecute(
             onStart = { updateState { copy(isAddingToList = true) } },
@@ -67,7 +67,9 @@ class BookmarkSheetViewModel @Inject constructor(
                     )
                 }
             },
-            onCompleted = { updateState { copy(isAddingToList = false) } }
+            onCompleted = {
+                updateState { copy(isAddingToList = false) }
+            }
         )
     }
 

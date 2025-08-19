@@ -49,7 +49,7 @@ interface CustomMovieListsApiService {
         @Body movieDeletionBody: ListMovieBody
     ): Response<CustomListResponse>
 
-    @GET("3/account/{account_id}/lists")
+    @GET("3/account/0/lists")
     suspend fun getAllUserLists(
         @Query("session_id") sessionId: String?,
         @Query("page") page: Int

@@ -12,15 +12,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NavHostGraph
 import com.london.data.local.preference.readLanguageCode
+import com.london.data.worker.MovieListSyncWorker
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.presentation.localization.LocalizationManager
@@ -38,6 +39,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var localizationManager: LocalizationManager
+
+    @Inject
+    lateinit var workManager: androidx.work.WorkManager
 
     override fun attachBaseContext(newBase: Context) {
         val languageCode = readLanguageCode(newBase)
@@ -75,6 +79,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        MovieListSyncWorker.schedulePeriodicSync(workManager)
     }
 }
 

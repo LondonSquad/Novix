@@ -1,6 +1,7 @@
 package com.london.data.repository.authentication
 
 import com.london.data.local.preference.AuthenticationPreferences
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.mapper.account.toEntity
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionResponse
@@ -13,7 +14,8 @@ import javax.inject.Inject
 class AuthenticationRepositoryImpl @Inject constructor(
     private val authenticationRemoteDataSource: AuthenticationRemoteDataSource,
     private val accountRemoteDataSource: AccountRemoteDataSource,
-    private val authenticationPreferences: AuthenticationPreferences
+    private val authenticationPreferences: AuthenticationPreferences,
+    private val customMovieListLocalDataSource: CustomMovieListLocalDataSource
 ) : AuthenticationRepository {
     override suspend fun login(username: String, password: String): Boolean {
 
@@ -51,6 +53,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         if (sessionId != null && !authenticationPreferences.isGuestMode()) {
             authenticationRemoteDataSource.deleteSession(sessionId).getOrThrow()
         }
+        customMovieListLocalDataSource.clearAllCache()
         authenticationPreferences.clearAuthentication()
         return true
     }

@@ -67,9 +67,7 @@ fun NavHostGraph() {
                 )
             }
         },
-        snackbar = { data: SnackbarData ->
-            CustomSnackbarUI(data = data)
-        }
+        snackbar = { data: SnackbarData -> CustomSnackbarUI(data = data) }
     ) { innerPadding ->
         CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(

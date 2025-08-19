@@ -94,8 +94,6 @@ private fun Content(
         contract = contract,
     )
 
-
-
     if (state.isSnackBarErrorVisible) {
         SnackBarAnimation(
             stringResource(R.string.deletion_failed),

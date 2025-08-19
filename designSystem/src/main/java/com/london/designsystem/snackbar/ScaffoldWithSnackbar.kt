@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -45,11 +43,17 @@ private class SnackbarManager(
     val snackbarData = mutableStateOf<SnackbarData?>(null)
     private var job: Job? = null
 
-    override fun showMessage(message: String, icon: Int?, snackbarType: SnackbarType) {
+    override fun showMessage(
+        message: String,
+        icon: Int?,
+        snackbarType: SnackbarType,
+        onComplete: () -> Unit
+    ) {
         job?.cancel()
         job = coroutineScope.launch {
             snackbarData.value = SnackbarData(message, icon, snackbarType)
             delay(3000L)
+            onComplete()
             snackbarData.value = null
         }
     }
@@ -75,7 +79,7 @@ fun ScaffoldWithSnackbar(
     floatingActionButton: @Composable () -> Unit = {},
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
-    snackbar: @Composable (data: SnackbarData) -> Unit, // Slot for your custom snackbar UI
+    snackbar: @Composable (data: SnackbarData) -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -105,7 +109,9 @@ fun ScaffoldWithSnackbar(
                         animationSpec = tween()
                     )
                 ) {
-                    snackbar(currentSnackbarData!!)
+                    currentSnackbarData?.let {
+                        snackbar(it)
+                    }
                 }
             }
         }

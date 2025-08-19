@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -72,7 +72,6 @@ fun OnboardingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
-            .padding(WindowInsets.systemBars.asPaddingValues())
     ) {
         Content(
             pagerState = pagerState,
@@ -120,7 +119,11 @@ private fun Content(
     viewModel: OnboardingViewModel,
     scope: CoroutineScope
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+    ) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.weight(1f)
@@ -191,6 +194,7 @@ private fun SkipButton(
     AnimatedVisibility(visible) {
         Text(
             modifier = Modifier
+                .padding(WindowInsets.statusBars.asPaddingValues())
                 .padding(16.dp)
                 .clickable { onClick() },
             text = stringResource(R.string.skip),

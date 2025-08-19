@@ -133,6 +133,7 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     override suspend fun clearAllCache() {
         membershipDao.clearAll()
         movieListDao.clearAll()
+        syncMetadataDao.clearAll()
     }
 
     companion object {

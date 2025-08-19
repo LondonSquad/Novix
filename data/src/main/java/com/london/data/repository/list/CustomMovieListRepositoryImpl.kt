@@ -66,7 +66,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteMovieList(id: Int): Boolean {
-        return try {
+        return runCatching {
             val success = remoteDataSource.delete(
                 listId = id,
                 sessionId = authenticationPreferences.getSessionId()
@@ -75,12 +75,10 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             if (success) {
                 localDataSource.removeMovieListCache(id)
             }
-
-            success
-        } catch (e: Exception) {
-            crashReporter.logException(e)
-            false
-        }
+        }.onFailure {
+            crashReporter.logException(it)
+            throw it
+        }.isSuccess
     }
 
     override suspend fun getAllListedMovieIds(): List<Int> {
@@ -93,7 +91,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createMovieList(name: String): Boolean {
-        return try {
+        return runCatching {
             val result = remoteDataSource.create(
                 name = name,
                 sessionId = authenticationPreferences.getSessionId(),
@@ -117,10 +115,10 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             } else {
                 false
             }
-        } catch (e: Exception) {
-            crashReporter.logException(e)
-            false
-        }
+        }.onFailure {
+            crashReporter.logException(it)
+            throw it
+        }.isSuccess
     }
 
     override suspend fun getMovieListName(listId: Int): String {
@@ -144,44 +142,31 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieLists(pageNumber: Int): PagedFetchResponse<MovieList> {
-        return if (localDataSource.shouldRefreshCache()) {
-            val response = remoteDataSource.getAllMovieLists(
-                page = pageNumber,
-                sessionId = authenticationPreferences.getSessionId()
-            ).getOrThrow()
-
-            val localLists = response.items.map { it.toLocal() }
-            localDataSource.cacheMovieListsMetadata(localLists)
-
-            PagedFetchResponse(
-                currentPage = response.currentPage,
-                items = response.items.map { it.toEntity() },
-                totalPages = response.totalPages,
-                totalItems = response.totalItems
-            )
-        } else {
-            val allLists = localDataSource.getAllUserLists()
-            val itemsPerPage = 20
-            val startIndex = (pageNumber - 1) * itemsPerPage
-            val endIndex = minOf(startIndex + itemsPerPage, allLists.size)
-
-            val items = if (startIndex < allLists.size) {
-                allLists.subList(startIndex, endIndex).map { it.toEntity() }
-            } else {
-                emptyList()
-            }
-
-            PagedFetchResponse(
-                currentPage = pageNumber,
-                items = items,
-                totalPages = (allLists.size + itemsPerPage - 1) / itemsPerPage,
-                totalItems = allLists.size
-            )
+        if (localDataSource.shouldRefreshCache()) {
+            refreshMovieListCache()
         }
+
+        val allLists = localDataSource.getAllUserLists()
+        val itemsPerPage = 20
+        val startIndex = (pageNumber - 1) * itemsPerPage
+        val endIndex = minOf(startIndex + itemsPerPage, allLists.size)
+
+        val items = if (startIndex < allLists.size) {
+            allLists.subList(startIndex, endIndex).map { it.toEntity() }
+        } else {
+            emptyList()
+        }
+
+        return PagedFetchResponse(
+            currentPage = pageNumber,
+            items = items,
+            totalPages = (allLists.size + itemsPerPage - 1) / itemsPerPage,
+            totalItems = allLists.size
+        )
     }
 
     override suspend fun addMovieToList(listId: Int, movieId: Int): Boolean {
-        return try {
+        return runCatching {
             val result = remoteDataSource.addMovieToList(
                 listId = listId,
                 movieId = movieId,
@@ -201,10 +186,10 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             } else {
                 false
             }
-        } catch (e: Exception) {
-            crashReporter.logException(e)
-            false
-        }
+        }.onFailure {
+            crashReporter.logException(it)
+            throw it
+        }.isSuccess
     }
 
     override suspend fun getMovieListDetails(
@@ -224,7 +209,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeMovieFromList(listId: Int, movieId: Int): Boolean {
-        return try {
+        return runCatching {
             val result = remoteDataSource.removeMovieFromList(
                 listId = listId,
                 movieId = movieId,
@@ -244,65 +229,80 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             } else {
                 false
             }
-        } catch (e: Exception) {
-            crashReporter.logException(e)
-            false
-        }
+        }.onFailure {
+            crashReporter.logException(it)
+            throw it
+        }.isSuccess
     }
 
     override suspend fun refreshMovieListCache() {
         syncMutex.withLock {
-            try {
-                val memberships = mutableListOf<MovieListMembershipLocal>()
-                val lists = mutableListOf<MovieListLocal>()
-
-                var page = 1
-                do {
-                    val listsResponse = remoteDataSource.getAllMovieLists(
-                        page = page,
-                        sessionId = authenticationPreferences.getSessionId()
-                    ).getOrThrow()
-
-                    lists.addAll(listsResponse.items.map { it.toLocal() })
-
-                    for (list in listsResponse.items) {
-                        if (list.id == null) continue
-
-                        var moviePage = 1
-                        do {
-                            val moviesResponse = remoteDataSource.getDetails(
-                                listId = list.id,
-                                page = moviePage
-                            ).getOrThrow()
-
-                            moviesResponse.items?.forEach { movie ->
-                                if (movie.id == null) return@forEach
-
-                                memberships.add(
-                                    MovieListMembershipLocal(
-                                        movieId = movie.id,
-                                        listId = list.id
-                                    )
-                                )
-                            }
-
-                            moviePage++
-                        } while (moviePage <= MAX_PAGES && moviesResponse.items?.isNotEmpty() == true)
-                    }
-
-                    page++
-                } while (page <= listsResponse.totalPages)
+            runCatching {
+                val memberships = assembleMembershipsFromRemote()
+                val lists = assembleListsFromRemote()
 
                 localDataSource.cacheMovieListsMetadata(lists)
                 localDataSource.cacheMovieListMemberships(memberships)
                 localDataSource.markCacheRefreshed(true)
-
-            } catch (e: Exception) {
+            }.onFailure {
                 localDataSource.markCacheRefreshed(false)
-                crashReporter.logException(e)
-                throw e
+                crashReporter.logException(it)
+                throw it
             }
         }
+    }
+
+    private suspend fun assembleListsFromRemote(): MutableList<MovieListLocal> {
+        val lists = mutableListOf<MovieListLocal>()
+        var page = 1
+        do {
+            val response = remoteDataSource.getAllMovieLists(
+                page = page,
+                sessionId = authenticationPreferences.getSessionId()
+            ).getOrThrow()
+            val pageLists = response.items.map { it.toLocal() }
+            lists.addAll(pageLists)
+            page++
+        } while (page <= response.totalPages)
+        return lists
+    }
+
+    private suspend fun assembleMembershipsFromRemote(): MutableList<MovieListMembershipLocal> {
+        val memberships = mutableListOf<MovieListMembershipLocal>()
+        var page = 1
+        do {
+            val listsResponse = remoteDataSource.getAllMovieLists(
+                page = page,
+                sessionId = authenticationPreferences.getSessionId()
+            ).getOrThrow()
+
+            for (list in listsResponse.items) {
+                if (list.id == null) continue
+
+                var moviePage = 1
+                var membershipCount = 0
+                do {
+                    val moviesResponse = remoteDataSource.getDetails(
+                        listId = list.id,
+                        page = moviePage
+                    ).getOrThrow()
+                    val items = moviesResponse.items ?: emptyList()
+                    for (movie in items) {
+                        if (movie.id == null) continue
+                        memberships.add(
+                            MovieListMembershipLocal(
+                                movieId = movie.id,
+                                listId = list.id
+                            )
+                        )
+                        membershipCount++
+                    }
+                    moviePage++
+                } while (moviePage <= MAX_PAGES && items.isNotEmpty())
+            }
+            page++
+        } while (page <= listsResponse.totalPages)
+        return memberships
     }
 
     private suspend fun refreshMovieListCacheIfNecessary(forceRefresh: Boolean) {
