@@ -2,8 +2,8 @@ package com.london.presentation.feature.reviews
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
-import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
@@ -57,7 +57,7 @@ class ReviewsViewModel @Inject constructor(
         )
     }
 
-    private fun handleLoadReviewsSuccess(pagingFlow: Flow<PagingData<ReviewEntity>>) {
+    private fun handleLoadReviewsSuccess(pagingFlow: Flow<PagingData<Review>>) {
         updateState {
             copy(
                 reviews = pagingFlow,

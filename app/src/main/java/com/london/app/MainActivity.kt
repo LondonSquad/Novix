@@ -2,7 +2,6 @@ package com.london.app
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,14 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
-import androidx.core.graphics.toColorInt
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NavHostGraph
 import com.london.data.local.preference.readLanguageCode
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import com.london.presentation.localization.LocalizationManager
 import com.london.presentation.localization.wrapWithLocale
 import com.london.presentation.shared.ContentRestrictionProvider
@@ -48,12 +47,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
-        }
 
         setContent {
             val isAppDarkMode by appPreferencesService.isAppDarkMode.collectAsState()
@@ -90,8 +84,6 @@ private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
     val view = LocalView.current
     if (view.isInEditMode) return
 
-    val translucentScrimColor = "#00000000".toColorInt()
-
     LaunchedEffect(useDarkTheme) {
         val window = (view.context as Activity).window
         val insetsController = WindowInsetsControllerCompat(window, view)
@@ -100,10 +92,10 @@ private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
         insetsController.isAppearanceLightNavigationBars = !useDarkTheme
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.navigationBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.Transparent.toArgb()
             window.isNavigationBarContrastEnforced = false
         } else {
-            window.navigationBarColor = translucentScrimColor
+            window.navigationBarColor = Color.Transparent.toArgb()
         }
     }
 }

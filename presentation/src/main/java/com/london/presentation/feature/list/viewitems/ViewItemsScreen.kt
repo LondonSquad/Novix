@@ -70,7 +70,7 @@ private fun Content(
             onBack = null,
             onRetry = listItems::refresh,
             isLoading = state.isLoading,
-            isError = (state.error != null && state.error != ErrorState.EntryNotFound()),
+            isError = (state.error != null && state.error != ErrorState.RequestFailed()),
             emptyLayoutMessage = R.string.no_items_found,
             emptyLayoutImage = R.drawable.img_no_result,
             pagingFlow = listItems,
@@ -109,7 +109,7 @@ private fun SnackBarSection(state: ViewItemsUiState) {
             )
         }
 
-        state.error is ErrorState.EntryNotFound -> {
+        state.error is ErrorState.Timeout -> {
             SnackBarAnimation(stringResource(R.string.movie_not_found))
         }
 

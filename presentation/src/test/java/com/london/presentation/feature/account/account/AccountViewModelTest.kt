@@ -1,12 +1,12 @@
 package com.london.presentation.feature.account.account
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.AppPreferencesService
-import com.london.domain.contentrestriction.ContentRestrictionLevel
-import com.london.domain.entity.AccountInfo
-import com.london.domain.language.AppLanguage
-import com.london.domain.theme.AppTheme
-import com.london.domain.usecase.accountdetails.GetAccountDetailsUseCase
+import com.london.domain.entity.account.AccountInfo
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.language.AppLanguage
+import com.london.domain.entity.theme.AppTheme
+import com.london.domain.service.AppPreferencesService
+import com.london.domain.usecase.account.GetAccountInfoUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.AccountViewModel
 import com.london.presentation.feature.account.ActiveBottomSheet
@@ -31,7 +31,7 @@ class   AccountViewModelTest {
 
     private lateinit var appPreferencesService: AppPreferencesService
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    private lateinit var accountDetailsUseCase: GetAccountDetailsUseCase
+    private lateinit var accountDetailsUseCase: GetAccountInfoUseCase
     private lateinit var viewModel: AccountViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -45,7 +45,8 @@ class   AccountViewModelTest {
         
         every { appPreferencesService.isAppDarkMode } returns MutableStateFlow(false)
         every { appPreferencesService.appLanguage } returns MutableStateFlow(AppLanguage.ENGLISH)
-        every { appPreferencesService.contentRestrictionLevel } returns MutableStateFlow(ContentRestrictionLevel.MODERATE)
+        every { appPreferencesService.contentRestrictionLevel } returns MutableStateFlow(
+            ContentRestrictionLevel.MODERATE)
     }
 
     @After
@@ -287,7 +288,8 @@ class   AccountViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        assertThat(viewModel.state.value.currentContentRestriction).isEqualTo(ContentRestrictionLevel.STRICT)
+        assertThat(viewModel.state.value.currentContentRestriction).isEqualTo(
+            ContentRestrictionLevel.STRICT)
     }
 
     private fun setupViewModel() {

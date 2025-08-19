@@ -12,7 +12,7 @@ import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
 class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
-    val customMovieListsApiService: CustomMovieListsApiService
+    private val customMovieListsApiService: CustomMovieListsApiService
 ) : CustomMovieListsRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun create(

@@ -2,11 +2,10 @@ package com.london.presentation.feature.list.viewitems
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
-import com.london.domain.entity.Movie
-import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
+import com.london.domain.entity.movie.Movie
 import com.london.domain.usecase.movielist.GetMovieListNameUseCase
+import com.london.domain.usecase.movielist.ManageGetMovieUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
-import com.london.domain.usecase.movielist.RemoveMovieFromListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -18,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
-    private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
-    private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
+    private val manageGetMovieUseCase: ManageGetMovieUseCase,
     private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     savedStateHandle: SavedStateHandle
@@ -56,9 +54,9 @@ class ViewItemsViewModel @Inject constructor(
 
     override fun onRemoveMovieClick(id: Int) {
         tryToExecute(
-            block = { removeMovieFromListUseCase.invoke(listId = listId, movieId = id) },
+            block = { manageMovieListUseCase.removeMovieFromList(listId = listId, movieId = id) },
             onStart = { updateState { copy(error = null, isSnackBarSuccessVisible = false) } },
-            onError = { updateState { copy(error = ErrorState.EntryNotFound()) } },
+            onError = { updateState { copy(error = ErrorState.RequestFailed()) } },
             onSuccess = { updateState { copy(isSnackBarSuccessVisible = true) } }
         )
     }
@@ -87,9 +85,9 @@ class ViewItemsViewModel @Inject constructor(
         )
     }
 
-    private fun createMoviesPagingFlow(listId: Int): Flow<PagingData<Movie>> =
+    private fun createMoviesPagingFlow(listId: Int): Flow<PagingData<Movtatusie>> =
         createPagingSourceFlow(query = "") { _, pageNumber ->
-            val movies = getMovieListDetailsUseCase.invoke(
+            val movies = manageGetMovieUseCase.getMovieListDetails(
                 listId = listId,
                 pageNumber = pageNumber
             )

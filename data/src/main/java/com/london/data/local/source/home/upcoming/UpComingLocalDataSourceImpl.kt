@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class UpComingLocalDataSourceImpl @Inject constructor(
     private val upcomingSectionDao: UpcomingSectionDao
-): UpComingLocalDataSource{
+) : UpComingLocalDataSource {
 
     init {
         deleteExpiredData()
@@ -20,9 +20,9 @@ class UpComingLocalDataSourceImpl @Inject constructor(
         upcomingSectionDao.insert(item)
 
     override suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal =
-        upcomingSectionDao.getUpComingMoviesPage(categoryId, page)
+        upcomingSectionDao.getUpComingMoviesPage(categoryId = categoryId, page = page)
 
-    private fun deleteExpiredData(){
+    private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             upcomingSectionDao.getAll().forEach { upcomingSectionLocal ->
                 if (upcomingSectionLocal.date.isDayExpired())

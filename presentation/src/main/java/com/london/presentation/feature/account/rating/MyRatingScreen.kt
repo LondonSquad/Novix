@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,7 +19,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.SnackBarAnimation
@@ -82,7 +81,6 @@ private fun Content(
         ) {
             TopBar(
                 modifier = Modifier
-                    .statusBarsPadding()
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 title = stringResource(R.string.my_rating),

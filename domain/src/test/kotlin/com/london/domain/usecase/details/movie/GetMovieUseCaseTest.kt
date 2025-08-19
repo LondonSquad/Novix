@@ -1,19 +1,19 @@
 package com.london.domain.usecase.details.movie
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.AuthorDetails
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaType
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
@@ -669,7 +669,7 @@ class GetMovieUseCaseTest {
         private fun mockReviews() = PagedFetchResponse(
             currentPage = 1,
             items = listOf(
-                ReviewEntity(
+                Review(
                     id = "1",
                     content = "Great movie!",
                     authorName = "John Doe",

@@ -2,7 +2,7 @@ package com.london.presentation.feature.category.tvshow
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

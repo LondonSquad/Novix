@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
 import com.london.presentation.shared.ImageView
 import com.london.designsystem.R as dsR
@@ -90,6 +91,7 @@ private fun UserProfileIcon(avatarPath: String? = null) {
                 contentDescription = stringResource(R.string.user_profile),
                 modifier = Modifier.size(48.dp),
                 contentScale = ContentScale.Crop,
+                contentRestrictionLevel = ContentRestrictionLevel.OFF,
                 loadingContent = {
                     Icon(
                         painter = painterResource(dsR.drawable.user),

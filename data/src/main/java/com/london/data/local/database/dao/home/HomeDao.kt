@@ -1,8 +1,4 @@
-@file:KoverIgnore
-
 package com.london.data.local.database.dao.home
-
-import com.london.domain.KoverIgnore
 
 interface HomeDao<T> {
     suspend fun insert(item: T)

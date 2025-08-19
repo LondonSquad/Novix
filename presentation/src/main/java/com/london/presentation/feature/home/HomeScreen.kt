@@ -45,8 +45,8 @@ import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
-import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.movie.UpComingMovie
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection
 import com.london.presentation.feature.home.section.ContinueWatchingSection
@@ -182,9 +182,7 @@ private fun HomeScreenLayout(
     homeScreenContract: HomeScreenContract
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(WindowInsets.statusBars.asPaddingValues())
+        modifier = Modifier.fillMaxSize()
     ) {
         BackgroundGradient(
             screenWidth = screenWidth,
@@ -257,6 +255,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier) {
         appIconContentDescription = R.string.novix_icon.string,
         modifier = modifier
             .background(NovixTheme.colors.surface)
+            .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(top = 12.dp, bottom = 8.dp)
     )
 }

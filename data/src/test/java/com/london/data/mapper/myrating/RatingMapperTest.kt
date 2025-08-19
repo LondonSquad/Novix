@@ -1,7 +1,7 @@
 package com.london.data.mapper.myrating
 
 import com.london.data.remote.model.myrating.RatingMediaResponse
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

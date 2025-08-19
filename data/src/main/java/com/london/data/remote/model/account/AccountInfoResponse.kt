@@ -15,14 +15,4 @@ data class AccountInfoResponse(
     val avatar: AvatarInfo? = null
 )
 
-@Serializable
-data class AvatarInfo(
-    @SerialName("tmdb")
-    val tmdb: AvatarDetails?
-)
 
-@Serializable
-data class AvatarDetails(
-    @SerialName("avatar_path")
-    val avatarPath: String? = null
-)

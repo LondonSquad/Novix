@@ -4,10 +4,10 @@ import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

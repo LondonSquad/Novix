@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -53,7 +49,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actordetails.cast.ActorMediaItems
+import com.london.domain.entity.actor.ActorMediaItems
 import com.london.presentation.R
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -62,6 +58,7 @@ import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 
@@ -130,10 +127,7 @@ private fun Content(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues()
-                    .calculateBottomPadding() + 16.dp
-            ),
+            contentPadding = PaddingValues(bottom = 16.dp),
             state = lazyState
         ) {
             item {
@@ -180,13 +174,7 @@ private fun Content(
         TopBar(
             onBackClick = actorDetailsContract::onBackClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
-                .padding(
-                    start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues()
-                        .calculateTopPadding() + 12.dp
-                )
+                .detailsTopBar(backgroundAlpha)
                 .zIndex(1f)
         )
     }
@@ -426,13 +414,13 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
     if (uiState.isLoading || uiState.error != null) return
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
-            uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
-            uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
-            uiState.actorDetails.biography.isBlank() &&
-            (uiState.actorDetails.name.isBlank() &&
-                    uiState.actorDetails.birthday.isBlank() &&
-                    uiState.actorDetails.placeOfBirth.isBlank() &&
-                    uiState.actorDetails.knownForDepartment.isBlank())
+        uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
+        uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
+        uiState.actorDetails.biography.isBlank() &&
+        (uiState.actorDetails.name.isBlank() &&
+            uiState.actorDetails.birthday.isBlank() &&
+            uiState.actorDetails.placeOfBirth.isBlank() &&
+            uiState.actorDetails.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -445,12 +433,12 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
 
 private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
     return uiState.actorDetails.name.isNotBlank() ||
-            uiState.actorDetails.birthday.isNotBlank() ||
-            uiState.actorDetails.placeOfBirth.isNotBlank() ||
-            uiState.actorDetails.knownForDepartment.isNotBlank() ||
-            uiState.actorDetails.biography.isNotBlank() ||
-            !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
-            !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
+        uiState.actorDetails.birthday.isNotBlank() ||
+        uiState.actorDetails.placeOfBirth.isNotBlank() ||
+        uiState.actorDetails.knownForDepartment.isNotBlank() ||
+        uiState.actorDetails.biography.isNotBlank() ||
+        !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
+        !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
 }
 
 @Preview

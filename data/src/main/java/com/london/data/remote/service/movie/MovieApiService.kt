@@ -4,19 +4,19 @@ package com.london.data.remote.service.movie
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
+import com.london.data.remote.model.details.actor.movie.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
+import com.london.data.remote.model.details.movie.details.MovieDetailsResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularMovieResponse
-import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularMovieResponse
 import com.london.data.remote.model.reviews.ReviewResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
+import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -35,7 +35,7 @@ interface MovieApiService {
     @GET(ApiConstants.SIMILAR_MOVIES_PATH)
     suspend fun getSimilarMovies(
         @Path("movie_id") movieId: Int,
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ApiResponse<SearchMovieRemote>>
 
     @GET(ApiConstants.MOVIE_IMAGES_PATH)
     suspend fun getMovieImages(
@@ -63,7 +63,7 @@ interface MovieApiService {
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ApiResponse<SearchMovieRemote>>
 
     @GET(POPULAR_MOVIES_PATH)
     suspend fun getPopularMovies(): Response<ApiResponse<PopularMovieResponse>>
@@ -78,7 +78,7 @@ interface MovieApiService {
         @Query("sort_by") sortBy: String = "primary_release_date.asc",
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ApiResponse<SearchMovieRemote>>
 
     @GET(ApiConstants.RATED_MOVIES_PATH)
     suspend fun getRatedMovies(

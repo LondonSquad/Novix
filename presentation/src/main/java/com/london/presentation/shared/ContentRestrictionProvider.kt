@@ -3,8 +3,8 @@ package com.london.presentation.shared
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.london.domain.AppPreferencesService
-import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
+import com.london.domain.service.AppPreferencesService
 
 @Composable
 fun ContentRestrictionProvider(

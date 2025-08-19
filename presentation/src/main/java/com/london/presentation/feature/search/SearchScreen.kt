@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -54,9 +53,9 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.TriangleBlurredShape
@@ -144,7 +143,6 @@ private fun SearchMainContent(
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
-            .background(color = NovixTheme.colors.surface)
     ) {
         TriangleBlurredShape()
         Column(
@@ -154,9 +152,7 @@ private fun SearchMainContent(
             verticalArrangement = Arrangement.Top
         ) {
             TopBar(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 title = stringResource(R.string.search),
             )
 

@@ -62,11 +62,7 @@ fun WelcomeScreen(
     }
     Content(
         onNavigateLogin = onNavigateLogin,
-        onNavigateContinue = onNavigateContinue,
-        modifier = Modifier.padding(
-            bottom = WindowInsets.navigationBars.asPaddingValues()
-                .calculateBottomPadding()
-        )
+        onNavigateContinue = onNavigateContinue
     )
 }
 
@@ -79,7 +75,8 @@ private fun Content(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, bottom = 21.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 21.dp)
+            .padding(WindowInsets.navigationBars.asPaddingValues()),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

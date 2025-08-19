@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
@@ -94,12 +94,10 @@ class MovieDetailsViewModelTest {
     @Test
     fun `when main movie data loads successfully, movie details should be populated`() = runTest {
 
-        // When
-        advanceUntilIdle()
-
-        // Then
+        // When & Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
+            advanceUntilIdle()
             assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
             assertThat(state.movieName).isEqualTo(mockMovieDetails.title)
             cancelAndIgnoreRemainingEvents()

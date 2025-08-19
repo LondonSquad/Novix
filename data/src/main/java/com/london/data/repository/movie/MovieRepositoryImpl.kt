@@ -24,19 +24,19 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.Trending
-import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.MediaType
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.RatedMedia
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.MovieRepository
 import javax.inject.Inject
@@ -72,10 +72,9 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieReviews(
         movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
-        networkBlock = {
-            getMovieReviewsFromRemote(movieId = movieId, pageNumber = pageNumber)
-        }).run {
+    ): PagedFetchResponse<Review> = fetchAndSync(
+        networkBlock = { getMovieReviewsFromRemote(movieId = movieId, pageNumber = pageNumber) }
+    ).run {
         PagedFetchResponse(
             currentPage = currentPage,
             items = items,
@@ -101,15 +100,15 @@ class MovieRepositoryImpl @Inject constructor(
         cacheBlock = { getUpComingCachedMovies(pageNumber = pageNumber, genre = genre) },
         crashReporter = crashReporter,
         syncBlock = { upComingLocalDataSource.insert(it) },
-        networkBlock = { getUpcomingMovies(pageNumber = pageNumber, genre = genre) })
-        .run {
-            PagedFetchResponse(
-                currentPage = page,
-                items = results.map { it.toEntity() },
-                totalPages = totalPages,
-                totalItems = totalResults
-            )
-        }
+        networkBlock = { getUpcomingMovies(pageNumber = pageNumber, genre = genre) }
+    ).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
+    }
 
     override suspend fun getTopRatedMovies(pageNumber: Int): PagedFetchResponse<TopRatedMedia> =
         fetchAndSync(
@@ -160,9 +159,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
         cacheBlock = { getCachedPopularMovies() },
-        networkBlock = {
-            movieRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
-        },
+        networkBlock = { movieRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies() },
         syncBlock = { popularList ->
             homeLocalDataSource.insertAll(popularList.map { it.toPopularMovieSectionLocal(MediaType.Movie) })
         },
@@ -187,7 +184,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun getMovieReviewsFromRemote(
         movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> {
+    ): PagedFetchResponse<Review> {
         return movieRemoteDataSource.getMovieReviews(
             movieId, pageNumber
         ).getOrThrow().toReviewEntity()
@@ -222,19 +219,17 @@ class MovieRepositoryImpl @Inject constructor(
         )
     }
 
-    private suspend fun getTopRatedRemoteMovies(pageNumber: Int): List<TopRatedMedia> {
-        return movieRemoteDataSource
+    private suspend fun getTopRatedRemoteMovies(pageNumber: Int): List<TopRatedMedia> =
+        movieRemoteDataSource
             .getTopRatedMovies(pageNumber)
             .getOrThrow()
             .items.map { it.toEntity() }
-    }
 
-    private suspend fun fetchFirstTopRatedPageMovies(): List<TopRatedMedia> {
-        return movieRemoteDataSource
+    private suspend fun fetchFirstTopRatedPageMovies(): List<TopRatedMedia> =
+        movieRemoteDataSource
             .getTopRatedMovies(pageNumber = PAGE_NUMBER)
             .getOrThrow()
             .items.map { it.toEntity() }
-    }
 
     private suspend fun getTopRatedCashedMovies(): List<TopRatedMedia>? {
         val local = localTopRated.getAll()

@@ -4,21 +4,21 @@ package com.london.data.remote.service.tvshow
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_TV_SHOWS_PATH
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularTvShowResponse
-import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.toprated.TopRatedTvShowRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -34,23 +34,23 @@ interface TvShowApiService {
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowDetailsRemoteResponse>
 
-    @GET(ApiConstants.TV_SHOW_EPISODE_BY_SEASON_PATH)
-    suspend fun getTvShowEpisodesBySeason(
+    @GET(ApiConstants.TV_SHOW_SEASON_PATH)
+    suspend fun getTvShowSeasonEpisodes(
         @Path("tv_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
-    ): Response<TvShowEpisodesRemoteResponse>
+    ): Response<SeasonEpisodesResponse>
 
     @GET(ApiConstants.TV_SHOW_IMAGE)
     suspend fun getTvShowImages(
         @Path("tv_id") tvShowId: Int,
     ): Response<ImagesResponse>
 
-    @GET(ApiConstants.EPISODE_DETAILS_PATH)
+    @GET(ApiConstants.TV_SHOW_EPISODE_PATH)
     suspend fun getEpisodeDetails(
         @Path("tv_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
         @Path("episode_number") episodeNumber: Int,
-    ): Response<TvShowEpisodeResponse>
+    ): Response<EpisodeDetailsResponse>
 
     @GET(ApiConstants.EPISODE_VIDEO_PATH)
     suspend fun getEpisodeVideo(
@@ -60,8 +60,9 @@ interface TvShowApiService {
     ): Response<VideoResponse>
 
     @GET(ApiConstants.TV_SHOW_VIDEO_PATH)
-    suspend fun getTvShowVideos(
-        @Path("tv_id") tvShowId: Int,
+    suspend fun getTvSeasonTrailer(
+        @Path("tv_show_id") tvShowId: Int,
+        @Path("season_number") seasonNumber: Int,
     ): Response<VideoResponse>
 
     @GET(ApiConstants.ACCOUNT_TV_SHOW_STATES)
@@ -137,5 +138,5 @@ interface TvShowApiService {
     @GET(ApiConstants.GET_TOP_RATED_TV_SHOWS_PATH)
     suspend fun getTopRatedTvShows(
         @Query("page") pageNumber: Int,
-    ): Response<ApiResponse<TopRatedTvSeriesRemote>>
+    ): Response<ApiResponse<TopRatedTvShowRemote>>
 }

@@ -2,7 +2,7 @@ package com.london.presentation.feature.category.movie
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
-import com.london.domain.entity.Movie
+import com.london.domain.entity.movie.Movie
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

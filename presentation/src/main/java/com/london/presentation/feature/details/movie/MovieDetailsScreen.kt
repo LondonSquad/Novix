@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -60,7 +57,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
@@ -75,6 +72,7 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.ActorItem
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isNotZeroRate
@@ -140,7 +138,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyState.firstVisibleItemScrollOffset > 40f ||
-                    lazyState.firstVisibleItemIndex > 0
+                lazyState.firstVisibleItemIndex > 0
         }
     }
 
@@ -161,15 +159,7 @@ private fun Content(
 
         TopBar(
             onBackClick = movieDetailsContract::onBackClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(horizontal = 16.dp)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )
@@ -394,6 +384,8 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
+                tint = NovixTheme.colors.yellowAccent,
+                hasInitialDot = false
             )
         }
 
@@ -408,8 +400,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
-
-                )
+            )
 
             if (!date.isNullOrBlank()) {
                 TextWithIcon(

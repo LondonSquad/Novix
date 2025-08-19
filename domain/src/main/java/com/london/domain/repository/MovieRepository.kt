@@ -1,24 +1,24 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.Trending
-import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.RatedMedia
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 
 interface MovieRepository {
     suspend fun getMovieById(id: Int): MovieDetails
     suspend fun getSimilarMoviesById(id: Int): List<Movie>
     suspend fun getMovieImagesById(id: Int): ImagesEntity
-    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
+    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<Review>
     suspend fun getMovieVideos(movieId: Int): List<String>
     suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails
     suspend fun getPopularMovies(): List<PopularMedia>

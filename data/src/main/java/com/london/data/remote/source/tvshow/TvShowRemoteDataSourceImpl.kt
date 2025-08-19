@@ -1,21 +1,21 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularTvShowResponse
-import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.toprated.TopRatedTvShowRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.remote.service.tvshow.TvShowApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -46,7 +46,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     override suspend fun deleteTvShowRating(
         tvShowId: Int,
         sessionId: String?
-    ): Result<RatingRemoteResponse> =callApiWithRetry(
+    ): Result<RatingRemoteResponse> = callApiWithRetry(
         apiCall = {
             tvShowApiService.deleteTvShowRating(
                 tvShowId = tvShowId,
@@ -120,7 +120,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>> =
+    override suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvShowRemote>> =
         callApi(
             apiCall = { tvShowApiService.getTopRatedTvShows(pageNumber) },
             mapper = { it }
@@ -147,13 +147,13 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-    override suspend fun getTvShowEpisodesBySeason(
+    override suspend fun getTvShowSeasonEpisodes(
         id: Int,
         seasonNumber: Int
-    ): Result<TvShowEpisodesRemoteResponse> =
+    ): Result<SeasonEpisodesResponse> =
         callApiWithRetry(
             apiCall = {
-                tvShowApiService.getTvShowEpisodesBySeason(
+                tvShowApiService.getTvShowSeasonEpisodes(
                     tvShowId = id,
                     seasonNumber = seasonNumber
                 )
@@ -171,7 +171,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<TvShowEpisodeResponse> =
+    ): Result<EpisodeDetailsResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowApiService.getEpisodeDetails(
@@ -233,10 +233,17 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse> =
+    override suspend fun getTvSeasonTrailer(
+        tvShowId: Int,
+        seasonNumber: Int
+    ): Result<VideoResponse> =
         callApiWithRetry(
-            apiCall = { tvShowApiService.getTvShowVideos(tvShowId = tvShowId) },
+            apiCall = {
+                tvShowApiService.getTvSeasonTrailer(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber
+                )
+            },
             mapper = { it }
         )
-
 }

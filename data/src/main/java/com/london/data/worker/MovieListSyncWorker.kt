@@ -6,9 +6,7 @@ import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -68,28 +66,6 @@ class MovieListSyncWorker @AssistedInject constructor(
             workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
-                syncRequest
-            )
-        }
-
-        fun syncNow(workManager: WorkManager) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val syncRequest = OneTimeWorkRequestBuilder<MovieListSyncWorker>()
-                .setConstraints(constraints)
-                .setBackoffCriteria(
-                    BackoffPolicy.LINEAR,
-                    WorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS
-                )
-                .addTag(IMMEDIATE_SYNC_WORK_NAME)
-                .build()
-
-            workManager.enqueueUniqueWork(
-                IMMEDIATE_SYNC_WORK_NAME,
-                ExistingWorkPolicy.REPLACE,
                 syncRequest
             )
         }

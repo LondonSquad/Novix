@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.tvshow.info
 
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshow.cast.TvShowCast
+import com.london.domain.entity.tvshow.episode.Episodes
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.TvShowGenreUi
 
@@ -21,14 +21,14 @@ data class TvShowDetailsUiState(
     val videoProvider: String = "",
     val isLoading: Boolean = false,
     val isGuestUser: Boolean = false,
-    val cast: TvShowCastEntity? = null,
+    val cast: TvShowCast? = null,
     val isSuccessfullyRated: Boolean? = null,
     val isRateBottomSheetVisible: Boolean = false,
     val tvImages: List<String>? = listOf(),
     val isGuestUserBottomSheetVisible: Boolean = false,
     val tvShowGenres: List<TvShowGenreUi> = listOf(),
-    val tvShowEpisodeCountBySeason: TvShowEpisodesEntity? = null,
-    val tvShowEpisodes: List<TvShowEpisodeBySeasonEntity> = listOf(),
+    val tvShowEpisodeCountBySeason: SeasonEpisodes? = null,
+    val tvShowEpisodes: List<Episodes> = listOf(),
 ) {
     val movieHaveTrailer: Boolean
         get() = videoProvider.isNotEmpty()

@@ -1,9 +1,7 @@
-@file:KoverIgnore
 package com.london.domain.repository
 
-import com.london.domain.KoverIgnore
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import kotlinx.coroutines.flow.Flow
 
 interface RecentWatchedRepository {

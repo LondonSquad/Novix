@@ -1,6 +1,8 @@
 package com.london.presentation.shared
 
-import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -19,15 +22,20 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.presentation.R
 import com.london.presentation.R.drawable
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
 fun FooterSection(
     haveTrailer: Boolean,
     modifier: Modifier,
-    isRateEnabled: Boolean = true,
+    isRateEnabled: Boolean,
     onVideoClick: () -> Unit,
     onRateClick: () -> Unit,
 ) {
+    val horizontalPadding by animateDpAsState(
+        targetValue = if (isRateEnabled) 24.dp else 16.dp,
+        label = "footer_horizontal_padding",
+        animationSpec = tween()
+    )
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -41,11 +49,9 @@ fun FooterSection(
                     endY = Float.POSITIVE_INFINITY
                 ),
             )
-            .padding(horizontal = if (haveTrailer) 16.dp else 24.dp)
-            .padding(
-                bottom = 24.dp + WindowInsets.navigationBars.asPaddingValues()
-                    .calculateBottomPadding()
-            ),
+            .padding(horizontal = horizontalPadding)
+            .padding(bottom = 24.dp)
+            .padding(WindowInsets.navigationBars.asPaddingValues()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (isRateEnabled) {
@@ -67,7 +73,9 @@ fun FooterSection(
             isLoading = false,
             enabled = haveTrailer,
             icon = null,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .animateContentSize(animationSpec = tween())
         )
     }
 }

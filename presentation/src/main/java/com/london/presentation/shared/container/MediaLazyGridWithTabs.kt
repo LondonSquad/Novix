@@ -12,10 +12,10 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.Tabbable
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import com.london.presentation.R
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.genre.MovieGenreUi

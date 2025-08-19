@@ -5,16 +5,16 @@ import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.mapper.genre.toGenreId
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.Genre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.SearchRepository
 import javax.inject.Inject
 
@@ -29,7 +29,6 @@ class SearchRepositoryImpl @Inject constructor(
         pageNumber: Int
     ): PagedFetchResponse<Movie> {
         val response = getMovieSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -43,7 +42,6 @@ class SearchRepositoryImpl @Inject constructor(
         pageNumber: Int
     ): PagedFetchResponse<TvShow> {
         val response = getTvShowSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -55,20 +53,17 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun getTvShowSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<SearchTvShowRemote> {
-        return remoteDataSource.searchForTvShows(
+    ): ApiResponse<SearchTvShowRemote> = remoteDataSource.searchForTvShows(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     override suspend fun searchForActors(
         name: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor> {
         val response = getActorsSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -101,24 +96,20 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun getMovieSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<MovieRemote> {
-        return remoteDataSource.searchForMovies(
+    ): ApiResponse<SearchMovieRemote> = remoteDataSource.searchForMovies(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     private suspend fun getActorsSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<SearchActorRemote> {
-        return remoteDataSource.searchForActors(
+    ): ApiResponse<SearchActorRemote> = remoteDataSource.searchForActors(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     private suspend fun updateGenreInterest(current: GenreInterestEntity) {
         genreInterestDao.updateGenreInterest(

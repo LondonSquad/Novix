@@ -2,7 +2,7 @@ package com.london.presentation.feature.home.section
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.home.HomeScreenContract
 import com.london.presentation.feature.home.HomeUiMedia

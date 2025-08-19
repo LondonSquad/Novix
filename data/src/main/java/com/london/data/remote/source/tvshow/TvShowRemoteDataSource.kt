@@ -1,20 +1,20 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularTvShowResponse
-import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.toprated.TopRatedTvShowRemote
+import com.london.data.remote.model.trending.TrendingResponse
 
 interface TvShowRemoteDataSource {
 
@@ -22,9 +22,9 @@ interface TvShowRemoteDataSource {
     suspend fun getPopularTvShows(): Result<ApiResponse<PopularTvShowResponse>>
     suspend fun getTrendingTvShows(page: Int): Result<ApiResponse<TrendingResponse>>
     suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
-    suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
+    suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvShowRemote>>
     suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
-    suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse>
+    suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): Result<VideoResponse>
 
 
     suspend fun getTvShowReviews(
@@ -59,10 +59,10 @@ interface TvShowRemoteDataSource {
         includeAdult: Boolean = false
     ): Result<ApiResponse<SearchTvShowRemote>>
 
-    suspend fun getTvShowEpisodesBySeason(
+    suspend fun getTvShowSeasonEpisodes(
         id: Int,
         seasonNumber: Int,
-    ): Result<TvShowEpisodesRemoteResponse>
+    ): Result<SeasonEpisodesResponse>
 
     suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse>
 
@@ -70,7 +70,7 @@ interface TvShowRemoteDataSource {
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<TvShowEpisodeResponse>
+    ): Result<EpisodeDetailsResponse>
 
     suspend fun getEpisodeVideos(
         tvShowId: Int,

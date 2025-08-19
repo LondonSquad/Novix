@@ -35,7 +35,7 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Actor
+import com.london.domain.entity.actor.Actor
 import com.london.presentation.shared.ImageView
 
 @Composable
