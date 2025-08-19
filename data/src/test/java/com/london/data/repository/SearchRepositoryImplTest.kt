@@ -5,7 +5,7 @@ import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.repository.search.SearchRepositoryImpl
@@ -370,7 +370,7 @@ class SearchRepositoryImplTest {
         private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
-                MovieRemote(
+                SearchMovieRemote(
                     genreIds = emptyList(),
                     id = 1,
                     posterPath = "",

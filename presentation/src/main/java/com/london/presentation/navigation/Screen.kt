@@ -1,6 +1,6 @@
 package com.london.presentation.navigation
 
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.serialization.Serializable

@@ -8,10 +8,10 @@ import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieDetails
 import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.AuthorDetails
 import com.london.domain.entity.review.Review
 import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia

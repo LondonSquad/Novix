@@ -2,7 +2,7 @@ package com.london.domain.usecase.details.actor
 
 import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.actor.ActorDetails
-import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository

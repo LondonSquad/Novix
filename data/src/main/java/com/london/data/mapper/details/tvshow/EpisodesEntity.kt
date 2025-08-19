@@ -1,9 +1,9 @@
 package com.london.data.mapper.details.tvshow
 
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
+import com.london.data.remote.model.details.tvshow.episode.Episode
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal

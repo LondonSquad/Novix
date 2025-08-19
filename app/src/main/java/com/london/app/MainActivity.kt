@@ -22,7 +22,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NavHostGraph
 import com.london.data.local.preference.readLanguageCode
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import com.london.presentation.localization.LocalizationManager
 import com.london.presentation.localization.wrapWithLocale
 import com.london.presentation.shared.ContentRestrictionProvider

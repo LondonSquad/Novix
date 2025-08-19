@@ -1,8 +1,4 @@
-@file:KoverIgnore
-
 package com.london.data.local.database.dao.recent
-
-import com.london.domain.KoverIgnore
 
 interface RecentDao<T> {
     suspend fun insert(item: T)

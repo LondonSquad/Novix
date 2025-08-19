@@ -15,109 +15,79 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     private val syncMetadataDao: SyncMetadataDao
 ) : CustomMovieListLocalDataSource {
 
-    override suspend fun isMovieListed(movieId: Int): Boolean {
-        return membershipDao.isMovieListed(movieId)
-    }
+    override suspend fun getAllUserLists(): List<MovieListLocal> = movieListDao.getAllLists()
 
-    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> {
-        return membershipDao.isMovieListedFlow(movieId)
-    }
+    override suspend fun getAllListedMovieIds(): List<Int> = membershipDao.getAllListedMovieIds()
 
-    override suspend fun getMovieListIds(movieId: Int): List<Int> {
-        return membershipDao.getMovieListIds(movieId)
-    }
+    override fun getAllUserListsFlow(): Flow<List<MovieListLocal>> = movieListDao.getAllListsFlow()
 
-    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> {
-        return membershipDao.getMovieListIdsFlow(movieId)
-    }
+    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> = membershipDao.getAllListedMovieIdsFlow()
 
-    override suspend fun getAllListedMovieIds(): List<Int> {
-        return membershipDao.getAllListedMovieIds()
-    }
+    override suspend fun isMovieListed(movieId: Int): Boolean = membershipDao.isMovieListed(movieId = movieId)
 
-    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> {
-        return membershipDao.getAllListedMovieIdsFlow()
-    }
+    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> =
+        membershipDao.isMovieListedFlow(movieId = movieId)
 
-    override suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int> {
-        return membershipDao.getMovieIdsForList(listId, limit, offset)
-    }
+    override suspend fun getMovieListIds(movieId: Int): List<Int> =
+        membershipDao.getMovieListIds(movieId = movieId)
 
-    override fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>> {
-        return membershipDao.getMovieIdsForListFlow(listId)
-    }
+    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> =
+        membershipDao.getMovieListIdsFlow(movieId = movieId)
 
-    override suspend fun getMovieCountForList(listId: Int): Int {
-        return membershipDao.getMovieCountForList(listId)
-    }
+    override suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int> =
+        membershipDao.getMovieIdsForList(listId = listId, limit =  limit, offset = offset)
 
-    override fun getMovieCountForListFlow(listId: Int): Flow<Int> {
-        return membershipDao.getMovieCountForListFlow(listId)
-    }
+    override fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>> =
+        membershipDao.getMovieIdsForListFlow(listId = listId)
 
-    override suspend fun getAllUserLists(): List<MovieListLocal> {
-        return movieListDao.getAllLists()
-    }
+    override suspend fun getMovieCountForList(listId: Int): Int =
+        membershipDao.getMovieCountForList(listId = listId)
 
-    override fun getAllUserListsFlow(): Flow<List<MovieListLocal>> {
-        return movieListDao.getAllListsFlow()
-    }
+    override fun getMovieCountForListFlow(listId: Int): Flow<Int> =
+        membershipDao.getMovieCountForListFlow(listId = listId)
 
-    override suspend fun getMovieList(listId: Int): MovieListLocal? {
-        return movieListDao.getList(listId)
-    }
+    override suspend fun getMovieList(listId: Int): MovieListLocal? = movieListDao.getList(listId = listId)
 
-    override fun getMovieListFlow(listId: Int): Flow<MovieListLocal?> {
-        return movieListDao.getListFlow(listId)
-    }
+    override fun getMovieListFlow(listId: Int): Flow<MovieListLocal?> =
+        movieListDao.getListFlow(listId = listId)
 
-    override suspend fun getMovieListsPaged(limit: Int, offset: Int): List<MovieListLocal> {
-        return movieListDao.getListsPaged(limit, offset)
-    }
+    override suspend fun getMovieListsPaged(limit: Int, offset: Int): List<MovieListLocal> =
+        movieListDao.getListsPaged(limit = limit, offset = offset)
 
-    override suspend fun cacheMovieListMemberships(memberships: List<MovieListMembershipLocal>) {
+    override suspend fun cacheMovieListMemberships(memberships: List<MovieListMembershipLocal>) =
         membershipDao.replaceAllMemberships(memberships)
-    }
 
-    override suspend fun addMovieToListCache(movieId: Int, listId: Int) {
-        membershipDao.insertMembership(
-            MovieListMembershipLocal(movieId = movieId, listId = listId)
-        )
-    }
+    override suspend fun addMovieToListCache(movieId: Int, listId: Int) = membershipDao.insertMembership(
+        MovieListMembershipLocal(movieId = movieId, listId = listId)
+    )
 
-    override suspend fun removeMovieFromListCache(movieId: Int, listId: Int) {
-        membershipDao.removeMembership(movieId, listId)
-    }
+    override suspend fun removeMovieFromListCache(movieId: Int, listId: Int) =
+        membershipDao.removeMembership(movieId = movieId, listId = listId)
 
     override suspend fun replaceMembershipsForList(
         listId: Int,
         memberships: List<MovieListMembershipLocal>
-    ) {
-        membershipDao.replaceMembershipsForList(listId, memberships)
-    }
+    ) = membershipDao.replaceMembershipsForList(listId = listId, memberships = memberships)
 
-    override suspend fun cacheMovieListsMetadata(lists: List<MovieListLocal>) {
+    override suspend fun cacheMovieListsMetadata(lists: List<MovieListLocal>) =
         movieListDao.insertLists(lists)
-    }
 
-    override suspend fun addMovieListCache(movieList: MovieListLocal) {
-        movieListDao.insertList(movieList)
-    }
+    override suspend fun addMovieListCache(movieList: MovieListLocal) =
+        movieListDao.insertList(list = movieList)
 
     override suspend fun removeMovieListCache(listId: Int) {
         membershipDao.removeAllMembershipsForList(listId)
         movieListDao.removeList(listId)
     }
 
-    override suspend fun updateMovieListItemCount(listId: Int, itemCount: Int) {
-        movieListDao.updateItemCount(listId, itemCount)
-    }
+    override suspend fun updateMovieListItemCount(listId: Int, itemCount: Int) =
+        movieListDao.updateItemCount(listId = listId, itemCount = itemCount)
 
     override suspend fun shouldRefreshCache(): Boolean {
         val metadata = syncMetadataDao.getSyncMetadata(SYNC_KEY)
         return metadata == null ||
-                !metadata.isSuccess ||
-                (System.currentTimeMillis() - metadata.lastSyncTime) > CACHE_VALIDITY_MS
+            !metadata.isSuccess ||
+            (System.currentTimeMillis() - metadata.lastSyncTime) > CACHE_VALIDITY_MS
     }
 
     override suspend fun markCacheRefreshed(success: Boolean) {
@@ -135,8 +105,8 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         movieListDao.clearAll()
     }
 
-    companion object {
-        private const val CACHE_VALIDITY_MS = 30 * 60 * 1000L // 30 minutes
-        private const val SYNC_KEY = SyncMetadataDao.MOVIE_LISTS_SYNC_KEY
+    private companion object {
+        const val CACHE_VALIDITY_MS = 30 * 60 * 1000L // 30 minutes
+        const val SYNC_KEY = SyncMetadataDao.MOVIE_LISTS_SYNC_KEY
     }
 }

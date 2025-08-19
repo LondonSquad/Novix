@@ -1,5 +1,5 @@
 package com.london.domain.repository
 
 interface SessionTokenProvider {
-    fun getAuthKey(): String?
+    fun getAuthenticationKey(): String?
 }
