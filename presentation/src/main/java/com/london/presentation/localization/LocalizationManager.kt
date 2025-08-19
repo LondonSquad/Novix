@@ -1,6 +1,6 @@
 package com.london.presentation.localization
 
-import com.london.domain.repository.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Locale

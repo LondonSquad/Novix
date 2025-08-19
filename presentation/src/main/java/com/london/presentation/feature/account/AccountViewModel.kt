@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage
 import com.london.domain.entity.theme.AppTheme
-import com.london.domain.repository.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import com.london.domain.usecase.account.GetAccountInfoUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.shared.base.BaseViewModel

@@ -6,7 +6,7 @@ import com.london.data.utils.LANGUAGE_KEY
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage
 import com.london.domain.entity.theme.AppTheme
-import com.london.domain.repository.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

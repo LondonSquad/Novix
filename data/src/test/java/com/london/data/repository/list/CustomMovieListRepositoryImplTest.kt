@@ -10,7 +10,7 @@ import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.language.AppLanguage
-import com.london.domain.repository.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
