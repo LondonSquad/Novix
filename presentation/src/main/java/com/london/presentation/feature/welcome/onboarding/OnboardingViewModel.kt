@@ -3,20 +3,18 @@ package com.london.presentation.feature.welcome.onboarding
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
-import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
-
 
     fun onPageChanged(page: Int) {
         updateState { copy(currentPage = page) }
@@ -55,14 +53,20 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun onboardingFinished() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 
     private fun setOnBoardingShown() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 }
