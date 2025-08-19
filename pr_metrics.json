@@ -33268,5 +33268,42 @@
       "deletions": 931,
       "changed_files": 190
     }
+  },
+  {
+    "pr_number": 692,
+    "url": "https://github.com/LondonSquad/Novix/pull/692",
+    "title": "refactor/di",
+    "opened_at": "2025-08-19T00:12:50Z",
+    "head_ref": "refactor/di",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "assignees": [
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 147,
+      "deletions": 275,
+      "changed_files": 10
+    }
   }
 ]
