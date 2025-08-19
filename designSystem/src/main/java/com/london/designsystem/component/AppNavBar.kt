@@ -44,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -79,26 +78,35 @@ fun <T> NavBar(
     )
 ) {
 
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .topBorder(navBarColors.topBorderColor, 1.dp)
             .background(color = navBarColors.backgroundColor)
             .navigationBarsPadding()
-            .padding(vertical = 7.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+            .clickable(
+                enabled = false,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }) {}
     ) {
-        navDestinations.forEach { item ->
-            NavBarItem(
-                item = item,
-                isSelected = currentSelectedDestination == item.destination,
-                selectedIconColor = navBarColors.selectedIconColor,
-                idleIconColor = navBarColors.idleIconColor,
-                onClick = {
-                    onNavDestinationClicked(item.destination)
-                }
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .topBorder(navBarColors.topBorderColor, 1.dp)
+                .padding(vertical = 7.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            navDestinations.forEach { item ->
+                NavBarItem(
+                    item = item,
+                    isSelected = currentSelectedDestination == item.destination,
+                    selectedIconColor = navBarColors.selectedIconColor,
+                    idleIconColor = navBarColors.idleIconColor,
+                    onClick = {
+                        onNavDestinationClicked(item.destination)
+                    }
+                )
+            }
         }
     }
 }
