@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.tvshow.info
 
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.shared.genre.TvShowGenreUi
 
 interface TvShowDetailsContract {

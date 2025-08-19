@@ -1,7 +1,7 @@
 package com.london.data.local.database.convertor
 
 import androidx.room.TypeConverter
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 class MediaTypeConverter {
     @TypeConverter

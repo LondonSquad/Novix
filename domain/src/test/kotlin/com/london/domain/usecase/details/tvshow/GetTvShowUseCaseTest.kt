@@ -4,10 +4,10 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.AuthorDetails
 import com.london.domain.entity.review.Review
 import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia

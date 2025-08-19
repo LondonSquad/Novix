@@ -1,17 +1,13 @@
-@file:KoverIgnore
-
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import com.london.domain.KoverIgnore
 import javax.inject.Inject
 
-@KoverIgnore
 class SearchRemoteDataSourceImpl @Inject constructor(
     private val searchApiService: SearchApiService
 ) : SearchRemoteDataSource, BaseRemoteDatasource {
@@ -20,7 +16,7 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): Result<ApiResponse<MovieRemote>> = callApiWithRetry(
+    ): Result<ApiResponse<SearchMovieRemote>> = callApiWithRetry(
         {
             searchApiService.searchMovies(
                 query = query,
@@ -60,5 +56,4 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
-
 }

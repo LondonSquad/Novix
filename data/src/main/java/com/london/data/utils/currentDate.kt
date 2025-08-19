@@ -1,7 +1,5 @@
-@file:KoverIgnore
 package com.london.data.utils
 
-import com.london.domain.KoverIgnore
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

@@ -57,7 +57,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview

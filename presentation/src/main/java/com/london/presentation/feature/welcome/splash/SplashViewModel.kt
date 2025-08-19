@@ -2,7 +2,7 @@ package com.london.presentation.feature.welcome.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.domain.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
