@@ -1,6 +1,5 @@
 package com.london.designsystem.component.button
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,7 +16,6 @@ import com.airbnb.lottie.model.KeyPath
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-
 
 @Composable
 fun LoadingLottieAnimation(modifier: Modifier = Modifier, tintColor: Color) {

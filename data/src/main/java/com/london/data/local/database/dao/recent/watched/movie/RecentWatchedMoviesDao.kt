@@ -16,4 +16,5 @@ interface RecentWatchedMoviesDao : RecentWatchedDao<RecentWatchedMovieLocal> {
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     override suspend fun insert(item: RecentWatchedMovieLocal)
+
 }

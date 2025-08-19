@@ -15,22 +15,19 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val authenticationPreferences: AuthenticationPreferences
 ) : AuthenticationRepository {
-    override suspend fun login(username: String, password: String): Boolean {
 
+    override suspend fun login(username: String, password: String): Boolean {
         val sessionResponse = attemptLogin(
             username = username,
             password = password
         )
-
         if (sessionResponse.isFailure()) return false
-
         val createdSession = createSession(sessionResponse)
         saveUserSession(
             username = username,
             session = createdSession,
             requestToken = sessionResponse.requestToken.orEmpty()
         )
-
         getUserAccount(session = createdSession)
         return true
     }
@@ -101,4 +98,5 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private fun saveUserAccount(id: Int) {
         authenticationPreferences.saveAccountId(id)
     }
+
 }

@@ -1,14 +1,9 @@
 package com.london.presentation.utils
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import java.util.Locale
@@ -86,7 +81,6 @@ fun convertDate(input: String): String {
             }
         }
     }
-
     return "$day $monthName $year".toLocalizedNumbers()
 }
 
@@ -94,14 +88,12 @@ fun getLocalizedTimeUnit(unit: String): String {
     val lang = Locale.getDefault().language
     val arMap = mapOf("h" to "س", "m" to "د", "s" to "ث")
     val enMap = mapOf("h" to "h", "m" to "m", "s" to "s")
-
     val key = unit.lowercase()
     return when (lang) {
         "ar" -> arMap[key] ?: unit
         else -> enMap[key] ?: unit
     }
 }
-
 
 fun reverseDateFormat(input: String): String {
     var day = ""
@@ -128,17 +120,6 @@ fun Double.isNotZeroRate() = runCatching {
     this != 0.0
 }.getOrDefault(false)
 
-fun IntSize.toDpSize(density: Density): DpSize = with(density) {
-    toSize().toDpSize()
-}
-
-@Composable
-fun rememberContainerSize(): DpSize {
-    val density = LocalDensity.current
-    val windowInfo = LocalWindowInfo.current
-    return remember(windowInfo, density) { windowInfo.containerSize.toDpSize(density) }
-}
-
 @Composable
 fun gridColumns(itemWidth: Int = 158): Int = runCatching {
     val screenWidth = LocalWindowInfo.current.containerSize.width
@@ -156,5 +137,4 @@ fun shouldShowLoading(
     handlePagingLoadingAutomatically: Boolean = true,
     pagingFlow: LazyPagingItems<*>? = null
 ): Boolean = isLoading || (handlePagingLoadingAutomatically
-        && pagingFlow?.loadState?.refresh is LoadState.Loading)
-
+    && pagingFlow?.loadState?.refresh is LoadState.Loading)

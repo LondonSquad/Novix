@@ -3,7 +3,6 @@ package com.london.presentation.feature.list.savedlist
 import androidx.compose.ui.text.input.TextFieldValue
 
 interface ListContract {
-
     fun onRetry()
     fun onFabClick()
     fun onLoginClick()
@@ -13,9 +12,7 @@ interface ListContract {
     fun onListNameChanged(listName: TextFieldValue)
 }
 
-
 fun defaultContractList() = object : ListContract {
-
     override fun onRetry() {}
     override fun onFabClick() {}
     override fun onLoginClick() {}

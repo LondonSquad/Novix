@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -112,7 +111,6 @@ private fun HandleEffects(
     }
 }
 
-
 @Composable
 private fun Content(
     pagerState: PagerState,
@@ -201,7 +199,7 @@ private fun SkipButton(
 }
 
 @Composable
-fun OnboardingPageContent(page: OnboardingPage) {
+private fun OnboardingPageContent(page: OnboardingPage) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -260,7 +258,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
 }
 
 @Composable
-fun OnboardingNavigationButtons(
+private fun OnboardingNavigationButtons(
     isFirstPage: Boolean,
     modifier: Modifier = Modifier,
     onPrevious: () -> Unit,
@@ -300,10 +298,9 @@ fun OnboardingNavigationButtons(
     }
 }
 
-
 @ThemePreviews
 @Composable
-fun OnboardingPreview() {
+private fun OnboardingPreview() {
     OnboardingScreen(
         onComplete = {},
     )

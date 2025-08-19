@@ -16,10 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val manageGetMovieUseCase: ManageGetMovieUseCase,
-    private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
-    savedStateHandle: SavedStateHandle
+    private val getMovieListNameUseCase: GetMovieListNameUseCase
 ) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
     ViewListItemsContract {
 
@@ -27,28 +27,28 @@ class ViewItemsViewModel @Inject constructor(
     private val listId = args?.listId ?: 0
 
     init {
+        getMovieItemsInfo()
+    }
+
+    private fun getMovieItemsInfo(){
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
 
     override fun onBack() {
-
         emitEffect(ViewItemsEffect.NavigateBack)
     }
 
     override fun onRetry() {
-
         updateState { copy(error = null) }
         fetchMovieListDetails(listId)
     }
 
     override fun onDeleteClick() {
-
         updateState { copy(isDeleteBottomSheetVisible = true) }
     }
 
     override fun onConfirmDelete() {
-
         tryToExecute(
             onStart = { onClearStateOnStart() },
             block = { manageMovieListUseCase.deleteMovieList(listId) },
@@ -64,7 +64,6 @@ class ViewItemsViewModel @Inject constructor(
     }
 
     override fun onRemoveMovieClick(id: Int) {
-
         tryToExecute(
             block = { manageMovieListUseCase.removeMovieFromList(listId = listId, movieId = id) },
             onStart = { onClearStateOnStart() },
@@ -86,7 +85,6 @@ class ViewItemsViewModel @Inject constructor(
     }
 
     private fun fetchMovieListDetails(listId: Int) {
-
         tryToExecute(
             block = { createMoviesPagingSource(listId = listId) },
             onStart = { updateState { copy(isLoading = true) } },
@@ -106,11 +104,11 @@ class ViewItemsViewModel @Inject constructor(
     }
 
     private fun getMovieListName(listId: Int) {
-
         tryToExecute(
             block = { getMovieListNameUseCase.invoke(listId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { updateState { copy(listTitle = it) } }
         )
     }
+
 }

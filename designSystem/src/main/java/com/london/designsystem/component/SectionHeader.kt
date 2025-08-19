@@ -45,14 +45,14 @@ fun SectionHeader(
                 text = text,
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-            )else
-                Box(
-            modifier = Modifier
-                .height(35.dp)
-                .width(200.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .shimmerEffect()
-        )
+            ) else
+            Box(
+                modifier = Modifier
+                    .height(35.dp)
+                    .width(200.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+            )
         if (hasGetAll && !isLoading) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -72,7 +72,7 @@ fun SectionHeader(
                     )
                 }
             }
-        }else if (isLoading){
+        } else if (isLoading) {
             Box(
                 modifier = Modifier
                     .height(35.dp)
@@ -86,7 +86,7 @@ fun SectionHeader(
 
 @ThemePreviews
 @Composable
-fun SectionHeaderPreview() {
+private fun SectionHeaderPreview() {
     NovixTheme {
         SectionHeader(
             text = stringResource(R.string.new_arrival),

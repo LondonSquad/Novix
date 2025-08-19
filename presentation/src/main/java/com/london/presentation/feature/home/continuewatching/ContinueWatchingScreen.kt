@@ -102,7 +102,7 @@ private fun Content(
 @Composable
 private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> {
     return state.movies.collectAsStateWithLifecycle(emptyList()).value +
-            state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
+        state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
 }
 
 private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int {

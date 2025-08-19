@@ -39,7 +39,7 @@ fun ActorsLayout(
 
 @ThemePreviews
 @Composable
-fun ActorsLayoutPreviews() {
+private fun ActorsLayoutPreviews() {
     NovixTheme {
     }
 }

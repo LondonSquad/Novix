@@ -28,6 +28,7 @@ import com.london.presentation.navigation.Screen.Search
 
 @Composable
 fun NavHostGraph() {
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val showBottomNav = navBackStackEntry.hasRoute(Home, Search, Categories, Lists(), Account)

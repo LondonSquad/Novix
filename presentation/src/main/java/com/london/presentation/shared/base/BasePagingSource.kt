@@ -36,16 +36,6 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 
     abstract suspend fun onFetchPage(pageNumber: Int): PagedFetchResponse<T>
 
-    fun asFlow(
-        config: PagingConfig = PagingConfig(
-            pageSize = PAGING_PAGE_SIZE,
-            enablePlaceholders = true,
-        ),
-    ): Flow<PagingData<T>> = Pager(
-        config = config,
-        pagingSourceFactory = { this }
-    ).flow
-
     companion object {
         const val PAGING_PAGE_SIZE = 20
     }

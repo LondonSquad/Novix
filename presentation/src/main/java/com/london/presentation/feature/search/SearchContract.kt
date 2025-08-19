@@ -27,4 +27,3 @@ interface SearchContract {
     fun incrementGenreInterest(genre: Genre, mediaType: String)
     fun updateRecentData()
 }
-

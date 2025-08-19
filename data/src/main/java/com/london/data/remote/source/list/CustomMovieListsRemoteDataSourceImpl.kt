@@ -89,7 +89,6 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it })
 
-
     override suspend fun getAllMovieLists(
         page: Int,
         sessionId: String?
@@ -102,4 +101,5 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
+
 }

@@ -51,7 +51,6 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
                     onSuccess(response)
                     return@onSuccess
                 }
-
                 onError(ErrorState.RequestFailed().also { Timber.e(it.toString()) })
             }
                 .onFailure {

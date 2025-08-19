@@ -11,6 +11,7 @@ import javax.inject.Inject
 data class RecentViewedRepositoryImpl @Inject constructor(
     private val recentRecentViewedLocalDataSource: RecentDataSource<RecentViewedLocal>
 ) : RecentRepository<RecentViewed> {
+
     override suspend fun insert(item: RecentViewed) =
         recentRecentViewedLocalDataSource.insertAndKeepLastTen(item.toLocal())
 
@@ -22,4 +23,5 @@ data class RecentViewedRepositoryImpl @Inject constructor(
     override suspend fun delete(item: RecentViewed) {
         recentRecentViewedLocalDataSource.delete(item.toLocal())
     }
+
 }

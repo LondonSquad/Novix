@@ -74,6 +74,7 @@ fun OutlinedTextField(
     passwordVisibleIcon: Painter? = null,
     passwordHiddenIcon: Painter? = null
 ) {
+
     val isFocused by interactionSource.collectIsFocusedAsState()
     val mergedTextStyle = textStyle.merge(TextStyle(color = NovixTheme.colors.body))
     val isPasswordEmpty = value.text.isEmpty()
@@ -130,7 +131,14 @@ fun OutlinedTextField(
                             placeholder = placeholder,
                             leadingIcon = null,
                             trailingIcon = currentTrailingIcon,
-                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(painter = it, isFocused = isFocused) } },
+                            prefix = leadingIcon?.let {
+                                {
+                                    AnimatedLeadingIcon(
+                                        painter = it,
+                                        isFocused = isFocused
+                                    )
+                                }
+                            },
                             suffix = suffix,
                             supportingText = supportingText,
                             singleLine = singleLine,
@@ -285,7 +293,7 @@ private fun PasswordToggleIcon(
 
 @ThemePreviews
 @Composable
-fun TextFieldDefaultPreview() {
+private fun TextFieldDefaultPreview() {
     var value by remember { mutableStateOf(TextFieldValue("Preview value")) }
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -309,7 +317,7 @@ fun TextFieldDefaultPreview() {
 
 @Preview
 @Composable
-fun PasswordFieldEmptyPreview() {
+private fun PasswordFieldEmptyPreview() {
     var value by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -338,7 +346,7 @@ fun PasswordFieldEmptyPreview() {
 
 @Preview
 @Composable
-fun PasswordFieldFilledPreview() {
+private fun PasswordFieldFilledPreview() {
     var value by remember { mutableStateOf(TextFieldValue("SecurePassword123")) }
     var passwordVisible by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -370,7 +378,7 @@ fun PasswordFieldFilledPreview() {
 
 @Preview
 @Composable
-fun TextFieldErrorStatePreview() {
+private fun TextFieldErrorStatePreview() {
     var value by remember { mutableStateOf(TextFieldValue("invalid-email")) }
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -401,7 +409,7 @@ fun TextFieldErrorStatePreview() {
 
 @Preview
 @Composable
-fun TextFieldDisabledPreview() {
+private fun TextFieldDisabledPreview() {
     var value by remember { mutableStateOf(TextFieldValue("Disabled field")) }
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -426,7 +434,7 @@ fun TextFieldDisabledPreview() {
 
 @Preview
 @Composable
-fun TextFieldNoLabelPreview() {
+private fun TextFieldNoLabelPreview() {
     var value by remember { mutableStateOf(TextFieldValue("No label example")) }
     val interactionSource = remember { MutableInteractionSource() }
 

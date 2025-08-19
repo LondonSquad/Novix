@@ -24,8 +24,8 @@ fun ConditionalText(
     minimumLineLength: Int = 4,
     onExpandedChange: () -> Unit
 ) {
-    var showReadMoreButtonState by remember { mutableStateOf(false) }
     var truncatedText by remember { mutableStateOf("") }
+    var showReadMoreButtonState by remember { mutableStateOf(false) }
 
     val textStyle = NovixTheme.typography.body.small.copy(color = NovixTheme.colors.body)
     val actionStyle = SpanStyle(

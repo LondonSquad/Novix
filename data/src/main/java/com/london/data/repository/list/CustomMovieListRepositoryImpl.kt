@@ -14,8 +14,8 @@ import com.london.data.utils.orZero
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieList
 import com.london.domain.entity.shared.PagedFetchResponse
-import com.london.domain.service.AppPreferencesService
 import com.london.domain.repository.CustomMovieListRepository
+import com.london.domain.service.AppPreferencesService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -73,7 +73,6 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             if (success) {
                 localDataSource.removeMovieListCache(id)
             }
-
             success
         } catch (e: Exception) {
             crashReporter.logException(e)
@@ -188,7 +187,6 @@ class CustomMovieListRepositoryImpl @Inject constructor(
                         list.copy(itemCount = list.itemCount + 1)
                     )
                 }
-
                 true
             } else {
                 false
@@ -231,7 +229,6 @@ class CustomMovieListRepositoryImpl @Inject constructor(
                         list.copy(itemCount = maxOf(0, list.itemCount - 1))
                     )
                 }
-
                 true
             } else {
                 false
@@ -277,11 +274,9 @@ class CustomMovieListRepositoryImpl @Inject constructor(
                                     )
                                 )
                             }
-
                             moviePage++
                         } while (moviePage <= MAX_PAGES && moviesResponse.items?.isNotEmpty() == true)
                     }
-
                     page++
                 } while (page <= listsResponse.totalPages)
 
@@ -304,5 +299,5 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     private companion object {
         const val MAX_PAGES = 10
     }
-}
 
+}

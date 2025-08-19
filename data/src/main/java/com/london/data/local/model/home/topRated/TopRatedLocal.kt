@@ -6,7 +6,7 @@ import com.london.domain.entity.shared.MediaType
 
 @Entity(
     tableName = "top_rated_table",
-    primaryKeys = ["id","mediaType"]
+    primaryKeys = ["id", "mediaType"]
 )
 data class TopRatedLocal(
     val id: Int,
@@ -15,4 +15,4 @@ data class TopRatedLocal(
     val mediaType: MediaType,
     val date: Long = System.currentTimeMillis(),
     val genre: List<Int>
-): GenreMapper
+) : GenreMapper

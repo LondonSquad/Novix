@@ -1,4 +1,5 @@
 package com.london.domain.entity.review
+
 data class AuthorDetails(
     val name: String,
     val username: String,

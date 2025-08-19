@@ -24,4 +24,3 @@ fun MediaTypeLocal.toEntity(): MediaType =
 
 fun MediaType.toLocal(): MediaTypeLocal =
     if (this == MediaType.Movie) MediaTypeLocal.Movie else MediaTypeLocal.TvShow
-

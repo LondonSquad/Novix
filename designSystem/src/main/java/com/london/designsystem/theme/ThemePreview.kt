@@ -3,7 +3,6 @@ package com.london.designsystem.theme
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
 
-
 // Small phone (Pixel 4a)
 @Preview(
     name = "LIGHT - Small",
@@ -47,4 +46,5 @@ import androidx.compose.ui.tooling.preview.Preview
     uiMode = Configuration.UI_MODE_NIGHT_NO,
     device = "spec:width=411dp,height=891dp,dpi=420"
 )
+
 annotation class ThemePreviews

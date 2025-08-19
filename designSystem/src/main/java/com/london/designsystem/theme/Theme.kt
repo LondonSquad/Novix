@@ -9,8 +9,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import com.london.designsystem.color.LightNovixColors
-import com.london.designsystem.color.LinearGradientDark
-import com.london.designsystem.color.LinearGradientLight
 import com.london.designsystem.color.NovixColors
 import com.london.designsystem.typography.NovixTypography
 import com.london.designsystem.typography.NovixTypographySet

@@ -43,11 +43,13 @@ fun <T> GenresSection(
                     onClick = { onGenreClick(genre) }
                 )
             else
-                Box(modifier = Modifier.height(40.dp)
-                    .width(60.dp)
-                    .padding(bottom = 8.dp)
-                    .clip(RoundedCornerShape(12))
-                    .shimmerEffect()
+                Box(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(60.dp)
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(12))
+                        .shimmerEffect()
                 )
         }
     }

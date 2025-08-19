@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.Flow
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private val manageGetMovieUseCase: ManageGetMovieUseCase,
-    private val manageMovieListUseCase: ManageMovieListUseCase,
-    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
+    private val manageGetMovieUseCase: ManageGetMovieUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
+    private val manageMovieListUseCase: ManageMovieListUseCase
 ) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
 
     private val args = savedStateHandle.getArgs<Screen.Lists>()
@@ -33,13 +33,15 @@ class ListViewModel @Inject constructor(
         setAddListSheetVisible(args?.createList ?: false)
     }
 
-    override fun onRetry() = fetchSavedLists()
-
+    override fun onRetry() =
+        fetchSavedLists()
+    
 
     override fun onFabClick() = setAddListSheetVisible(true)
 
-    override fun onLoginClick() = emitEffect(ListEffect.NavigateToLogin)
-
+    override fun onLoginClick() =
+        emitEffect(ListEffect.NavigateToLogin)
+    
 
     override fun onListClick(id: Int) {
         updateState { copy(isSnackBarSuccessVisible = false) }

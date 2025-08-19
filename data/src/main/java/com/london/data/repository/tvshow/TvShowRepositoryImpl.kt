@@ -150,29 +150,29 @@ class TvShowRepositoryImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int
     ): SeasonEpisodes = tvShowRemoteDataSource.getTvShowSeasonEpisodes(
-            id = tvShowId,
-            seasonNumber = seasonNumber
-        ).getOrThrow().toEpisodesEntity()
+        id = tvShowId,
+        seasonNumber = seasonNumber
+    ).getOrThrow().toEpisodesEntity()
 
     override suspend fun getTvShowEpisodeByPosition(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): EpisodeDetails = tvShowRemoteDataSource.getEpisodeDetails(
-            tvShowId = tvShowId,
-            seasonNumber = seasonNumber,
-            episodeNumber = episodeNumber
-        ).getOrThrow().toEpisodeEntity()
+        tvShowId = tvShowId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber
+    ).getOrThrow().toEpisodeEntity()
 
     override suspend fun getEpisodeVideos(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): List<String> = tvShowRemoteDataSource.getEpisodeVideos(
-            tvShowId = tvShowId,
-            seasonNumber = seasonNumber,
-            episodeNumber = episodeNumber
-        ).getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
+        tvShowId = tvShowId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber
+    ).getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): List<String> =
         tvShowRemoteDataSource.getTvSeasonTrailer(tvShowId = tvShowId, seasonNumber = seasonNumber)
@@ -192,7 +192,8 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAccountTvShowStateById(id: Int
+    override suspend fun getAccountTvShowStateById(
+        id: Int
     ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
         tvShowId = id,
         guestSessionId = authenticationPreferences.getGuestSessionId(),
@@ -219,7 +220,6 @@ class TvShowRepositoryImpl @Inject constructor(
         pageNumber = pageNumber
     ).getOrThrow().toReviewEntity()
 
-
     private suspend fun getTopRatedPages(pageNumber: Int): PagedFetchResponse<TopRatedMedia> {
         val remoteResult = tvShowRemoteDataSource.getTopRatedTvShows(pageNumber).getOrThrow()
         val tvShows = remoteResult.items.map { it.toEntity() }
@@ -232,9 +232,9 @@ class TvShowRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getTopRatedRemoteTvShows(pageNumber: Int) = tvShowRemoteDataSource
-            .getTopRatedTvShows(pageNumber = pageNumber)
-            .getOrThrow()
-            .items.map { it.toEntity() }
+        .getTopRatedTvShows(pageNumber = pageNumber)
+        .getOrThrow()
+        .items.map { it.toEntity() }
 
     private suspend fun fetchFirstTopRatedPageTvShows(): List<TopRatedMedia> {
         return tvShowRemoteDataSource
@@ -260,4 +260,5 @@ class TvShowRepositoryImpl @Inject constructor(
     companion object {
         const val PAGE_NUMBER = 1
     }
+
 }

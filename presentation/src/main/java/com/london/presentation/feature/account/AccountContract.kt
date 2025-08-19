@@ -3,10 +3,10 @@ package com.london.presentation.feature.account
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 
 interface AccountContract {
-    fun onWatchingHistoryClick()
     fun onMyRatingClick()
-    fun onContentRestrictionClick()
     fun onChangePasswordClick()
+    fun onWatchingHistoryClick()
+    fun onContentRestrictionClick()
 
     // appearance bottom sheet
     fun onAppearanceClick()
@@ -17,16 +17,15 @@ interface AccountContract {
 
     // Language Bottom Sheet
     fun onLanguageClick()
-    fun onEnglishSelected()
     fun onArabicSelected()
+    fun onEnglishSelected()
     fun onLanguageSettingsSave()
 
     // Logout Bottom Sheet
-    fun onLogoutConfirmed()
-
-    fun onUserMenuClick()
-    fun onLogoutClick()
-    fun onBottomSheetDismiss()
     fun onLoginClick()
+    fun onLogoutClick()
+    fun onUserMenuClick()
+    fun onLogoutConfirmed()
+    fun onBottomSheetDismiss()
     fun onContentRestrictionSave(level: ContentRestrictionLevel)
 }

@@ -54,11 +54,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun ListScreen(
-    onNavigateToListDetails: (Int) -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToListDetails: (Int) -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 

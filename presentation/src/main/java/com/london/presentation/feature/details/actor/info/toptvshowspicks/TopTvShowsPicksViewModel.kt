@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TopTvShowsPicksViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getActorUseCase: GetActorUseCase,
+    private val getActorUseCase: GetActorUseCase
 ) : BaseViewModel<TopTvShowsPicksUiState, TopTvShowsPicksEffect>(
     TopTvShowsPicksUiState()
 ), TopTvShowsPicksContract {

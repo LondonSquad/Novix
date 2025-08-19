@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingActorsViewModel @Inject constructor(
-    private val getActorUseCase: GetActorUseCase,
+    private val getActorUseCase: GetActorUseCase
 ) : BaseViewModel<TrendingActorsUiState, TrendingActorsEffect>(TrendingActorsUiState()),
     TrendingActorsContract {
 
@@ -22,11 +22,11 @@ class TrendingActorsViewModel @Inject constructor(
         getTrendingActors()
     }
 
-    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.ActorDetailsNavigation(id))
+    override fun onRetryClick() = getTrendingActors()
 
     override fun onBackClick() = emitEffect(TrendingActorsEffect.BackNavigation)
 
-    override fun onRetryClick() = getTrendingActors()
+    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.ActorDetailsNavigation(id))
 
     private fun getTrendingActors() {
         tryToExecute(
@@ -58,4 +58,5 @@ class TrendingActorsViewModel @Inject constructor(
 
     private fun setLoadingState(isLoading: Boolean) =
         updateState { copy(isLoading = isLoading) }
+
 }

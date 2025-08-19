@@ -22,9 +22,9 @@ import com.london.designsystem.theme.NovixTheme
 
 @Composable
 fun NetworkErrorScreen(
+    onBack: (() -> Unit)?,
     modifier: Modifier = Modifier,
     onRetry: () -> Unit = {},
-    onBack: (() -> Unit)?
 ) {
     Box(
         modifier
@@ -64,6 +64,7 @@ fun NetworkErrorScreen(
                 color = NovixTheme.colors.body,
                 textAlign = TextAlign.Center
             )
+
             OutlineButton(
                 text = stringResource(com.london.presentation.R.string.retry),
                 hasLabel = true,

@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieCategoryViewModel @Inject constructor(
-    private val getMovieUseCase: GetMovieUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val getMovieUseCase: GetMovieUseCase
 ) : BaseViewModel<MovieCategoryUiState, MovieCategoryEffect>(MovieCategoryUiState()),
     MovieCategoryContract {
 
@@ -70,4 +70,5 @@ class MovieCategoryViewModel @Inject constructor(
 
     private fun onInitializeMoviesFailed(errorState: ErrorState) =
         updateState { copy(error = errorState) }
+
 }

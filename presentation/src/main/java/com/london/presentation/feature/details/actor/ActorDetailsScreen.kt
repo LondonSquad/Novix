@@ -66,10 +66,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun ActorDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToGallery: (Int) -> Unit,
-    onNavigateToTopMoviePicks: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
-    onNavigateToTopTvShowPicks: (Int) -> Unit,
+    onNavigateToTopMoviePicks: (Int) -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToTopTvShowPicks: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val effect by viewModel.effect.collectAsState(null)
@@ -98,7 +98,6 @@ fun ActorDetailsScreen(
         )
     }
 }
-
 
 @Composable
 private fun Content(
@@ -140,7 +139,6 @@ private fun Content(
                     }
                 }
             }
-
             item { ActorInfoSectionItem(uiState = uiState) }
             item { BiographySection(uiState = uiState) }
             item {
@@ -284,7 +282,7 @@ private fun TvShowsSection(
 }
 
 @Composable
-fun TopMoviesPicksList(
+private fun TopMoviesPicksList(
     movie: List<ActorMediaItems>,
     onNavigateToMoviePicks: (Int) -> Unit
 ) {
@@ -308,7 +306,7 @@ fun TopMoviesPicksList(
 }
 
 @Composable
-fun TopTvShowsPicksList(
+private fun TopTvShowsPicksList(
     tvShow: List<ActorMediaItems>,
     onNavigateToTvShowPicks: (Int) -> Unit
 ) {
@@ -332,7 +330,7 @@ fun TopTvShowsPicksList(
 }
 
 @Composable
-fun ActorGallery(images: List<String>) {
+private fun ActorGallery(images: List<String>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -443,7 +441,7 @@ private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
 
 @Preview
 @Composable
-fun Preview() {
+private fun Preview() {
     NovixTheme {
         ActorDetailsScreen(
             onNavigateBack = {},

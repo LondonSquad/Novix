@@ -18,6 +18,7 @@ class RecentWatchedRepositoryImpl @Inject constructor(
     private val recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
     private val recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
 ) : RecentWatchedRepository {
+
     override suspend fun getAllRecentWatchedMovies(): Flow<List<Movie>> =
         recentWatchedMoviesDataSource.getAll().map { list -> list.map { item -> item.toEntity() } }
 
@@ -29,4 +30,5 @@ class RecentWatchedRepositoryImpl @Inject constructor(
 
     override suspend fun insertTvShow(item: TvShow) =
         recentWatchedTvShowsDataSource.insert(item.toRecentWatchedTvShowLocal())
+
 }

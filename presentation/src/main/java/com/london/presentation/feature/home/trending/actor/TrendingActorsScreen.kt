@@ -26,8 +26,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingActorsScreen(
-    onNavigateToActorDetailsClick: (Int) -> Unit,
     onNavigateBackClick: () -> Unit,
+    onNavigateToActorDetailsClick: (Int) -> Unit,
     viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

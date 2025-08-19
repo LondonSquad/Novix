@@ -8,7 +8,7 @@ import com.london.data.local.database.dao.home.HomeDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 
 @Dao
-interface PopularSectionDao: HomeDao<PopularSectionLocal> {
+interface PopularSectionDao : HomeDao<PopularSectionLocal> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insert(item: PopularSectionLocal)
@@ -24,4 +24,5 @@ interface PopularSectionDao: HomeDao<PopularSectionLocal> {
 
     @Query("SELECT * FROM popular_section_table WHERE date = :date")
     override suspend fun getByDate(date: Long): PopularSectionLocal
+
 }

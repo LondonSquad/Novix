@@ -28,8 +28,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -58,7 +58,6 @@ fun TrendingTvShowsScreen(
         )
     }
 }
-
 
 @Composable
 private fun Content(

@@ -15,18 +15,31 @@ import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 
 interface MovieRepository {
+
     suspend fun getMovieById(id: Int): MovieDetails
+
     suspend fun getSimilarMoviesById(id: Int): List<Movie>
+
     suspend fun getMovieImagesById(id: Int): ImagesEntity
+
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<Review>
+
     suspend fun getMovieVideos(movieId: Int): List<String>
+
     suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails
+
     suspend fun getPopularMovies(): List<PopularMedia>
+
     suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending>
+
     suspend fun getTopRatedMovies(pageNumber: Int): PagedFetchResponse<TopRatedMedia>
+
     suspend fun getFirstPageTopRatedMovies(): List<TopRatedMedia>
+
     suspend fun getMoviesByGenre(genre: MovieGenre, pageNumber: Int): PagedFetchResponse<Movie>
+
     suspend fun getAllRatedMovies(): List<RatedMedia>
+
     suspend fun deleteMovieRating(movieId: Int): Boolean
 
     suspend fun getUpcomingMoviesByGenre(
@@ -42,4 +55,5 @@ interface MovieRepository {
     suspend fun getAccountMovieStatesById(
         id: Int,
     ): MediaStates
+
 }

@@ -38,14 +38,13 @@ import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TopRatedScreen(
-    viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
-    onNaviagteToMovieDetalis: (Int) -> Unit = {},
-    onNaviagteToTvShowDetalis: (Int) -> Unit = {}
+    onNavigateToMovieDetails: (Int) -> Unit = {},
+    onNavigateToTvShowDetails: (Int) -> Unit = {},
+    viewModel: TopRatedViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -53,8 +52,8 @@ fun TopRatedScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopRatedEffect.NavigateBack -> onNavigateBack()
-            is TopRatedEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(currentEffect.id)
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
         }
     }
 
@@ -64,7 +63,7 @@ fun TopRatedScreen(
     BuildScreen(
         isLoading = state.isLoading,
         isError = topRatedMovieFlow.loadState.refresh is LoadState.Error
-                && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
+            && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBackClicked,
         onRetry = viewModel::onRetry,
     ) {

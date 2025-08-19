@@ -122,9 +122,11 @@ fun ImageViewFilter(
             isLoading -> {
                 loadingContent()
             }
+
             errorState != null -> {
                 errorContent(errorState)
             }
+
             moderationState != null && moderationState!!.isModerated -> {
                 if (moderationState!!.shouldBlur && config.showCustomContentWhenBlurred) {
                     moderatedContent()
@@ -139,9 +141,9 @@ fun ImageViewFilter(
                         blurStrength = config.blurStrength,
                         modifier = Modifier.fillMaxSize()
                     )
-                     if (moderationState!!.shouldBlur){
-                         moderatedContent()
-                     }
+                    if (moderationState!!.shouldBlur) {
+                        moderatedContent()
+                    }
 
                     // Show text overlay when image should be blurred but showTextInsteadOfBlur is true
                     if (moderationState!!.shouldBlur && config.showTextInsteadOfBlur) {

@@ -16,14 +16,23 @@ import com.london.domain.entity.tvshow.episode.EpisodeDetails
 import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 
 interface TvShowRepository {
+
     suspend fun getTvShowDetailsById(id: Int): TvShowDetails
+
     suspend fun getImagesTvShowById(id: Int): ImagesEntity
+
     suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails
+
     suspend fun getPopularTvShows(): List<PopularMedia>
+
     suspend fun addTvShowById(id: Int, rating: Int): Boolean
+
     suspend fun getAllRatedTvShows(): List<RatedMedia>
+
     suspend fun deleteTvShowRating(tvShowId: Int): Boolean
+
     suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending>
+
     suspend fun getFirstPageTopRatedTvShows(): List<TopRatedMedia>
 
     suspend fun getTopRatedTvShows(
@@ -54,8 +63,11 @@ interface TvShowRepository {
     ): EpisodeDetails
 
     suspend fun getEpisodeVideos(tvShowId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
+
     suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): List<String>
+
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<Review>
+
     suspend fun getAccountTvShowStateById(
         id: Int,
     ): MediaStates
@@ -65,4 +77,5 @@ interface TvShowRepository {
         seasonNumber: Int,
         episodeNumber: Int,
     ): MediaStates
+
 }

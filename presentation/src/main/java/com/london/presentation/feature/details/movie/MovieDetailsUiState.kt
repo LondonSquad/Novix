@@ -21,13 +21,13 @@ data class MovieDetailsUiState(
     val movieOverview: String = "",
     val isGuestUser: Boolean = false,
     val actors: List<Actor> = listOf(),
-    val movieGenres: List<MovieGenreUi> = listOf(),
     val isSuccessfullyRated: Boolean? = null,
     val movieImages: List<String> = listOf(),
     val similarMovies: List<Movie> = listOf(),
     val isRateBottomSheetVisible: Boolean = false,
+    val movieGenres: List<MovieGenreUi> = listOf(),
     val isGuestUserBottomSheetVisible: Boolean = false,
-){
+) {
     val hasTrailer: Boolean
         get() = movieVideo.isNotEmpty()
 }

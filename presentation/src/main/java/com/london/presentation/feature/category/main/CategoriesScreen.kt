@@ -43,7 +43,6 @@ fun CategoriesScreen(
     onNavigateToTvShowCategory: (TvShowGenreUi) -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 

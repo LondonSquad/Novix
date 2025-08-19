@@ -11,7 +11,6 @@ data class OnboardingUiState(
     val isLastPage = currentPage == pages.lastIndex
 }
 
-
 data class OnboardingPage(
     @StringRes val title: Int,
     @StringRes val description: Int,

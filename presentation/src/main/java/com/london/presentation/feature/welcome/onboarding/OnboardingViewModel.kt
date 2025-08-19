@@ -18,7 +18,6 @@ class OnboardingViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
 
-
     fun onPageChanged(page: Int) {
         updateState { copy(currentPage = page) }
     }

@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContinueWatchingViewModel @Inject constructor(
-    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
+    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
 ) : BaseViewModel<ContinueWatchingUiState, ContinueWatchingEffect>(ContinueWatchingUiState()),
     ContinueWatchingContract {
 
@@ -69,7 +69,7 @@ class ContinueWatchingViewModel @Inject constructor(
         if (!alreadySelected) onNotSelected()
     }
 
-    fun getRecentWatchedMedia() {
+    private fun getRecentWatchedMedia() {
         tryToExecute(
             block = ::fetchRecentWatchedMedia,
             onStart = { setLoadingState(true) },
@@ -95,4 +95,5 @@ class ContinueWatchingViewModel @Inject constructor(
         updateState { copy(movies = movies, tvSeries = tvSeries) }
 
     private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
+
 }

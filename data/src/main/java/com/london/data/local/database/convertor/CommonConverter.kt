@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.london.data.utils.jsonList
 
-
 class CommonConverter {
 
     private val gson = Gson()

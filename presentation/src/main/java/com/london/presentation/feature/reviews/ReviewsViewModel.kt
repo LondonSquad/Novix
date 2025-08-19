@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getMovieUseCase: GetMovieUseCase,
-    private val getTvShowUseCase: GetTvShowUseCase,
-    savedStateHandle: SavedStateHandle
+    private val getTvShowUseCase: GetTvShowUseCase
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
@@ -80,4 +80,5 @@ class ReviewsViewModel @Inject constructor(
         MediaType.Movie -> getMovieUseCase.getMovieReviews(mediaId, pageNumber)
         MediaType.TvShow -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
     }
+
 }

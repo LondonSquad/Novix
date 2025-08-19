@@ -30,13 +30,8 @@ import com.london.designsystem.component.carousel.m3.CarouselItemScope
 import com.london.designsystem.component.carousel.m3.CarouselState
 import com.london.designsystem.component.carousel.m3.keylineListOf
 import com.london.designsystem.component.carousel.m3.rememberCarouselState
-import kotlin.Float
-import kotlin.Int
-import kotlin.Unit
 import kotlin.math.floor
 import kotlin.math.max
-import kotlin.repeat
-import kotlin.with
 
 @Composable
 fun HeroCarousel(
@@ -94,7 +89,7 @@ fun HeroCarousel(
 
 @Composable
 @Preview
-fun MyCarouselScreen() {
+private fun MyCarouselScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

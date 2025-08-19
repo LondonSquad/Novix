@@ -87,7 +87,7 @@ private fun Content(
 @Composable
 private fun GalleryContent(
     uiState: ActorsGalleryUiState
-){
+) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 104.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),

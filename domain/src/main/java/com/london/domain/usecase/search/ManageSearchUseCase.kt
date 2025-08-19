@@ -11,6 +11,7 @@ import javax.inject.Inject
 class ManageSearchUseCase @Inject constructor(
     private val repository: SearchRepository
 ) {
+
     suspend fun searchForActors(
         name: String,
         pageNumber: Int

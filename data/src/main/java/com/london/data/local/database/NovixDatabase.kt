@@ -65,5 +65,4 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun listMembershipDao(): ListMembershipDao
     abstract fun movieListDao(): MovieListDao
     abstract fun syncMetadataDao(): SyncMetadataDao
-
 }

@@ -38,9 +38,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddListBottomSheet(
-    modifier: Modifier = Modifier,
     addListSheetState: AddSheetState,
     addListInteractions: ListContract,
+    modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -164,7 +164,7 @@ private fun isButtonEnabled(addSheetState: AddSheetState): Boolean {
 
 @Composable
 @Preview
-fun Preview() {
+private fun Preview() {
     Content(
         addSheetState = AddSheetState(
             listName = TextFieldValue(""),

@@ -163,14 +163,14 @@ private fun BookmarkBottomSheetContent(
      * host to manage and show snack-bars across screens regardless of the parent lifecycle.
      */
 
-    if (state.isSuccessSnackbarVisible) {
+    if (state.isSuccessSnackBarVisible) {
         SnackBarAnimation(
             message = R.string.item_added_success.string,
             icon = com.london.designsystem.R.drawable.ic_success
         )
     }
 
-    if (state.isErrorSnackbarVisible) {
+    if (state.isErrorSnackBarVisible) {
         SnackBarAnimation(
             message = R.string.item_added_fail.string
         )
@@ -272,7 +272,7 @@ private fun UserListsView(
 }
 
 @Composable
-fun UserActions(
+private fun UserActions(
     contract: BookmarkSheetContract,
     uiState: BookmarkSheetUiState,
     bookmarkedMovieId: Int

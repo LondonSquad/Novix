@@ -27,7 +27,7 @@ fun Scaffold(
         bottomBar = bottomBar,
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition =  FabPosition.End,
+        floatingActionButtonPosition = FabPosition.End,
         containerColor = containerColor,
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,

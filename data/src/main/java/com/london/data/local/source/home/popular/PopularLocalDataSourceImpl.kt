@@ -31,7 +31,7 @@ class PopularLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getByDate(date: Long): PopularSectionLocal =
         popularSectionDao.getByDate(date)
-    
+
     private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             popularSectionDao.getAll().forEach { popularLocal ->
@@ -40,4 +40,5 @@ class PopularLocalDataSourceImpl @Inject constructor(
             }
         }
     }
+
 }

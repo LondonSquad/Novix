@@ -41,11 +41,12 @@ fun EmptyGenreLayout(
             style = NovixTheme.typography.body.small,
             color = NovixTheme.colors.body
         )
+
     }
 }
 
 @Preview
 @Composable
-fun EmptyStateViewPreview() {
+private fun EmptyStateViewPreview() {
     EmptyGenreLayout()
 }

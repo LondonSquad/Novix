@@ -41,8 +41,8 @@ import com.london.presentation.R
 @Composable
 fun TrendingSection(
     onMoviesClick: () -> Unit,
-    onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,
+    onTvShowsClick: () -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
 ) {
@@ -70,7 +70,7 @@ fun TrendingSection(
                     .shimmerEffect()
             )
 
-        Row (
+        Row(
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .fillMaxWidth()
@@ -79,38 +79,38 @@ fun TrendingSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-                CategoryCard(
-                    title = stringResource(R.string.Movies),
-                    icon = painterResource(id = R.drawable.icon_movie),
-                    startColor = NovixTheme.colors.primary,
-                    endColor = NovixTheme.colors.darkCocoa,
-                    imageWidth = 60.dp,
-                    imageHeight = 64.dp,
-                    onClick = onMoviesClick,
-                    modifier = Modifier.weight(1f)
-                )
+            CategoryCard(
+                title = stringResource(R.string.Movies),
+                icon = painterResource(id = R.drawable.icon_movie),
+                startColor = NovixTheme.colors.primary,
+                endColor = NovixTheme.colors.darkCocoa,
+                imageWidth = 60.dp,
+                imageHeight = 64.dp,
+                onClick = onMoviesClick,
+                modifier = Modifier.weight(1f)
+            )
 
-                CategoryCard(
-                    title = stringResource(R.string.TV_Shows),
-                    icon = painterResource(id = R.drawable.icon_tvshow),
-                    startColor = NovixTheme.colors.secondary,
-                    endColor = NovixTheme.colors.deepCrimson,
-                    imageWidth = 88.46.dp,
-                    imageHeight = 64.dp,
-                    onClick = onTvShowsClick,
-                    modifier = Modifier.weight(1f)
-                )
+            CategoryCard(
+                title = stringResource(R.string.TV_Shows),
+                icon = painterResource(id = R.drawable.icon_tvshow),
+                startColor = NovixTheme.colors.secondary,
+                endColor = NovixTheme.colors.deepCrimson,
+                imageWidth = 88.46.dp,
+                imageHeight = 64.dp,
+                onClick = onTvShowsClick,
+                modifier = Modifier.weight(1f)
+            )
 
-                CategoryCard(
-                    title = stringResource(R.string.actors),
-                    icon = painterResource(id = R.drawable.icon_actor),
-                    startColor = NovixTheme.colors.tealBlue,
-                    endColor = NovixTheme.colors.oceanDark,
-                    imageWidth = 56.49.dp,
-                    imageHeight = 64.dp,
-                    onClick = onActorsClick,
-                    modifier = Modifier.weight(1f)
-                )
+            CategoryCard(
+                title = stringResource(R.string.actors),
+                icon = painterResource(id = R.drawable.icon_actor),
+                startColor = NovixTheme.colors.tealBlue,
+                endColor = NovixTheme.colors.oceanDark,
+                imageWidth = 56.49.dp,
+                imageHeight = 64.dp,
+                onClick = onActorsClick,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }

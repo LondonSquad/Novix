@@ -33,6 +33,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @Inject
     lateinit var appPreferencesService: AppPreferencesService
 
@@ -65,7 +66,6 @@ class MainActivity : ComponentActivity() {
 
             NovixTheme(isAppDarkMode = isAppDarkMode) {
                 ApplySystemBarTheme(useDarkTheme = isAppDarkMode)
-
                 ContentRestrictionProvider(appPreferencesService) { contentRestrictionLevel ->
                     CompositionLocalProvider(
                         LocalContentRestrictionLevel provides contentRestrictionLevel

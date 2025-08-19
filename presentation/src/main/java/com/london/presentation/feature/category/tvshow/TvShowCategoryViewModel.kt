@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowCategoryViewModel @Inject constructor(
-    private val managerTvShowDetailsUseCase: GetTvShowUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val managerTvShowDetailsUseCase: GetTvShowUseCase
 ) : BaseViewModel<TvShowCategoryUiState, TvShowCategoryEffect>(TvShowCategoryUiState()),
     TvShowCategoryContract {
 
@@ -69,4 +69,5 @@ class TvShowCategoryViewModel @Inject constructor(
 
     private fun onInitializeTvShowsFailed(errorState: ErrorState) =
         updateState { copy(error = errorState) }
+
 }
