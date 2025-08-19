@@ -33563,9 +33563,19 @@
     },
     "assignees": [
       {
+        "login": "abdo-essam",
+        "id": 92235360,
+        "url": "https://github.com/abdo-essam"
+      },
+      {
         "login": "BassantM",
         "id": 102248144,
         "url": "https://github.com/BassantM"
+      },
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
       }
     ],
     "comments": [
@@ -33592,9 +33602,9 @@
     "week": "2025-W34",
     "status": "pending",
     "diff_stats": {
-      "additions": 622,
-      "deletions": 870,
-      "changed_files": 184
+      "additions": 624,
+      "deletions": 872,
+      "changed_files": 185
     }
   }
 ]
