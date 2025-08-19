@@ -57,12 +57,15 @@ fun BuildScreen(
     @StringRes emptyLayoutMessage: Int? = null,
     @DrawableRes emptyLayoutImage: Int? = null,
     pagingFlow: LazyPagingItems<*>? = null,
-    handlePagingLoadingAutomatically: Boolean = false,
+    handlePagingLoadingAutomatically: Boolean = true,
     emptyContent: (@Composable () -> Unit)? = null,
     guestContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     when {
+
+        isGuest && guestContent != null  -> { guestContent.invoke() }
+
         shouldShowLoading(
             isLoading = isLoading,
             handlePagingLoadingAutomatically = handlePagingLoadingAutomatically,
@@ -73,7 +76,7 @@ fun BuildScreen(
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
         }
 
-        isGuest && guestContent != null  -> { guestContent.invoke() }
+
 
         (pagingFlow!=null)  &&
                 pagingFlow.isEmpty() &&

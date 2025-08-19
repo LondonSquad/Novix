@@ -35,6 +35,7 @@ import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
+import com.london.presentation.utils.navBarBottomPadding
 
 @Composable
 fun CategoriesScreen(
@@ -64,7 +65,7 @@ private fun Content(
     state: CategoriesUiState,
     contract: CategoriesContract,
 ) {
-    Column {
+    Column(Modifier.navBarBottomPadding()) {
         TopBar(
             title = stringResource(R.string.categories),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
