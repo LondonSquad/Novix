@@ -33448,10 +33448,20 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-19T09:17:29Z",
+        "commit_id": "07c482f9d4621e45ec2863f7b670fab9b8c222c0"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-19T09:17:29Z",
+    "time_to_first_approval_minutes": 10.416666666666666,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
