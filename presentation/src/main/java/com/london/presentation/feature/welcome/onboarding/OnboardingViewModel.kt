@@ -51,7 +51,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun navigateToWelcome() {
         setOnBoardingShown()
-        emitEffect(OnboardingEffect.NavigateToWelcome)
+        emitEffect(OnboardingEffect.OnWelcomeNavigation)
     }
 
     fun onboardingFinished() {

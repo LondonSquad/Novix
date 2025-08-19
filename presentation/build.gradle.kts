@@ -67,5 +67,4 @@ dependencies {
 
     ksp(libs.bundles.hilt.ksp)
     implementation(libs.bundles.hilt.runtime)
-    testImplementation(kotlin("test"))
 }

@@ -71,7 +71,7 @@ fun OnboardingScreen(
                 viewModel.scrollToPage(pagerState, currentEffect.page, scope)
             }
 
-            OnboardingEffect.NavigateToWelcome -> {
+            OnboardingEffect.OnWelcomeNavigation -> {
                 viewModel.onboardingFinished()
                 onComplete()
             }
