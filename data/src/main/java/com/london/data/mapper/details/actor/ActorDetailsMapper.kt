@@ -3,10 +3,8 @@ package com.london.data.mapper.details.actor
 import com.london.data.remote.model.details.actor.ActorDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.actor.ActorDetails
 
-@KoverIgnore
 fun ActorDetailsResponse.toEntity(): ActorDetails {
     return ActorDetails(
         id = id.orZero(),

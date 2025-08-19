@@ -9,7 +9,7 @@ interface CustomMovieListRepository {
 
     suspend fun createMovieList(name: String): Boolean
     suspend fun deleteMovieList(id: Int): Boolean
-//    suspend fun getAllListedMovieIds(): List<Int>
+    suspend fun getAllListedMovieIds(): List<Int>
 //    fun getAllListedMovieIdsFlow(): Flow<List<Int>>
     suspend fun addMovieToList(listId: Int, movieId: Int): Boolean
     suspend fun removeMovieFromList(listId: Int, movieId: Int): Boolean

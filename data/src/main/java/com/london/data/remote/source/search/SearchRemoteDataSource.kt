@@ -1,12 +1,9 @@
-@file:KoverIgnore
-
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.search.SearchActorRemote
 import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.domain.KoverIgnore
 
 interface SearchRemoteDataSource {
 

@@ -1,5 +1,3 @@
-@file:KoverIgnore
-
 package com.london.data.mapper.home.popular
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
@@ -8,7 +6,6 @@ import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.shared.MediaType
 

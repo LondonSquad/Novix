@@ -1,5 +1,3 @@
-@file:KoverIgnore
-
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
@@ -8,10 +6,8 @@ import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import com.london.domain.KoverIgnore
 import javax.inject.Inject
 
-@KoverIgnore
 class SearchRemoteDataSourceImpl @Inject constructor(
     private val searchApiService: SearchApiService
 ) : SearchRemoteDataSource, BaseRemoteDatasource {
@@ -60,5 +56,4 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
-
 }

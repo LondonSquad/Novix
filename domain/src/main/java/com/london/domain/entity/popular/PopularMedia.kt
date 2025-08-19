@@ -1,7 +1,5 @@
-@file:KoverIgnore
 package com.london.domain.entity.popular
 
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.shared.MediaType
 
 data class PopularMedia(

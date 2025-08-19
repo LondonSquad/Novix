@@ -1,5 +1,3 @@
-@file:KoverIgnore
-
 package com.london.data.mapper.search
 
 import com.london.data.local.model.home.upcoming.UpComingMovieLocal
@@ -9,7 +7,6 @@ import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.extractYear
 import com.london.data.utils.orZero
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.UpComingMovie
 
