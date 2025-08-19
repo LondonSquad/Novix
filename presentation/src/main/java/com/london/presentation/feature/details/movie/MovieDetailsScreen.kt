@@ -138,7 +138,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyState.firstVisibleItemScrollOffset > 40f ||
-                    lazyState.firstVisibleItemIndex > 0
+                lazyState.firstVisibleItemIndex > 0
         }
     }
 
@@ -384,6 +384,8 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
+                tint = NovixTheme.colors.yellowAccent,
+                hasInitialDot = false
             )
         }
 
@@ -398,8 +400,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
-
-                )
+            )
 
             if (!date.isNullOrBlank()) {
                 TextWithIcon(
