@@ -84,7 +84,7 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         movieListDao.updateItemCount(listId = listId, itemCount = itemCount)
 
     override suspend fun shouldRefreshCache(): Boolean {
-        val metadata = syncMetadataDao.getSyncMetadata(SYNC_KEY)
+        val metadata = syncMetadataDao.getSyncMetadata(SyncMetadataDao.MOVIE_LISTS_SYNC_KEY)
         return metadata == null ||
             !metadata.isSuccess ||
             (System.currentTimeMillis() - metadata.lastSyncTime) > CACHE_VALIDITY_MS
@@ -93,7 +93,7 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     override suspend fun markCacheRefreshed(success: Boolean) {
         syncMetadataDao.insertSyncMetadata(
             SyncMetadataLocal(
-                syncKey = SYNC_KEY,
+                syncKey = SyncMetadataDao.MOVIE_LISTS_SYNC_KEY,
                 lastSyncTime = System.currentTimeMillis(),
                 isSuccess = success
             )
@@ -103,10 +103,10 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     override suspend fun clearAllCache() {
         membershipDao.clearAll()
         movieListDao.clearAll()
+        syncMetadataDao.clearAll()
     }
 
     private companion object {
         const val CACHE_VALIDITY_MS = 30 * 60 * 1000L // 30 minutes
-        const val SYNC_KEY = SyncMetadataDao.MOVIE_LISTS_SYNC_KEY
     }
 }

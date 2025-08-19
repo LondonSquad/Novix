@@ -13,4 +13,6 @@ data class ActorDetailsUiState(
     val actorDetails: ActorDetails = ActorDetails(),
     val actorMovieDetails: ActorMediaDetails? = null,
     val actorTvShowDetails: ActorMediaDetails? = null,
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

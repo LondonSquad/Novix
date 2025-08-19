@@ -203,8 +203,22 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.BackNavigation)
     }
 
-    override fun onSavedClick() {
-        // TODO: implement saving logic
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
     }
 
     override fun onExpandClick() {

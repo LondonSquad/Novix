@@ -7,6 +7,8 @@ interface TrendingMoviesContract {
     fun onRetryClick()
     fun onMovieClick(id: Int)
     fun onGenreClick(genre: MovieGenreUi)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }
 
 fun defaultTrendingMoviesContract() = object : TrendingMoviesContract {
@@ -14,4 +16,6 @@ fun defaultTrendingMoviesContract() = object : TrendingMoviesContract {
     override fun onRetryClick() {}
     override fun onMovieClick(id: Int) {}
     override fun onGenreClick(genre: MovieGenreUi) {}
+    override fun onBookmarkSheetDismiss() {}
+    override fun onManageBookmarkClicked(movieId: Int) {}
 }

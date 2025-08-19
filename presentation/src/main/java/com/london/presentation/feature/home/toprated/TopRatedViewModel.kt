@@ -62,6 +62,24 @@ class TopRatedViewModel @Inject constructor(
         emitEffect(TopRatedEffect.NavigateToTvShowDetails(id))
     }
 
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
+
     private fun initializeTopRated() {
         if (state.value.isMovieSelected) initializeTopMovies()
         else initializeTvShow()
