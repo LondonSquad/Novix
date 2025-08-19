@@ -1,6 +1,6 @@
 package com.london.presentation.feature.account
 
-import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 
 interface AccountContract {
     fun onWatchingHistoryClick()

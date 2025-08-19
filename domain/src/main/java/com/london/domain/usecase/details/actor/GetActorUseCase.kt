@@ -1,9 +1,9 @@
 package com.london.domain.usecase.details.actor
 
-import com.london.domain.entity.Actor
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.actor.ActorDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository

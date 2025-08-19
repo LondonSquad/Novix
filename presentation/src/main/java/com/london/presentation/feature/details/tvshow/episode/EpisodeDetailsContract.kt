@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.tvshow.episode
 
 interface EpisodeDetailsContract {
-    fun onBackClicked()
+    fun onBackClick()
     fun onLoginClick()
-    fun onRateBottomSheetClick()
+    fun onRateEpisodeClick()
     fun onSelectRatingClick(rating: Int)
 }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.imageharamblur.ui.ImageFilterConfig
 import com.london.imageharamblur.ui.ImageViewFilter
 

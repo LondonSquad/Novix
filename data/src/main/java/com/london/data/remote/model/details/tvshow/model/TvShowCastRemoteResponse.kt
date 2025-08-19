@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowCastRemoteResponse(
     @SerialName("cast")
-    val cast: List<TvShowCastMember>? = null,
+    val cast: List<TvShowCastMemberResponse>? = null,
     @SerialName("id")
     val id: Int? = null
 )
 
 @Serializable
-data class TvShowCastMember(
+data class TvShowCastMemberResponse(
     @SerialName("id")
     val id: Int? = null,
     @SerialName("name")

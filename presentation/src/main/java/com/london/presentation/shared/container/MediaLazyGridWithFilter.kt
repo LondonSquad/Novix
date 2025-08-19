@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Movie
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.shared.genre.MovieGenreUi

@@ -1,10 +1,9 @@
 package com.london.presentation.feature.details.tvshow.info
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.TvShow
-import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
@@ -45,8 +44,8 @@ class TvShowDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val episodesBySeason =
-                    getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
-                val videoProvider = getTvShowUseCase.getTvShowVideo(tvShowId)
+                    getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
+                val videoProvider = getTvShowUseCase.getTvSeasonTrailer(tvShowId, seasonNumber)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->
@@ -73,6 +72,7 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        clearRatedState()
         emitEffect(
             TvShowDetailsEffect.OnNavigateToEpisodeDetails(
                 tvShowId = tvShowId,
@@ -83,14 +83,17 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onReviewsClicked(tvShowId: Int, mediaType: MediaType) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
     override fun onCastClicked(tvShowId: Int) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
     override fun onGenreClicked(genre: TvShowGenreUi) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre))
     }
 
@@ -201,7 +204,7 @@ class TvShowDetailsViewModel @Inject constructor(
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
                 val seasonNumber = firstSeason ?: 1
 
-                val episodes = getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+                val episodes = getTvEpisodesUseCase.getTvShowSeasonEpisodes(
                     tvShowId,
                     seasonNumber
                 ).episodes
@@ -259,4 +262,6 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) =
         manageRecentViewedUseCase.addToRecentViewed(tvShow)
+
+    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
 }

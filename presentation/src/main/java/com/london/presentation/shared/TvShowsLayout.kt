@@ -11,8 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.tvshow.TvShow
 import com.london.presentation.utils.gridColumns
 
 @Deprecated(

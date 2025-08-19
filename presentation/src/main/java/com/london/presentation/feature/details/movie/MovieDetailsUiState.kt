@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.movie
 
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
 

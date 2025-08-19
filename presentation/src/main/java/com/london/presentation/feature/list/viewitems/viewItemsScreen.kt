@@ -2,7 +2,6 @@ package com.london.presentation.feature.list.viewitems
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -62,7 +61,6 @@ private fun Content(
             onClickOption2 = contract::onDeleteClick,
             option2IconTint = NovixTheme.colors.redAccent,
             modifier = Modifier
-                .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
@@ -70,7 +68,7 @@ private fun Content(
             onBack = null,
             onRetry = listItems::refresh,
             isLoading = state.isLoading,
-            isError = (state.error != null && state.error != ErrorState.EntryNotFound()),
+            isError = state.error == ErrorState.NoInternet,
             emptyLayoutMessage = R.string.no_items_found,
             emptyLayoutImage = R.drawable.img_no_result,
             pagingFlow = listItems,
@@ -79,11 +77,11 @@ private fun Content(
             MediaLazyPagingGrid(
                 pagingFlow = listItems,
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onItemClick = { contract.onMovieClick(it.id.toInt()) },
+                onItemClick = { contract.onMovieClick(it.id) },
                 getImageUrl = { it.posterUrl },
                 getTitle = { "${it.id} media img" },
                 onSaveClick = {
-                    contract.onRemoveMovieClick(it.id.toInt())
+                    contract.onRemoveMovieClick(it.id)
                     contract.onRetry()
                 },
                 isItemSaved = { true },
@@ -96,14 +94,12 @@ private fun Content(
         contract = contract,
     )
 
-    if (state.error is ErrorState.RequestFailed) {
-        SnackBarAnimation(
-            stringResource(R.string.list_deletion_failed)
-        )
-    }
 
-    if (state.error is ErrorState.EntryNotFound) {
-        SnackBarAnimation(stringResource(R.string.movie_not_found))
+
+    if (state.isSnackBarErrorVisible) {
+        SnackBarAnimation(
+            stringResource(R.string.deletion_failed),
+        )
     }
 
     if (state.isSnackBarSuccessVisible) {
@@ -113,7 +109,6 @@ private fun Content(
         )
     }
 }
-
 
 @Composable
 @Preview

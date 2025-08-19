@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Selection
-import com.london.domain.language.AppLanguage
+import com.london.domain.entity.language.AppLanguage
 import com.london.presentation.R
 import com.london.presentation.feature.account.bottomsheet.base.BaseBottomSheet
 import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButton

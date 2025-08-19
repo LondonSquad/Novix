@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -23,7 +24,9 @@ import com.london.presentation.R
 @Composable
 fun TextWithIcon(
     text: String,
-    icon: Painter
+    icon: Painter,
+    tint: Color = NovixTheme.colors.body,
+    hasInitialDot: Boolean = true
 ) {
     if (text.isEmpty()) return
     Row(
@@ -33,18 +36,20 @@ fun TextWithIcon(
         val scale = LocalDensity.current.fontScale
         val baseIconSize = 12.dp
 
-        Box(
-            modifier = Modifier
-                .padding(4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.body)
-                .align(alignment = Alignment.CenterVertically)
-        )
+        if (hasInitialDot)
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(3.dp)
+                    .clip(CircleShape)
+                    .background(NovixTheme.colors.body)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+        
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.image_dot),
-            tint = NovixTheme.colors.body,
+            tint = tint,
             modifier = Modifier.size(baseIconSize * scale)
         )
         Text(

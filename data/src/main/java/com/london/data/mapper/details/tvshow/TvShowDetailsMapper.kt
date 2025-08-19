@@ -4,9 +4,9 @@ import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResp
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshow.TvShowDetails
 
-fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
+fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetails(
     firstAirDate = firstAirDate.orEmpty(),
     tvShowGenres = tvShowGenres?.map { it.id.orZero() }.toTvShowGenre(),
     id = id.orZero(),

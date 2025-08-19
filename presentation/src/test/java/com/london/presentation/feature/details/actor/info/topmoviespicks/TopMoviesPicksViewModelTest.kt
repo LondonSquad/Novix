@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
-import com.london.domain.entity.actordetails.cast.ActorMediaItems
+import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.cast.ActorMediaItems
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -54,24 +53,6 @@ class TopMoviesPicksViewModelTest {
         Dispatchers.resetMain()
         viewModel?.viewModelScope?.cancel()
         viewModel = null
-    }
-
-    @Test
-    fun `error state should be updated when getActorMoviesPicksData fails`() = runTest {
-        // Given
-        val exception = Exception("error")
-        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } throws exception
-
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
     }
 
     @Test

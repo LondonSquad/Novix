@@ -2,13 +2,7 @@ package com.london.presentation.shared.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.domain.exception.ConnectionException
-import com.london.domain.exception.EmptyBodyException
-import com.london.domain.exception.EntryNotFoundException
-import com.london.domain.exception.InternetDisconnectedException
-import com.london.domain.exception.ResponseException
-import com.london.domain.exception.UnAuthorizedException
-import com.london.domain.exception.ValidationException
+import com.london.domain.exception.NetworkException
 import com.london.presentation.utils.getValueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +22,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.net.ConnectException
 import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -119,27 +112,17 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         val message = throwable.message.getValueOf("message")
 
         val exception = when (throwable.cause) {
-            is ConnectException -> ConnectionException()
+            is ConnectException -> NetworkException.NoInternetException(message)
             is SocketTimeoutException,
             is TimeoutCancellationException -> TimeoutException()
-            is UnknownHostException -> InternetDisconnectedException()
+
             else -> throwable
         }
 
         when (exception) {
-            is UnAuthorizedException -> ErrorState.UnAuthorized
-            is ConnectionException, is InternetDisconnectedException -> ErrorState.NoInternet
-            is EmptyBodyException -> ErrorState.EmptyBody
+            is NetworkException.UnAuthorizedException -> ErrorState.UnAuthorized
             is TimeoutException -> ErrorState.Timeout
-            is ValidationException -> ErrorState.Validation
-            is EntryNotFoundException -> ErrorState.EntryNotFound()
-            is ResponseException -> {
-                when (exception.code) {
-                    HttpStatus.SC_UNAUTHORIZED -> ErrorState.UnAuthorized
-                    HttpStatus.SC_TOO_MANY_REQUESTS -> ErrorState.RequestFailed("Too many requests")
-                    else -> ErrorState.RequestFailed(exception.message)
-                }
-            }
+            is NetworkException.ValidationException -> ErrorState.Validation
 
             else -> ErrorState.RequestFailed(message).also { Timber.e(throwable) }
         }.also { errorState ->

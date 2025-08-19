@@ -5,15 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -45,7 +42,7 @@ import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection
@@ -182,9 +179,7 @@ private fun HomeScreenLayout(
     homeScreenContract: HomeScreenContract
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(WindowInsets.statusBars.asPaddingValues())
+        modifier = Modifier.fillMaxSize()
     ) {
         BackgroundGradient(
             screenWidth = screenWidth,

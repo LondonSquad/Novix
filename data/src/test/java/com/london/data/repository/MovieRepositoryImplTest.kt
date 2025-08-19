@@ -15,7 +15,7 @@ import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.mapper.search.toEntity
-import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
@@ -39,12 +39,12 @@ import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.MovieRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -141,12 +141,12 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieCast should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieDetails(123) } throws
-                NetworkException.UnAuthorizedException(
+                ResponseException(
                     message = "unauthorized",
-                    status = 401
+                    code = 401
                 )
 
-        assertThrows<NetworkException.UnAuthorizedException> {
+        assertThrows<ResponseException> {
             repository.getMovieById(123)
         }
     }
@@ -154,12 +154,12 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieImages should throw HttpLockedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieImages(123) } throws
-                NetworkException.HttpLockedException(
+                ResponseException(
                     "locked",
-                    status = 423
+                    code = 423
                 )
 
-        assertThrows<NetworkException.HttpLockedException> {
+        assertThrows<ResponseException> {
             repository.getMovieImagesById(123)
         }
     }
@@ -167,12 +167,12 @@ class MovieRepositoryImplTest {
     @Test
     fun `getSimilarMovies should throw TimeoutException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getSimilarMovies(123) } throws
-                NetworkException.TimeoutException(
+                ResponseException(
                     message = "timeout",
-                    status = 408
+                    code = 408
                 )
 
-        assertThrows<NetworkException.TimeoutException> {
+        assertThrows<ResponseException> {
             repository.getSimilarMoviesById(123)
         }
     }
@@ -186,7 +186,7 @@ class MovieRepositoryImplTest {
         )
 
         // When
-        val result: PagedFetchResponse<ReviewEntity> =
+        val result: PagedFetchResponse<Review> =
             repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
 
         //Then
@@ -331,13 +331,13 @@ class MovieRepositoryImplTest {
                 PAGE_NUMBER
             )
         } returns Result.failure(
-            NetworkException.HttpLockedException(
+            ResponseException(
                 message = "Resource locked",
-                status = 423
+                code = 423
             )
         )
         //When //Then
-        assertThrows<NetworkException.HttpLockedException> {
+        assertThrows<ResponseException> {
             repository.getMoviesByGenre(
                 MovieGenre.TV_MOVIE,
                 PAGE_NUMBER
@@ -560,15 +560,15 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws UnAuthorizedException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.UnAuthorizedException(
+            val exception = ResponseException(
                 message = "401 Unauthorized",
-                status = 401
+                code = 401
             )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 
             // When & Then
-            assertThrows<NetworkException.UnAuthorizedException> {
+            assertThrows<ResponseException> {
                 repository.getPopularMovies()
             }
 
@@ -580,15 +580,15 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws TimeoutException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.TimeoutException(
+            val exception = ResponseException(
                 message = "Request timed out",
-                status = 408
+                code = 408
             )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 
             // When & Then
-            assertThrows<NetworkException.TimeoutException> {
+            assertThrows<ResponseException> {
                 repository.getPopularMovies()
             }
 
@@ -608,7 +608,6 @@ class MovieRepositoryImplTest {
                 repository.getPopularMovies()
             }
         }
-
 
     @Test
     fun `getPopularMovies - should correctly map all movie fields from network response`() =
@@ -630,7 +629,6 @@ class MovieRepositoryImplTest {
             assertThat(movie.posterUrl).contains("/poster.jpg")
             assertThat(movie.rating).isEqualTo(7.8)
         }
-
 
     @Test
     fun `getPopularMovies - when cache has only tv shows should fetch from network`() = runTest {

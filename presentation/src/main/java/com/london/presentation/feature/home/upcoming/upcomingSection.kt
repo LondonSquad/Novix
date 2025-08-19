@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.presentation.R
 import com.london.presentation.feature.home.HomeScreenContract
 import com.london.presentation.feature.home.HomeScreenUiState
