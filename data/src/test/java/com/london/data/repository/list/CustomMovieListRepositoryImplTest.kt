@@ -6,7 +6,7 @@ import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.list.ListDetailsResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.domain.AppPreferencesService
@@ -221,7 +221,7 @@ class CustomMovieListRepositoryImplTest {
         val MovieListDetailsMock = ListDetailsResponse(
             itemCount = 1,
             items = listOf(
-                MovieRemote(
+                SearchMovieRemote(
                     genreIds = emptyList(),
                     id = 100,
                     posterPath = "",

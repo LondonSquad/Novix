@@ -3,9 +3,9 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.domain.KoverIgnore
 
 interface SearchRemoteDataSource {
@@ -14,7 +14,7 @@ interface SearchRemoteDataSource {
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): Result<ApiResponse<MovieRemote>>
+    ): Result<ApiResponse<SearchMovieRemote>>
 
     suspend fun searchForTvShows(
         query: String,

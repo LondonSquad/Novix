@@ -3,9 +3,9 @@ package com.london.data.remote.service.search
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.domain.KoverIgnore
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,7 +18,7 @@ interface SearchApiService {
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean,
         @Query("page") page: Int
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ApiResponse<SearchMovieRemote>>
 
     @GET(ApiConstants.SEARCH_PATH_TVS)
     suspend fun searchTvShows(

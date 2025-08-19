@@ -1,21 +1,21 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.account.AccountStatesResponse
 import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularTvShowResponse
-import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.toprated.TopRatedTvShowRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.remote.service.tvshow.TvShowApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -120,7 +120,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>> =
+    override suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvShowRemote>> =
         callApi(
             apiCall = { tvShowApiService.getTopRatedTvShows(pageNumber) },
             mapper = { it }

@@ -3,9 +3,9 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.domain.KoverIgnore
@@ -20,7 +20,7 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): Result<ApiResponse<MovieRemote>> = callApiWithRetry(
+    ): Result<ApiResponse<SearchMovieRemote>> = callApiWithRetry(
         {
             searchApiService.searchMovies(
                 query = query,

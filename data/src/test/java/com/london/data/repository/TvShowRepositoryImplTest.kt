@@ -15,28 +15,28 @@ import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.account.AccountStatesResponse
 import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowCastMember
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowCastMember
+import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.movie.details.GenreRemote
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowSeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowSeason
+import com.london.data.remote.model.details.tvshow.episode.Episode
+import com.london.data.remote.model.details.tvshow.episode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.episode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.episode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
-import com.london.data.remote.model.home.popular.PopularTvShowResponse
-import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularTvShowResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.toprated.TopRatedTvShowRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
@@ -1223,8 +1223,8 @@ class TvShowRepositoryImplTest {
         )
 
         fun fakeTopRatedTvSeriesRemoteResponse(
-            items: List<TopRatedTvSeriesRemote> = listOf(
-                TopRatedTvSeriesRemote(
+            items: List<TopRatedTvShowRemote> = listOf(
+                TopRatedTvShowRemote(
                     id = 301,
                     name = "Fake Top Rated TV Show",
                     posterPath = "/fake_tv_poster.jpg",
@@ -1233,7 +1233,7 @@ class TvShowRepositoryImplTest {
                     voteAverage = 9.5
                 )
             )
-        ): ApiResponse<TopRatedTvSeriesRemote> =
+        ): ApiResponse<TopRatedTvShowRemote> =
             ApiResponse(
                 currentPage = 1,
                 totalPages = 5,
@@ -1356,14 +1356,14 @@ class TvShowRepositoryImplTest {
 
         private fun fakeApiResponseWithTvSeries() = ApiResponse(
             currentPage = PAGE, totalPages = 1, totalItems = 2, items = listOf(
-                TopRatedTvSeriesRemote(
+                TopRatedTvShowRemote(
                     genreIds = listOf(18, 80),
                     id = 1396,
                     posterPath = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
                     firstAirDate = "2008-01-20",
                     name = "Breaking Bad",
                     voteAverage = 8.9,
-                ), TopRatedTvSeriesRemote(
+                ), TopRatedTvShowRemote(
                     genreIds = listOf(18, 36),
                     id = 87108,
                     posterPath = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
@@ -1378,7 +1378,7 @@ class TvShowRepositoryImplTest {
             currentPage = PAGE,
             totalPages = 1,
             totalItems = 0,
-            items = emptyList<TopRatedTvSeriesRemote>()
+            items = emptyList<TopRatedTvShowRemote>()
         )
 
         private fun createMockTrendingTvShowsApiResponse(): ApiResponse<TrendingResponse> {

@@ -5,9 +5,9 @@ import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.mapper.genre.toGenreId
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchActorRemote
+import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.actor.Actor
@@ -96,7 +96,7 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun getMovieSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<MovieRemote> = remoteDataSource.searchForMovies(
+    ): ApiResponse<SearchMovieRemote> = remoteDataSource.searchForMovies(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,

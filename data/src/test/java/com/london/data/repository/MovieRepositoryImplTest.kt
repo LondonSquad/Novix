@@ -17,23 +17,23 @@ import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.account.AccountStatesResponse
 import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieCastMember
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.details.actor.movie.ActorMovieCastMember
+import com.london.data.remote.model.details.actor.movie.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.movie.details.GenreRemote
+import com.london.data.remote.model.details.movie.details.MovieDetailsResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
-import com.london.data.remote.model.home.popular.PopularMovieResponse
-import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularMovieResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
+import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.CrashReporter
@@ -1030,7 +1030,7 @@ class MovieRepositoryImplTest {
     private val searchMoviesRemoteMock = ApiResponse(
         currentPage = PAGE_NUMBER,
         items = listOf(
-            MovieRemote(
+            SearchMovieRemote(
                 genreIds = emptyList(),
                 id = 1,
                 posterPath = "",
@@ -1062,7 +1062,7 @@ class MovieRepositoryImplTest {
     private fun fakeSimilarMoviesRemote() = ApiResponse(
         currentPage = 1,
         items = listOf(
-            MovieRemote(
+            SearchMovieRemote(
                 genreIds = listOf(1, 2, 3),
                 id = 1,
                 posterPath = "",
@@ -1070,7 +1070,7 @@ class MovieRepositoryImplTest {
                 voteAverage = 8.0,
                 name = "",
             ),
-            MovieRemote(
+            SearchMovieRemote(
                 genreIds = listOf(1, 2, 3),
                 id = 1,
                 posterPath = "",
