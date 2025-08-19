@@ -1,4 +1,4 @@
-package com.london.data.remote.model.details
+package com.london.data.remote.model.details.image
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

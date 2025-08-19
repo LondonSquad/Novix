@@ -18,10 +18,10 @@ import com.london.data.mapper.search.toEntity
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.account.AccountStatesResponse
-import com.london.data.remote.model.details.ImageRemote
-import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.movie.ActorMovieCastMember
 import com.london.data.remote.model.details.actor.movie.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.image.ImageRemote
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.movie.details.GenreRemote
 import com.london.data.remote.model.details.movie.details.MovieDetailsResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse

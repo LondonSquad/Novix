@@ -1,6 +1,6 @@
 package com.london.data.remote.model.details.actor.image
 
-import com.london.data.remote.model.details.ImageRemote
+import com.london.data.remote.model.details.image.ImageRemote
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

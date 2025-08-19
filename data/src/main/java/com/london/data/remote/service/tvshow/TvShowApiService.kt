@@ -5,8 +5,8 @@ import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_TV_SHOWS_PATH
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.account.AccountStatesResponse
-import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse

@@ -24,7 +24,7 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieDetails

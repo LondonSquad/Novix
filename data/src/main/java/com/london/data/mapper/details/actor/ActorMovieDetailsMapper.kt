@@ -5,8 +5,8 @@ import com.london.data.remote.model.details.actor.movie.ActorMovieDetailsRespons
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.actor.cast.ActorMediaDetails
-import com.london.domain.entity.actor.cast.ActorMediaItems
+import com.london.domain.entity.actor.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaItems
 
 fun ActorMovieDetailsResponse.toEntity(): ActorMediaDetails {
     return ActorMediaDetails(

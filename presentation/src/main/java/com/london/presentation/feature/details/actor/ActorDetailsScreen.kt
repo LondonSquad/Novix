@@ -49,7 +49,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actor.cast.ActorMediaItems
+import com.london.domain.entity.actor.ActorMediaItems
 import com.london.presentation.R
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager

@@ -16,10 +16,10 @@ import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.account.AccountStatesResponse
-import com.london.data.remote.model.details.ImageRemote
-import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.tvshow.ActorTvShowCastMember
 import com.london.data.remote.model.details.actor.tvshow.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.image.ImageRemote
+import com.london.data.remote.model.details.image.ImagesResponse
 import com.london.data.remote.model.details.movie.details.GenreRemote
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse

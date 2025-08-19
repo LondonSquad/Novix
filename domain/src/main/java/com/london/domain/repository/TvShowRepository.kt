@@ -1,6 +1,6 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.Review

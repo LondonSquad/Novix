@@ -28,11 +28,11 @@ class AppPreferencesServiceImplTest {
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var service: AppPreferencesService
 
-    companion object {
-        private const val ONBOARDING_KEY = "has_onboarding_been_shown"
-        private const val THEME_KEY = "theme_key"
-        private const val LANGUAGE_KEY = "language_key"
-        private const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
+    private companion object {
+        const val ONBOARDING_KEY = "has_onboarding_been_shown"
+        const val THEME_KEY = "theme_key"
+        const val LANGUAGE_KEY = "language_key"
+        const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
     }
 
 
@@ -110,7 +110,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `appLanguage returns specific language when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns AppLanguage.ENGLISH.code
+        every {
+            sharedPreferences.getString(
+                LANGUAGE_KEY,
+                AppLanguage.ARABIC.code
+            )
+        } returns AppLanguage.ENGLISH.code
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
@@ -179,7 +184,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `contentRestrictionLevel returns default MODERATE when no preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.MODERATE.name) } returns null
+        every {
+            sharedPreferences.getString(
+                CONTENT_RESTRICTION_KEY,
+                ContentRestrictionLevel.MODERATE.name
+            )
+        } returns null
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
@@ -192,7 +202,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `contentRestrictionLevel returns specific level when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.MODERATE.name) } returns ContentRestrictionLevel.STRICT.name
+        every {
+            sharedPreferences.getString(
+                CONTENT_RESTRICTION_KEY,
+                ContentRestrictionLevel.MODERATE.name
+            )
+        } returns ContentRestrictionLevel.STRICT.name
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)

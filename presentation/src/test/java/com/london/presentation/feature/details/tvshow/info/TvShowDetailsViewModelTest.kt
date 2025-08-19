@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.domain.usecase.authentication.AuthenticationUseCase
