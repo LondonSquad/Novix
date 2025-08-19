@@ -1,24 +1,24 @@
 package com.london.data.mapper.details.tvshow
 
 import com.london.data.remote.model.details.tvshow.model.Role
-import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
+import com.london.data.remote.model.details.tvshow.model.TvShowCastMemberResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
+import com.london.domain.entity.tvshow.cast.TvShowCast
+import com.london.domain.entity.tvshow.cast.TvShowCastMember
+import com.london.domain.entity.tvshow.cast.TvShowRole
 
 @KoverIgnore
-fun TvShowCastRemoteResponse.toCastEntity(): TvShowCastEntity =
-    TvShowCastEntity(
+fun TvShowCastRemoteResponse.toCastEntity(): TvShowCast =
+    TvShowCast(
         cast = cast?.map { it.toCastMember() }.orEmpty(),
         id = id
     )
 
-fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity =
-    TvShowCastMemberEntity(
+fun TvShowCastMemberResponse.toCastMember(): TvShowCastMember =
+    TvShowCastMember(
         id = id.orZero(),
         name = name.orEmpty(),
         profileUrl = profilePath.asImageUrlOrEmpty(),
@@ -26,8 +26,8 @@ fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity =
     )
 
 @KoverIgnore
-fun Role.toRoleEntity(): TvShowRoleEntity =
-    TvShowRoleEntity(
+fun Role.toRoleEntity(): TvShowRole =
+    TvShowRole(
         character = character.orEmpty(),
         episodeCount = episodeCount.orZero()
     )

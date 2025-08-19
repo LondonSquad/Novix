@@ -3,8 +3,8 @@ package com.london.presentation.feature.home.trending.actor
 import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import io.mockk.clearAllMocks
 import io.mockk.coEvery

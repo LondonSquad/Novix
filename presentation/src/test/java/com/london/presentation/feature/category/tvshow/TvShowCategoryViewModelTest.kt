@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

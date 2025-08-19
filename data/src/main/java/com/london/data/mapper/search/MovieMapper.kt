@@ -10,8 +10,8 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.extractYear
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.Movie
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.UpComingMovie
 
 fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
     date = System.currentTimeMillis(),

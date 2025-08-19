@@ -1,8 +1,8 @@
 package com.london.domain.usecase.recent.watched.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.RecentWatchedRepository
 import io.mockk.Runs
 import io.mockk.coEvery

@@ -3,8 +3,8 @@ package com.london.presentation.feature.details.actor
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

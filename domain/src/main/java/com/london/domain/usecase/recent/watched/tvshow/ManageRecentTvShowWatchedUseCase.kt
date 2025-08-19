@@ -1,7 +1,7 @@
 package com.london.domain.usecase.recent.watched.tvshow
 
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.RecentWatchedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

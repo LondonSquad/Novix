@@ -3,9 +3,9 @@ package com.london.presentation.feature.reviews
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
@@ -206,7 +206,7 @@ class ReviewsViewModelTest {
         }
     }
 
-    private fun createMockReview(id: Int) = mockk<ReviewEntity> {
+    private fun createMockReview(id: Int) = mockk<Review> {
         every { this@mockk.id } returns id.toString()
         every { content } returns "Review content $id"
         every { createdAt } returns "2024-01-0$id"

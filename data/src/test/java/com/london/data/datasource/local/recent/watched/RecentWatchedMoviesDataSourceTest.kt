@@ -3,7 +3,7 @@ package com.london.data.datasource.local.recent.watched
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.database.dao.recent.watched.movie.RecentWatchedMoviesDao
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
-import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
+import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSourceImpl
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,12 +18,13 @@ import org.junit.Test
 
 class RecentWatchedMoviesDataSourceTest {
     private lateinit var recentWatchedMoviesDao: RecentWatchedMoviesDao
-    private lateinit var recentWatchedMoviesDataSource: RecentWatchedMoviesDataSource
+    private lateinit var recentWatchedMoviesDataSourceImpl: RecentWatchedMoviesDataSourceImpl
 
     @Before
     fun setUp() {
         recentWatchedMoviesDao = mockk()
-        recentWatchedMoviesDataSource = RecentWatchedMoviesDataSource(recentWatchedMoviesDao)
+        recentWatchedMoviesDataSourceImpl =
+            RecentWatchedMoviesDataSourceImpl(recentWatchedMoviesDao)
     }
 
     @Test
@@ -31,7 +32,7 @@ class RecentWatchedMoviesDataSourceTest {
         // Given
         coEvery { recentWatchedMoviesDao.getAll() } returns flowOf(recentWatchedMovieLocalList)
         // When
-        val result = recentWatchedMoviesDataSource.getAll().single()
+        val result = recentWatchedMoviesDataSourceImpl.getAll().single()
         // Then
         assertThat(result).isEqualTo(recentWatchedMovieLocalList)
     }
@@ -41,7 +42,7 @@ class RecentWatchedMoviesDataSourceTest {
         // Given
         coEvery { recentWatchedMoviesDao.getAll() } returns flowOf(emptyList())
         // When
-        val result = recentWatchedMoviesDataSource.getAll().single()
+        val result = recentWatchedMoviesDataSourceImpl.getAll().single()
         // Then
         assertThat(result).isEmpty()
     }
@@ -51,7 +52,7 @@ class RecentWatchedMoviesDataSourceTest {
         // Given
         coEvery { recentWatchedMoviesDao.insert(recentWatchedMovieLocal) } just Runs
         // When
-        recentWatchedMoviesDataSource.insert(recentWatchedMovieLocal)
+        recentWatchedMoviesDataSourceImpl.insert(recentWatchedMovieLocal)
         // Then
         coVerify(exactly = 1) { recentWatchedMoviesDao.insert(recentWatchedMovieLocal) }
     }
@@ -61,7 +62,7 @@ class RecentWatchedMoviesDataSourceTest {
         // Given
         coEvery { recentWatchedMoviesDao.getAll() } returns flow { throw Exception("DAO error") }
         // When
-        val result = recentWatchedMoviesDataSource.getAll().single()
+        val result = recentWatchedMoviesDataSourceImpl.getAll().single()
         // Then
         assertThat(result).isEmpty()
     }

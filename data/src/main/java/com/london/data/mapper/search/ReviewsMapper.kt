@@ -6,11 +6,11 @@ import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orDefault
 import com.london.data.utils.orZero
-import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.AuthorDetails
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.PagedFetchResponse
 
-fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<ReviewEntity> =
+fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<Review> =
     PagedFetchResponse(
         items = items.map { it.toReviewEntity() },
         currentPage = currentPage,
@@ -18,8 +18,8 @@ fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<ReviewEntit
         totalItems = totalItems
     )
 
-fun ReviewResponse.toReviewEntity(): ReviewEntity =
-    ReviewEntity(
+fun ReviewResponse.toReviewEntity(): Review =
+    Review(
         authorName = author.orEmpty(),
         authorDetails = authorDetailsResponse.toAuthorDetails(),
         content = content.orEmpty(),

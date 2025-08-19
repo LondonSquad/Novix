@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.tvshow.episode
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase

@@ -23,21 +23,21 @@ import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.Trending
-import com.london.domain.entity.TvShow
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.RatedMedia
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
-import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
+import com.london.domain.entity.tvshow.TvShow
+import com.london.domain.entity.tvshow.TvShowDetails
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class TvShowRepositoryImpl @Inject constructor(
     private val localTopRated: HomeLocalDataSource<TopRatedLocal>
 ) : TvShowRepository {
 
-    override suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity =
+    override suspend fun getTvShowDetailsById(id: Int): TvShowDetails =
         tvShowRemoteDataSource.getTvShowDetailsById(id).getOrThrow().toEntity()
 
     override suspend fun getImagesTvShowById(id: Int): ImagesEntity =
@@ -185,7 +185,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getTvShowReviews(
         tvShowId: Int,
         pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
+    ): PagedFetchResponse<Review> = fetchAndSync(
         networkBlock = {
             getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber)
         }).run {
@@ -220,7 +220,7 @@ class TvShowRepositoryImpl @Inject constructor(
     private suspend fun getTvShowReviewsFromRemote(
         tvShowId: Int,
         pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> =
+    ): PagedFetchResponse<Review> =
         tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow().toReviewEntity()
 
 
