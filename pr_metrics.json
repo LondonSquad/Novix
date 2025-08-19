@@ -32429,13 +32429,22 @@
         },
         "submitted_at": "2025-08-18T13:09:15Z",
         "commit_id": "c4836bc86f4b78cadd65c5d6b465b63030ea4e0d"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-18T13:30:09Z",
+        "commit_id": "c4836bc86f4b78cadd65c5d6b465b63030ea4e0d"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-18T13:09:15Z",
     "time_to_first_approval_minutes": 943.2833333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-18T13:30:09Z",
+    "time_to_required_approvals_minutes": 964.1833333333333,
     "closed_at": "2025-08-18T13:30:10Z",
     "merged_at": "2025-08-18T13:30:10Z",
     "merged_by": {
@@ -32449,6 +32458,124 @@
       "additions": 513,
       "deletions": 207,
       "changed_files": 6
+    }
+  },
+  {
+    "pr_number": 664,
+    "url": "https://github.com/LondonSquad/Novix/pull/664",
+    "title": "refactor/episode",
+    "opened_at": "2025-08-17T23:29:23Z",
+    "head_ref": "refactor/episode",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "assignees": [
+      {
+        "login": "BassantM",
+        "id": 102248144,
+        "url": "https://github.com/BassantM"
+      }
+    ],
+    "comments": [
+      {
+        "author": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "first_comment_at": "2025-08-18T00:35:58Z",
+        "last_comment_at": "2025-08-18T17:54:34Z",
+        "count": 5
+      },
+      {
+        "author": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "first_comment_at": "2025-08-18T16:51:51Z",
+        "last_comment_at": "2025-08-18T16:51:51Z",
+        "count": 1
+      },
+      {
+        "author": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "first_comment_at": "2025-08-18T17:00:40Z",
+        "last_comment_at": "2025-08-18T17:01:05Z",
+        "count": 2
+      }
+    ],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-18T18:06:53Z",
+        "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
+      },
+      {
+        "reviewer": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-18T18:07:36Z",
+        "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-18T18:07:51Z",
+        "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
+      },
+      {
+        "reviewer": {
+          "login": "Aseel-AbuKmail",
+          "id": 189210092,
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-08-18T18:07:53Z",
+        "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
+      },
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-18T18:23:25Z",
+        "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
+      }
+    ],
+    "required_approvals": 2,
+    "first_approved_at": "2025-08-18T18:06:53Z",
+    "time_to_first_approval_minutes": 1117.5,
+    "required_approvals_met_at": "2025-08-18T18:07:36Z",
+    "time_to_required_approvals_minutes": 1118.2166666666667,
+    "closed_at": "2025-08-18T18:32:02Z",
+    "merged_at": "2025-08-18T18:32:02Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W33",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 698,
+      "deletions": 730,
+      "changed_files": 31
     }
   },
   {
@@ -32621,13 +32748,22 @@
         },
         "submitted_at": "2025-08-18T14:33:33Z",
         "commit_id": "57c731829a6f6c0ba360e97a365688cd6c03983e"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-18T16:02:32Z",
+        "commit_id": "57c731829a6f6c0ba360e97a365688cd6c03983e"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-18T14:33:33Z",
     "time_to_first_approval_minutes": 270.15,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-18T16:02:32Z",
+    "time_to_required_approvals_minutes": 359.1333333333333,
     "closed_at": "2025-08-18T16:02:33Z",
     "merged_at": "2025-08-18T16:02:33Z",
     "merged_by": {
@@ -32694,7 +32830,7 @@
   {
     "pr_number": 672,
     "url": "https://github.com/LondonSquad/Novix/pull/672",
-    "title": "Implement getTvSessionVideo for TV season videos",
+    "title": "fix getTvSessionVideo call api",
     "opened_at": "2025-08-18T16:07:41Z",
     "head_ref": "hotfix/tv-season-video",
     "base_ref": "develop",
@@ -32741,13 +32877,22 @@
         },
         "submitted_at": "2025-08-18T17:38:23Z",
         "commit_id": "1972e9559be024d078bc3e88a127f157b7af6f9e"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-18T17:49:20Z",
+        "commit_id": "1972e9559be024d078bc3e88a127f157b7af6f9e"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-18T17:38:23Z",
     "time_to_first_approval_minutes": 90.7,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-18T17:49:20Z",
+    "time_to_required_approvals_minutes": 101.65,
     "closed_at": "2025-08-18T17:49:21Z",
     "merged_at": "2025-08-18T17:49:21Z",
     "merged_by": {
@@ -32761,6 +32906,47 @@
       "additions": 74,
       "deletions": 34,
       "changed_files": 16
+    }
+  },
+  {
+    "pr_number": 673,
+    "url": "https://github.com/LondonSquad/Novix/pull/673",
+    "title": "refactor/episode-data",
+    "opened_at": "2025-08-18T16:07:44Z",
+    "head_ref": "refactor/episode-data",
+    "base_ref": "refactor/episode",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "assignees": [
+      {
+        "login": "BassantM",
+        "id": 102248144,
+        "url": "https://github.com/BassantM"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-08-18T16:09:56Z",
+    "merged_at": "2025-08-18T16:09:56Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W34",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 87,
+      "deletions": 88,
+      "changed_files": 22
     }
   },
   {
@@ -32835,7 +33021,7 @@
   {
     "pr_number": 687,
     "url": "https://github.com/LondonSquad/Novix/pull/687",
-    "title": "Set content restriction level to OFF in userProfileSection.kt",
+    "title": "Set content restriction level to OFF in userProfileSection",
     "opened_at": "2025-08-18T18:32:02Z",
     "head_ref": "hotfix/profile-restriction",
     "base_ref": "develop",
@@ -32948,11 +33134,15 @@
     "time_to_first_approval_minutes": 27.066666666666666,
     "required_approvals_met_at": "2025-08-18T19:27:38Z",
     "time_to_required_approvals_minutes": 34.38333333333333,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-18T19:27:58Z",
+    "merged_at": "2025-08-18T19:27:58Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
     "week": "2025-W34",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 12,
       "deletions": 44,
@@ -32988,13 +33178,22 @@
         },
         "submitted_at": "2025-08-18T20:12:32Z",
         "commit_id": "e6d0b042c8330733bc5871302633415452073be7"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-18T20:28:37Z",
+        "commit_id": "e6d0b042c8330733bc5871302633415452073be7"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-18T20:12:32Z",
     "time_to_first_approval_minutes": 14.25,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-18T20:28:37Z",
+    "time_to_required_approvals_minutes": 30.333333333333332,
     "closed_at": "2025-08-18T20:28:39Z",
     "merged_at": "2025-08-18T20:28:39Z",
     "merged_by": {
@@ -33039,13 +33238,22 @@
         },
         "submitted_at": "2025-08-19T00:07:00Z",
         "commit_id": "183294cc6e7a8f9ba49341d79dc5bf67454c74aa"
+      },
+      {
+        "reviewer": {
+          "login": "abdelrhman1002",
+          "id": 180463542,
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-08-19T00:07:15Z",
+        "commit_id": "183294cc6e7a8f9ba49341d79dc5bf67454c74aa"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-19T00:07:00Z",
     "time_to_first_approval_minutes": 30.15,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-19T00:07:15Z",
+    "time_to_required_approvals_minutes": 30.4,
     "closed_at": "2025-08-19T00:07:16Z",
     "merged_at": "2025-08-19T00:07:16Z",
     "merged_by": {
