@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,24 +82,34 @@ fun NavBar(
     )
 ) {
 
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .topBorder(navBarColors.topBorderColor, 1.dp)
             .background(color = navBarColors.backgroundColor)
-            .padding(vertical = 7.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+            .navigationBarsPadding()
+            .clickable(
+                enabled = false,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }) {}
     ) {
-        navDestinations.forEach { item ->
-            NavBarItem(
-                item = item,
-                selectedIconColor = navBarColors.selectedIconColor,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .topBorder(navBarColors.topBorderColor, 1.dp)
+                .padding(vertical = 7.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            navDestinations.forEach { item ->
+                NavBarItem(
+                    item = item,
+                    selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
                 onClick = { onNavDestinationClicked(item.destination) },
                 screen = item.destination,
-                backStackEntry = navBackStackEntry
-            )
+                    backStackEntry = navBackStackEntry
+                )
+            }
         }
     }
 }
