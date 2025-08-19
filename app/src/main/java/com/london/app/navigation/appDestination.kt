@@ -89,7 +89,7 @@ fun NavController.navigateToListDetails(listId: Int) = navigateTo(Screen.ViewLis
 
  fun navigateToBottomBarDestination(
     navController: NavHostController,
-    destination: Screen
+    destination: Any
 ) {
     if (navController.currentBackStackEntry?.destination?.hasRoute(destination::class) == true) {
         return

@@ -31,12 +31,7 @@ import com.london.presentation.navigation.Screen.Search
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-    val showBottomNav = navBackStackEntry.hasRoute(Home) ||
-            navBackStackEntry.hasRoute(Search) ||
-            navBackStackEntry.hasRoute(Categories) ||
-            navBackStackEntry.hasRoute(Lists()) ||
-            navBackStackEntry.hasRoute(Account)
+    val showBottomNav = navBackStackEntry.hasRoute(Home, Search, Categories, Lists(), Account)
 
     Scaffold(
         containerColor = NovixTheme.colors.surface,
