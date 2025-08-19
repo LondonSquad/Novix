@@ -3,7 +3,6 @@ package com.london.data.local.source.home.popular
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.source.home.HomeLocalDataSource
-import com.london.data.local.utils.executeInsert
 import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,7 @@ class PopularLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insert(item: PopularSectionLocal) =
-        popularSectionDao.executeInsert(item)
+        popularSectionDao.insert(item)
 
     override suspend fun deleteAll() =
         popularSectionDao.deleteAll()

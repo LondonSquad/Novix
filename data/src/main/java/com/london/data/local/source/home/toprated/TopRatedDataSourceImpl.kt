@@ -3,7 +3,6 @@ package com.london.data.local.source.home.toprated
 import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
-import com.london.data.local.utils.executeInsert
 import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,7 @@ class TopRatedDataSourceImpl @Inject constructor (
     }
 
     override suspend fun insert(item: TopRatedLocal) =
-        topRatedDao.executeInsert(item)
+        topRatedDao.insert(item)
 
 
     override suspend fun insertAll(items: List<TopRatedLocal>) =
