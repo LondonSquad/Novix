@@ -72,6 +72,7 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
@@ -162,12 +163,7 @@ private fun Content(
     ) {
         TopBar(
             onBackClick = tvShowDetailsContract::onBackClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )
