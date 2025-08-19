@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actor
 
-import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class ActorDetailsUiState(

@@ -72,6 +72,7 @@ import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isNotZeroRate
@@ -137,7 +138,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyState.firstVisibleItemScrollOffset > 40f ||
-                    lazyState.firstVisibleItemIndex > 0
+                lazyState.firstVisibleItemIndex > 0
         }
     }
 
@@ -158,12 +159,7 @@ private fun Content(
 
         TopBar(
             onBackClick = movieDetailsContract::onBackClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )
@@ -388,6 +384,8 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
+                tint = NovixTheme.colors.yellowAccent,
+                hasInitialDot = false
             )
         }
 
@@ -402,8 +400,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
-
-                )
+            )
 
             if (!date.isNullOrBlank()) {
                 TextWithIcon(

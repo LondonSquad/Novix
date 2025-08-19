@@ -166,4 +166,6 @@
     <string name="item_added_success">Added to list successfully</string>
     <string name="item_added_fail">Something went wrong, item addition failed</string>
     <string name="categories">Categories</string>
+    <string name="tv_icon">Tv icon</string>
+    <string name="deletion_failed">Deletion failed</string>
 </resources>

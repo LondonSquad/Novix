@@ -46,7 +46,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.userName).isEqualTo(expectedUsername)
@@ -61,7 +61,7 @@ class AccountRepositoryImplTest {
         coEvery { authenticationPreferences.getSessionId() } returns null
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.userName).isEqualTo("")
@@ -81,7 +81,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.userName).isEqualTo("")
@@ -100,7 +100,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.userName).isEqualTo("")
@@ -120,7 +120,7 @@ class AccountRepositoryImplTest {
 
         // When & Then
         try {
-            repository.getAccountDetails()
+            repository.getAccountInfo()
             assert(false) { "Expected exception to be thrown" }
         } catch (e: Exception) {
             assertThat(e).isEqualTo(expectedException)
@@ -151,7 +151,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(12345)
@@ -177,7 +177,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(0)
@@ -203,7 +203,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -229,7 +229,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -255,7 +255,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -283,7 +283,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -311,7 +311,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -337,7 +337,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -363,7 +363,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -389,7 +389,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -415,7 +415,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -441,7 +441,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(0)
@@ -467,7 +467,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)
@@ -485,7 +485,7 @@ class AccountRepositoryImplTest {
         coEvery { authenticationPreferences.getSessionId() } returns null
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(0)
@@ -511,7 +511,7 @@ class AccountRepositoryImplTest {
         coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
 
         // When
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountInfo()
 
         // Then
         assertThat(result.id).isEqualTo(1)

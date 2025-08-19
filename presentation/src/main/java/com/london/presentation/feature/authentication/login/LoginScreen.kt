@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -79,7 +82,8 @@ private fun Content(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(NovixTheme.colors.surface),
+            .background(NovixTheme.colors.surface)
+            .padding(WindowInsets.navigationBars.asPaddingValues()),
     ) {
         Image(
             painter = painterResource(dsR.drawable.polygon1),

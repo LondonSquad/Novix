@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.GetMovieUseCase

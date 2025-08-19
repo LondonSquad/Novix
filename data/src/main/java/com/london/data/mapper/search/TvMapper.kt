@@ -7,7 +7,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.extractYear
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.tvshow.TvShow
 
 fun SearchTvShowRemote.toEntity(): TvShow = TvShow(
     id = id.orZero(),

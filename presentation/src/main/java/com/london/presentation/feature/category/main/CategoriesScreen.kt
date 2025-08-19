@@ -72,7 +72,7 @@ private fun Content(
         CategoriesSelection(
             onClick = contract::onCategoryClick,
             selectedCategory = state.selectedCategory,
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
         )
         GenresGrid(
             state = state,

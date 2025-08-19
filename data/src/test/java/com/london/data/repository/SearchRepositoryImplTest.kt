@@ -3,7 +3,7 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
-import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.model.search.SearchTvShowRemote
@@ -11,12 +11,12 @@ import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShow
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -59,7 +59,7 @@ class SearchRepositoryImplTest {
         val actualException = assertThrows<RuntimeException>(
             expectedException::class.java.simpleName
         ) {
-      fetchAndSync(
+            fetchAndSync(
                 cacheBlockAction,
                 networkBlockAction,
                 syncBlockAction,
@@ -72,35 +72,41 @@ class SearchRepositoryImplTest {
 
 
         if (crashReporterToUse != null) {
-            coVerify(exactly = PAGE_NUMBER) { crashReporterToUse.logException(expectedLoggedException) }
+            coVerify(exactly = PAGE_NUMBER) {
+                crashReporterToUse.logException(
+                    expectedLoggedException
+                )
+            }
         } else {
             coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
         }
     }
 
     @Test
-    fun `fetchAndSync reports to crashReporter when networkBlock throws and cache is null`() = runTest {
-        val networkException = RuntimeException("Network failed")
+    fun `fetchAndSync reports to crashReporter when networkBlock throws and cache is null`() =
+        runTest {
+            val networkException = RuntimeException("Network failed")
 
-        testFetchAndSyncScenario(
-            cacheBlockAction = { null },
-            networkBlockAction = { throw networkException },
-            expectedException = networkException
-        )
-    }
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { throw networkException },
+                expectedException = networkException
+            )
+        }
 
     @Test
-    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache is null`() = runTest {
-        val syncException = RuntimeException("Sync failed")
-        val networkData = "Network Data"
+    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache is null`() =
+        runTest {
+            val syncException = RuntimeException("Sync failed")
+            val networkData = "Network Data"
 
-        testFetchAndSyncScenario(
-            cacheBlockAction = { null },
-            networkBlockAction = { networkData },
-            syncBlockAction = { throw syncException },
-            expectedException = syncException
-        )
-    }
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { networkData },
+                syncBlockAction = { throw syncException },
+                expectedException = syncException
+            )
+        }
 
     @Test
     fun `fetchAndSync reports to crashReporter when syncBlock throws and cache threw`() = runTest {
@@ -130,7 +136,7 @@ class SearchRepositoryImplTest {
 
 
         val actualException = assertThrows<RuntimeException> {
-          fetchAndSync(
+            fetchAndSync(
                 cacheBlock = { throw cacheException },
                 networkBlock = { throw networkException },
                 syncBlock = { /* Do nothing */ },
@@ -266,12 +272,12 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.UnAuthorizedException(
-            "401 Unauthorized",
-            status = 401
+        } throws ResponseException(
+            message = "401 Unauthorized",
+            code = 401
         )
 
-        assertThrows<NetworkException.UnAuthorizedException> {
+        assertThrows<ResponseException> {
             repository.searchForTvShows(query, page)
         }
     }
@@ -283,12 +289,12 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.TimeoutException(
-            "Request timed out",
-            status = 408
+        } throws ResponseException(
+            message = "Request timed out",
+            code = 408
         )
 
-        assertThrows<NetworkException.TimeoutException> {
+        assertThrows<ResponseException> {
             repository.searchForTvShows(query, page)
         }
     }
@@ -300,22 +306,22 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForActors(query, false, page)
-        } throws NetworkException.ValidationException(
-            "Invalid query",
-            status = 422
+        } throws ResponseException(
+            message = "Invalid query",
+            code = 422
         )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.searchForActors(query, page)
         }
     }
 
     private companion object {
-      private  const val NAME = "Tom"
-       private const val LANG = "en-US"
-       private const val PAGE_NUMBER = 1
+        private const val NAME = "Tom"
+        private const val LANG = "en-US"
+        private const val PAGE_NUMBER = 1
 
-        private    val MovieList = PagedFetchResponse(
+        private val MovieList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 Movie(
@@ -331,7 +337,7 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        private   val TvShowList = PagedFetchResponse(
+        private val TvShowList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 TvShow(
@@ -377,7 +383,7 @@ class SearchRepositoryImplTest {
             totalItems = 1
         )
 
-        private   val SearchTvShowRemoteMock = ApiResponse(
+        private val SearchTvShowRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchTvShowRemote(

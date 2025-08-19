@@ -1,6 +1,6 @@
 package com.london.domain.usecase.rating
 
-import com.london.domain.entity.RatedMedia
+import com.london.domain.entity.shared.RatedMedia
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject

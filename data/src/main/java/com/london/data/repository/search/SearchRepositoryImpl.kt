@@ -10,11 +10,11 @@ import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.Genre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.SearchRepository
 import javax.inject.Inject
 

@@ -42,13 +42,14 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
-import com.london.domain.entity.MovieList
+import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun ListScreen(
@@ -217,7 +218,7 @@ private fun ItemCount(
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = itemUi.moviesCount.toString(),
+            text = itemUi.moviesCount.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.primary,
         )

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.london.data.utils.APP_SHARED_PREFS_NAME
 import com.london.data.utils.LANGUAGE_KEY
-import com.london.domain.language.AppLanguage
+import com.london.domain.entity.language.AppLanguage
 import java.util.Locale
 
 fun readLanguageCode(context: Context): String {

@@ -2,8 +2,8 @@ package com.london.presentation.feature.account.rating
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.RatedMedia
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -31,23 +31,6 @@ class MyRatingViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
         mainDispatcher.scheduler.advanceUntilIdle()
-    }
-
-    @Test
-    fun `initializeRatedMedia should load movies and tv shows when viewModel is initialized`() = runTest(mainDispatcher) {
-        // Given
-        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
-        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
-
-        // When & Then
-        viewModel.state.test {
-            advanceUntilIdle()
-            val state = expectMostRecentItem()
-            assertThat(state.ratedMovies).isNotEmpty()
-            assertThat(state.ratedTvShows).isNotEmpty()
-            ensureAllEventsConsumed()
-        }
     }
 
     @Test

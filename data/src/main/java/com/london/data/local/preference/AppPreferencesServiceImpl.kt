@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.data.utils.LANGUAGE_KEY
 import com.london.domain.AppPreferencesService
-import com.london.domain.contentrestriction.ContentRestrictionLevel
-import com.london.domain.language.AppLanguage
-import com.london.domain.theme.AppTheme
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.language.AppLanguage
+import com.london.domain.entity.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
