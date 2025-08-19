@@ -281,6 +281,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         lists: List<MovieListLocal>,
         memberships: List<MovieListMembershipLocal>
     ) {
+        localDataSource.clearAllCache()
         localDataSource.cacheMovieListsMetadata(lists)
         localDataSource.cacheMovieListMemberships(memberships)
     }
