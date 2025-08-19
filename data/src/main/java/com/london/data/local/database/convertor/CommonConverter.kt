@@ -2,7 +2,7 @@ package com.london.data.local.database.convertor
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.london.data.local.utils.jsonList
+import com.london.data.utils.jsonList
 
 
 class CommonConverter {
