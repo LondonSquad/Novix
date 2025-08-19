@@ -1,6 +1,8 @@
 package com.london.designsystem.component
 
+import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
@@ -43,6 +45,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -63,12 +67,13 @@ data class NavBarColors(
     val topBorderColor: Color
 )
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun <T> NavBar(
     modifier: Modifier = Modifier,
     navDestinations: List<NavigationTab<T>>,
-    currentSelectedDestination: T,
     onNavDestinationClicked: (T) -> Unit,
+    navBackStackEntry: NavBackStackEntry? = null,
     navBarColors: NavBarColors = NavBarColors(
         backgroundColor = NovixTheme.colors.surface,
         selectedIconColor = NovixTheme.colors.primary,
@@ -89,17 +94,21 @@ fun <T> NavBar(
         navDestinations.forEach { item ->
             NavBarItem(
                 item = item,
-                isSelected = currentSelectedDestination == item.destination,
+                isSelected = navBackStackEntry?.destination.isRoute(item.destination),
                 selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
-                onClick = {
-                    onNavDestinationClicked(item.destination)
-                }
+                onClick = { onNavDestinationClicked(item.destination) }
             )
         }
     }
 }
 
+fun <T> NavDestination?.isRoute(destination: T): Boolean {
+    val current = this?.route?.substringAfterLast(".")
+    Log.d("NavBar", "isRoute: $current")
+    val target = destination.toString()
+    return current == target
+}
 @Composable
 private fun <T> NavBarItem(
     item: NavigationTab<T>,
@@ -288,7 +297,6 @@ private fun NavBarPreview() {
                     destination = MockDestination("account"),
                 )
             ),
-            currentSelectedDestination = currentSelectedDestination,
             onNavDestinationClicked = { destination ->
                 if (destination != currentSelectedDestination) {
                     currentSelectedDestination = destination
