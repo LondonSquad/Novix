@@ -2,8 +2,11 @@ package com.london.presentation.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -51,3 +54,8 @@ fun Modifier.headerDetailsCard() = fillMaxWidth()
 fun Modifier.detailsTopBar(backgroundAlpha: Float) = fillMaxWidth()
     .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
     .padding(horizontal = 16.dp, vertical = 8.dp)
+
+@Composable
+fun Modifier.navBarBottomPadding() = padding(bottom = 70.dp).padding(
+    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+)

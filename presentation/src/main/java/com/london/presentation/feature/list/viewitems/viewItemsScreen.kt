@@ -72,7 +72,6 @@ private fun Content(
             emptyLayoutMessage = R.string.no_items_found,
             emptyLayoutImage = R.drawable.img_no_result,
             pagingFlow = listItems,
-            handlePagingLoadingAutomatically = false
         ) {
             MediaLazyPagingGrid(
                 pagingFlow = listItems,

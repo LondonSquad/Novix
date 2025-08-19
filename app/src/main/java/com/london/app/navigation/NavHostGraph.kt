@@ -26,29 +26,13 @@ import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.Lists
-import com.london.presentation.navigation.Screen.Login
 import com.london.presentation.navigation.Screen.Search
 
 @Composable
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-    val currentScreen = when {
-        navBackStackEntry.hasRoute(Home) -> Home
-        navBackStackEntry.hasRoute(Search) -> Search
-        navBackStackEntry.hasRoute(Categories) -> Categories
-        navBackStackEntry.hasRoute(Lists()) -> Lists()
-        navBackStackEntry.hasRoute(Account) -> Account
-        navBackStackEntry.hasRoute(Login) -> Login
-        else -> Home
-    }
-
-    val showBottomNav = navBackStackEntry.hasRoute(Home) ||
-        navBackStackEntry.hasRoute(Search) ||
-        navBackStackEntry.hasRoute(Categories) ||
-        navBackStackEntry.hasRoute(Lists()) ||
-        navBackStackEntry.hasRoute(Account)
+    val showBottomNav = navBackStackEntry.hasRoute(Home, Search, Categories, Lists(), Account)
 
     ScaffoldWithSnackbar(
         containerColor = NovixTheme.colors.surface,
@@ -60,10 +44,10 @@ fun NavHostGraph() {
             ) {
                 NavBar(
                     navDestinations = NavigationHelper.getNavigationTabs(),
-                    currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
                         navigateToBottomBarDestination(navController, destination)
-                    }
+                    },
+                    navBackStackEntry = navBackStackEntry
                 )
             }
         },

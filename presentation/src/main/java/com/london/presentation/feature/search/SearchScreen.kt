@@ -68,6 +68,7 @@ import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
+import com.london.presentation.utils.navBarBottomPadding
 import com.london.presentation.utils.toRecentViewed
 
 @Composable
@@ -144,6 +145,7 @@ private fun SearchMainContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .navBarBottomPadding()
             .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
     ) {
         TriangleBlurredShape()
