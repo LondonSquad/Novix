@@ -85,5 +85,4 @@ class AppPreferencesServiceImpl @Inject constructor(
         const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
         const val THEME_KEY = "theme_key"
     }
-
 }
