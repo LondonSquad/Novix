@@ -64,7 +64,6 @@ import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
-import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -72,6 +71,7 @@ import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.ActorItem
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate

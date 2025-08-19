@@ -51,32 +51,34 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.ActorItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as Res
+
 @Composable
 fun EpisodeDetailsScreen(
-    viewModel: EpisodeDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNaviagteToActorDetalis: (Int) -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
+    onNavigateToLogin: () -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
+    viewModel: EpisodeDetailsViewModel = hiltViewModel(),
+
+    ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
-            is EpisodeDetailsEffect.NavigateToCast -> onNaviagteToActorDetalis(currentEffect.episodeId)
+            is EpisodeDetailsEffect.NavigateToCast -> onNavigateToActorDetails(currentEffect.episodeId)
             is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
     }
@@ -90,7 +92,7 @@ fun EpisodeDetailsScreen(
         Content(
             uiState = uiState,
             episodeDetailsContract = viewModel,
-            onNavigateToCast = onNaviagteToActorDetalis
+            onNavigateToCast = onNavigateToActorDetails
         )
     }
 }
@@ -263,7 +265,7 @@ private fun Content(
 }
 
 @Composable
-fun HeaderDetailsCard(
+private fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
@@ -297,7 +299,7 @@ fun HeaderDetailsCard(
 }
 
 @Composable
-fun TvShowBasicDetails(
+private fun TvShowBasicDetails(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
@@ -336,7 +338,7 @@ fun TvShowBasicDetails(
 }
 
 @Composable
-fun TvShowDate(
+private fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
     Row(
@@ -360,7 +362,7 @@ fun TvShowDate(
 
 
 @Composable
-fun GenreNames(
+private fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
@@ -394,7 +396,7 @@ fun GenreNames(
 }
 
 @Composable
-fun Seasons(uiState: EpisodeDetailsUiState) {
+private fun Seasons(uiState: EpisodeDetailsUiState) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -416,7 +418,7 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
 }
 
 @Composable
-fun OverviewSection(
+private fun OverviewSection(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {

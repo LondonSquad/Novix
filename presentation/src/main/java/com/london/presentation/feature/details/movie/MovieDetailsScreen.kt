@@ -65,7 +65,6 @@ import com.london.presentation.R.drawable
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -73,6 +72,7 @@ import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.ActorItem
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.getLocalizedTimeUnit
