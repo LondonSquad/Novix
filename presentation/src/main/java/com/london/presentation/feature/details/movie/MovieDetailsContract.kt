@@ -15,5 +15,5 @@ interface MovieDetailsContract {
     fun onGenreClick(genre: MovieGenreUi)
     fun onReviewsClick(movieId: Int, mediaType: MediaType)
     fun onBookmarkSheetDismiss()
-    fun onManageBookmarkClicked()
+    fun onManageBookmarkClicked(movieId: Int)
 }

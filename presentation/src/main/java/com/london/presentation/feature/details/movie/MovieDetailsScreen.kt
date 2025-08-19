@@ -161,7 +161,7 @@ private fun Content(
         TopBar(
             onBackClick = movieDetailsContract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
-            onClickOption1 = movieDetailsContract::onManageBookmarkClicked,
+            onClickOption1 = { movieDetailsContract.onManageBookmarkClicked(uiState.movieId) },
             option1Icon = R.drawable.icon_remove,
         )
 
@@ -190,7 +190,7 @@ private fun Content(
         BookmarkBottomSheet(
             onSheetDismiss = movieDetailsContract::onBookmarkSheetDismiss,
             isSheetVisible = uiState.isBookmarkSheetVisible,
-            bookmarkedMovieId = uiState.movieId
+            bookmarkedMovieId = uiState.bookmarkedMovieId
         )
     }
 
@@ -351,11 +351,10 @@ private fun HomeLazyVerticalGrid(
                 HomeCard(
                     imageUrl = movie.posterUrl,
                     isSaved = false,
-                    onSaveClick = {},
-                    modifier = Modifier
-                        .clickable {
-                            movieDetailsContract.onMovieClick(movie.id)
-                        }
+                    onSaveClick = { movieDetailsContract.onManageBookmarkClicked(movie.id) },
+                    modifier = Modifier.clickable {
+                        movieDetailsContract.onMovieClick(movie.id)
+                    }
                 )
             }
         }
