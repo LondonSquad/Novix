@@ -1,8 +1,8 @@
 package com.london.domain.usecase.recent.watched.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.RecentWatchedRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -92,7 +92,19 @@ class ManageRecentTvShowWatchedUseCaseTest {
         // Then
         assertThat(result).hasSize(2)
     }
-    // endregion
+
+    @Test
+    fun `getMostRecent should return most recent tv show when recentWatchedRepository returns list`() =
+        runTest {
+            // Given
+            coEvery { recentWatchedRepository.getAllRecentWatchedTvShows() } returns flow {
+                emit(tvShowList)
+            }
+            // When
+            val result = manageRecentTvShowWatchedUseCase.getMostRecent().single()
+            // Then
+            assertThat(result).isEqualTo(tvShowList)
+        }
 
     companion object {
         val tvShow = TvShow(

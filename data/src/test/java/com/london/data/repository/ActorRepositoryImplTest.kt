@@ -10,7 +10,7 @@ import com.london.data.remote.model.details.actor.model.actorimage.ActorImageRes
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
 import com.london.data.remote.model.details.tvshow.model.Role
-import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
+import com.london.data.remote.model.details.tvshow.model.TvShowCastMemberResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.source.actor.ActorRemoteDataSource
@@ -243,7 +243,7 @@ class ActorRepositoryImplTest {
 
     private val tvShowCastRemoteMock = TvShowCastRemoteResponse(
         cast = listOf(
-            TvShowCastMember(
+            TvShowCastMemberResponse(
                 id = 1,
                 name = "Actor Name",
                 profilePath = "/actor.jpg",

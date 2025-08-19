@@ -50,4 +50,5 @@ fun TvShowGenre.getId(): Int = when (this) {
 fun Genre.toGenreId(): Int = when (this) {
     is MovieGenre -> this.getId()
     is TvShowGenre -> this.getId()
+    else -> 0
 }

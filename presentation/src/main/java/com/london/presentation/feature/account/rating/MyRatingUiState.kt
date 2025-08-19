@@ -1,6 +1,6 @@
 package com.london.presentation.feature.account.rating
 
-import com.london.domain.entity.RatedMedia
+import com.london.domain.entity.shared.RatedMedia
 import com.london.presentation.shared.base.ErrorState
 
 data class MyRatingUiState(

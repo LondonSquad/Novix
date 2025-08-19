@@ -5,7 +5,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToFirstDecimal
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.MovieDetails
 
 fun MovieDetailsResponse.toEntity(): MovieDetails = MovieDetails(
     backdropUrl = this.backdropPath.asImageUrlOrEmpty(),

@@ -3,7 +3,7 @@ package com.london.presentation.feature.home.trending.actor
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.london.domain.entity.Actor
+import com.london.domain.entity.actor.Actor
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState

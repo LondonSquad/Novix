@@ -1,13 +1,13 @@
 package com.london.domain.usecase.details.movie
 
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
@@ -29,7 +29,7 @@ class GetMovieUseCase @Inject constructor(
         }.take(limit)
     }
 
-    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity> =
+    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<Review> =
         movieRepository.getMovieReviews(movieId, pageNumber)
 
     suspend fun getMovieCast(movieId: Int): List<Actor> = actorRepository.getMovieActors(movieId)

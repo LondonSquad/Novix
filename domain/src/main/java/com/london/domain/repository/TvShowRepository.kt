@@ -1,22 +1,22 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.Trending
-import com.london.domain.entity.TvShow
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.RatedMedia
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshow.TvShow
+import com.london.domain.entity.tvshow.TvShowDetails
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 
 interface TvShowRepository {
-    suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
+    suspend fun getTvShowDetailsById(id: Int): TvShowDetails
     suspend fun getImagesTvShowById(id: Int): ImagesEntity
     suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails
     suspend fun getPopularTvShows(): List<PopularMedia>
@@ -42,20 +42,20 @@ interface TvShowRepository {
         rating: Int
     ): Boolean
 
-    suspend fun getTvShowEpisodesBySeason(
+    suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int,
-    ): TvShowEpisodesEntity
+    ): SeasonEpisodes
 
     suspend fun getTvShowEpisodeByPosition(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisodeByIdEntity
+    ): EpisodeDetails
 
-    suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
-    suspend fun getTvShowVideos(tvShowId: Int): List<String>
-    suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
+    suspend fun getEpisodeVideos(tvShowId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
+    suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): List<String>
+    suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<Review>
     suspend fun getAccountTvShowStateById(
         id: Int,
     ): MediaStates

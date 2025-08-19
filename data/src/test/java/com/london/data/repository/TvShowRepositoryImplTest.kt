@@ -8,8 +8,8 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
-import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
-import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
+import com.london.data.mapper.details.tvshow.toEpisodeEntity
+import com.london.data.mapper.details.tvshow.toEpisodesEntity
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toReviewEntity
@@ -24,10 +24,10 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
@@ -42,12 +42,12 @@ import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
+import com.london.domain.entity.tvshow.TvShow
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -148,7 +148,7 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getTvShowEpisodesBySeason should throw HttpLockedException when remote fails`() = runTest {
         coEvery {
-            remoteDataSource.getTvShowEpisodesBySeason(
+            remoteDataSource.getTvShowSeasonEpisodes(
                 seasonNumber = 0, id = 123
             )
         } throws NetworkException.HttpLockedException(
@@ -157,7 +157,7 @@ class TvShowRepositoryImplTest {
         )
 
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getTvShowEpisodesBySeason(123, 0)
+            repository.getTvShowSeasonEpisodes(123, 0)
         }
     }
 
@@ -182,12 +182,12 @@ class TvShowRepositoryImplTest {
     fun `getTvShowEpisodesBySeason should return TvShowEpisodesEntity when remote call succeeds`() =
         runTest {
             coEvery {
-                remoteDataSource.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                remoteDataSource.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }.returns(Result.success(TvShowEpisodesRemoteMock))
 
-            val result = repository.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+            val result = repository.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
 
-            assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toTvShowEpisodesEntity())
+            assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toEpisodesEntity())
         }
 
     @Test
@@ -205,7 +205,7 @@ class TvShowRepositoryImplTest {
         val result =
             repository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
 
-        assertThat(result).isEqualTo(fakeResponse.toTvShowEpisodeEntity())
+        assertThat(result).isEqualTo(fakeResponse.toEpisodeEntity())
     }
 
     @Test
@@ -213,11 +213,11 @@ class TvShowRepositoryImplTest {
         runTest {
             val networkException = RuntimeException("Network error")
             coEvery {
-                remoteDataSource.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                remoteDataSource.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }.throws(networkException)
 
             val actualException = assertThrows<RuntimeException> {
-                repository.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                repository.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }
 
             assertThat(actualException).isEqualTo(networkException)
@@ -474,12 +474,18 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should map remote video list correctly`() = runTest {
         // Given
         val tvShowId = 123
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+        val seasonNumber = 1
+        coEvery {
+            remoteDataSource.getTvSeasonTrailer(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber
+            )
+        } returns Result.success(
             fakeTvShowVideosResponse()
         )
 
         // When
-        val result: List<String> = repository.getTvShowVideos(tvShowId)
+        val result: List<String> = repository.getTvSeasonTrailer(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).hasSize(2)
@@ -497,12 +503,18 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should return empty list when API returns null list`() = runTest {
         // Given
         val tvShowId = 999
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+        val seasonNumber = 1
+        coEvery {
+            remoteDataSource.getTvSeasonTrailer(
+                tvShowId,
+                seasonNumber
+            )
+        } returns Result.success(
             fakeNullTvShowVideosResponse()
         )
 
         // When
-        val result = repository.getTvShowVideos(tvShowId)
+        val result = repository.getTvSeasonTrailer(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).isEmpty()
@@ -512,15 +524,16 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should throw ValidationException when remote fails`() = runTest {
 
         val tvShowId = 123
+        val seasonNumber = 1
         coEvery {
-            remoteDataSource.getTvShowVideos(tvShowId)
+            remoteDataSource.getTvSeasonTrailer(tvShowId, seasonNumber)
         } throws NetworkException.ValidationException(
             message = "validation error",
             status = 422
         )
 
         assertThrows<NetworkException.ValidationException> {
-            repository.getTvShowVideos(tvShowId)
+            repository.getTvSeasonTrailer(tvShowId, seasonNumber)
         }
     }
 
@@ -1197,7 +1210,7 @@ class TvShowRepositoryImplTest {
             voteCount: Int = 100,
             guestStars: List<EpisodeGuestStar> = emptyList(),
             episodeType: String = "standard"
-        ): TvShowEpisodeResponse = TvShowEpisodeResponse(
+        ): EpisodeDetailsResponse = EpisodeDetailsResponse(
             id = id,
             name = name,
             seasonNumber = seasonNumber,
@@ -1310,10 +1323,10 @@ class TvShowRepositoryImplTest {
             )
         )
 
-        val TvShowEpisodesRemoteMock = TvShowEpisodesRemoteResponse(
-            id = "season_id",
+        val TvShowEpisodesRemoteMock = SeasonEpisodesResponse(
+            seasonId = "season_id",
             episodes = listOf(
-                TvShowEpisodeBySeason(
+                Episode(
                     airDate = "2020-01-01",
                     episodeNumber = 1,
                     episodeType = "standard",

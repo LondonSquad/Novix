@@ -2,7 +2,7 @@ package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.paging.PagingData
-import com.london.domain.entity.MovieList
+import com.london.domain.entity.movie.MovieList
 import com.london.presentation.shared.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

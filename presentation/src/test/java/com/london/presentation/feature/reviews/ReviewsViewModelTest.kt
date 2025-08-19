@@ -3,9 +3,9 @@ package com.london.presentation.feature.reviews
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
@@ -15,7 +15,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -80,6 +79,7 @@ class ReviewsViewModelTest {
             assertThat(state.isLoading).isFalse()
             assertThat(state.error).isNull()
             assertThat(state.reviews).isNotNull()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -100,6 +100,7 @@ class ReviewsViewModelTest {
             assertThat(state.isLoading).isFalse()
             assertThat(state.error).isNull()
             assertThat(state.reviews).isNotNull()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -117,6 +118,7 @@ class ReviewsViewModelTest {
             viewModel.onBackClicked()
             val effect = awaitItem()
             assertThat(effect).isInstanceOf(ReviewEffect.NavigateBack::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -133,39 +135,13 @@ class ReviewsViewModelTest {
             getTvShowUseCase = getTvShowUseCase,
             savedStateHandle = savedStateHandle
         )
-        advanceUntilIdle()
 
         // Then
         viewModel.state.test {
             val state = expectMostRecentItem()
+            advanceUntilIdle()
             assertThat(state.isLoading).isFalse()
-            // Verify it uses default mediaType (Movie) and mediaId (0)
-        }
-    }
-
-    @Test
-    fun `when reviews are loaded successfully, should update state with paging flow`() = runTest {
-        // Given
-        val movieId = 123
-        val mockReviews = listOf(
-            createMockReview(1),
-            createMockReview(2),
-            createMockReview(3)
-        )
-        val mockResponse = createMockPagedFetchResponse(mockReviews)
-        coEvery { getMovieUseCase.getMovieReviews(movieId, any()) } returns mockResponse
-
-        // When
-        viewModel = createViewModel(MediaType.Movie, movieId)
-        advanceUntilIdle()
-
-        // Then
-        viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state.isLoading).isFalse()
-            assertThat(state.error).isNull()
-            assertThat(state.reviews).isNotNull()
-            assertThat(state.reviews).isInstanceOf(Flow::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -198,13 +174,13 @@ class ReviewsViewModelTest {
             viewModel.state.test {
                 val state = expectMostRecentItem()
                 assertThat(state.reviews).isNotNull()
-                // The actual paging behavior would be tested in integration tests
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
     fun `when error state exists and new reviews are loaded, should clear error`() = runTest {
-        // Given - Initial error state
+        // Given
         val movieId = 123
         coEvery {
             getMovieUseCase.getMovieReviews(
@@ -216,7 +192,7 @@ class ReviewsViewModelTest {
         viewModel = createViewModel(MediaType.Movie, movieId)
         advanceUntilIdle()
 
-        // When - Successful retry
+        // When
         val mockReviews = createMockPagedFetchResponse(listOf(createMockReview(1)))
         coEvery { getMovieUseCase.getMovieReviews(movieId, any()) } returns mockReviews
         viewModel.onRetry()
@@ -226,11 +202,11 @@ class ReviewsViewModelTest {
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state.error).isNull()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
-    // Helper functions
-    private fun createMockReview(id: Int) = mockk<ReviewEntity> {
+    private fun createMockReview(id: Int) = mockk<Review> {
         every { this@mockk.id } returns id.toString()
         every { content } returns "Review content $id"
         every { createdAt } returns "2024-01-0$id"

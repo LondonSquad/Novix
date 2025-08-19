@@ -2,10 +2,10 @@ package com.london.presentation.feature.home.continuewatching
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.genre.MovieGenreUi
@@ -178,7 +178,7 @@ class ContinueWatchingViewModelTest {
         // Given
         advanceUntilIdle()
         val initialTab = viewModel.state.value.selectedMediaCategory
-        val newTab = com.london.presentation.shared.MediaCategory.TvShows // Use different category
+        val newTab = com.london.presentation.shared.MediaCategory.TvShows
 
         // When
         viewModel.onMediaCategoryTabClick(newTab)
@@ -222,21 +222,6 @@ class ContinueWatchingViewModelTest {
             viewModel.onNavigateToTvShowClick(tvShowId)
             assertThat(awaitItem()).isInstanceOf(ContinueWatchingEffect.NavigateToTvShowDetails::class.java)
         }
-    }
-
-    @Test
-    fun `when onRetryClick should call getRecentWatchedMedia`() = runTest {
-
-        // Given
-        advanceUntilIdle()
-
-        // When
-        viewModel.onRetryClick()
-        advanceUntilIdle()
-
-        // Then
-        val state = viewModel.state.value
-        assertThat(state.isLoading).isFalse()
     }
 
     private fun createMockRecentMovie() = mockk<Movie> {

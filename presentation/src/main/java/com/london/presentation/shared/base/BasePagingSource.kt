@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.shared.PagedFetchResponse
 import kotlinx.coroutines.flow.Flow
 
 abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {

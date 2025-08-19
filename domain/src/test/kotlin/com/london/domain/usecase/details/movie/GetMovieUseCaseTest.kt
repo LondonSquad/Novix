@@ -1,16 +1,19 @@
 package com.london.domain.usecase.details.movie
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.review.AuthorDetails
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
@@ -548,11 +551,11 @@ class GetMovieUseCaseTest {
                 movieRepository.getMoviesByGenre(
                     CATEGORY, PAGE_NUMBER
                 )
-            } returns pagedFetchResponse
+            } returns pagedFetchMovieResponse
             //when
             val result = getMovieUseCase.getMoviesByGenre(CATEGORY, PAGE_NUMBER)
             //then
-            assertThat(result).isEqualTo(pagedFetchResponse)
+            assertThat(result).isEqualTo(pagedFetchMovieResponse)
         }
 
     @Test
@@ -613,6 +616,46 @@ class GetMovieUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return reviews when repository returns reviews`() = runTest {
+        // Given
+        coEvery { movieRepository.getMovieReviews(MOVIE_ID, any()) } returns mockReviews()
+
+        // When
+        val result = getMovieUseCase.getMovieReviews(MOVIE_ID, 1)
+
+        // Then
+        assertThat(result).isEqualTo(mockReviews())
+    }
+
+    @Test
+    fun `should return upcoming movies when repository returns upcoming movies`() = runTest {
+        // Given
+        coEvery {
+            movieRepository.getUpcomingMoviesByGenre(
+                CATEGORY,
+                PAGE_NUMBER
+            )
+        } returns pagedFetchUpComingMovieResponse
+
+        // When
+        val result = getMovieUseCase.getUpcomingMoviesByGenre(CATEGORY, PAGE_NUMBER)
+
+        // Then
+        assertThat(result).isEqualTo(pagedFetchUpComingMovieResponse)
+    }
+
+    @Test
+    fun `should return most recent movies when repository returns most recent movies`() = runTest {
+        // Given
+        coEvery { movieRepository.getFirstPageTopRatedMovies() } returns mockTopRatedMovies
+
+        // When
+        val result = getMovieUseCase.getMostRecentMovies()
+
+        // Then
+        assertThat(result).isEqualTo(mockTopRatedMovies)
+    }
 
     private companion object {
         private val CATEGORY = MovieGenre.ACTION
@@ -622,6 +665,26 @@ class GetMovieUseCaseTest {
         private const val TOTAL_ITEMS = 100
         private const val MOVIE_ID = 123
 
+
+        private fun mockReviews() = PagedFetchResponse(
+            currentPage = 1,
+            items = listOf(
+                Review(
+                    id = "1",
+                    content = "Great movie!",
+                    authorName = "John Doe",
+                    authorDetails = AuthorDetails(
+                        username = "John Doe",
+                        profileUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
+                        rating = 4.5,
+                        name = "John Doe",
+                    ),
+                    createdAt = "2023-08-01",
+                )
+            ),
+            totalPages = 1,
+            totalItems = 1
+        )
 
         private val mockMovie1 = TopRatedMedia(
             id = 278,
@@ -649,8 +712,17 @@ class GetMovieUseCaseTest {
             rating = 8,
             genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
         )
-        private val pagedFetchResponse = PagedFetchResponse(
+
+        private val upComingMovie = UpComingMovie(
+            id = 1,
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION),
+            imageUrl = "/backdrop_1.jpg"
+        )
+        private val pagedFetchMovieResponse = PagedFetchResponse(
             currentPage = 1, items = listOf(movie), totalPages = 1, totalItems = 1
+        )
+        private val pagedFetchUpComingMovieResponse = PagedFetchResponse(
+            currentPage = 1, items = listOf(upComingMovie), totalPages = 1, totalItems = 1
         )
 
         private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =

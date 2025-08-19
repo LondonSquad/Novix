@@ -1,15 +1,15 @@
 package com.london.presentation.shared.bookmarkSheet
 
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.movielist.AddMovieToListUseCase
 import com.london.domain.usecase.movielist.GetAvailableListsForMovie
+import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkSheetViewModel @Inject constructor(
-    private val addMovieToListUseCase: AddMovieToListUseCase,
+    private val manageMovieListUseCase: ManageMovieListUseCase,
     private val getAvailableListsForMovie: GetAvailableListsForMovie,
     private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
@@ -45,7 +45,7 @@ class BookmarkSheetViewModel @Inject constructor(
             onStart = { updateState { copy(isAddingToList = true) } },
             block = {
                 listsToAdd.forEach { listId ->
-                    addMovieToListUseCase.invoke(
+                    manageMovieListUseCase.addMovieToList(
                         listId = listId,
                         movieId = bookmarkedId
                     )

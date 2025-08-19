@@ -3,7 +3,7 @@ package com.london.presentation.feature.list.savedlist
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
+import com.london.domain.usecase.movielist.ManageGetMovieUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -14,7 +14,7 @@ import jakarta.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
+    private val manageGetMovieUseCase: ManageGetMovieUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
@@ -88,7 +88,7 @@ class ListViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getAllMovieListsUseCase.invoke(
+                    val movies = manageGetMovieUseCase.getAllMovieLists(
                         pageNumber
                     )
                     movies.copy(items = movies.items)

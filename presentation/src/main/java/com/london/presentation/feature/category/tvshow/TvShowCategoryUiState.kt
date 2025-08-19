@@ -1,7 +1,7 @@
 package com.london.presentation.feature.category.tvshow
 
 import androidx.paging.PagingData
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.tvshow.TvShow
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.coroutines.flow.Flow
