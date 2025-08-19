@@ -33629,5 +33629,42 @@
       "deletions": 881,
       "changed_files": 188
     }
+  },
+  {
+    "pr_number": 700,
+    "url": "https://github.com/LondonSquad/Novix/pull/700",
+    "title": "fix: Improve code quality and state priority list screen",
+    "opened_at": "2025-08-19T18:48:21Z",
+    "head_ref": "refactor/list-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "assignees": [
+      {
+        "login": "marwanqashwa",
+        "id": 100484790,
+        "url": "https://github.com/marwanqashwa"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 80,
+      "deletions": 88,
+      "changed_files": 9
+    }
   }
 ]
