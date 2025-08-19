@@ -33390,5 +33390,42 @@
       "deletions": 365,
       "changed_files": 19
     }
+  },
+  {
+    "pr_number": 694,
+    "url": "https://github.com/LondonSquad/Novix/pull/694",
+    "title": "hotfix/unused-utils and refactor app nav ",
+    "opened_at": "2025-08-19T05:03:09Z",
+    "head_ref": "hotfix/unused-utils",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "assignees": [
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 30,
+      "deletions": 115,
+      "changed_files": 10
+    }
   }
 ]
