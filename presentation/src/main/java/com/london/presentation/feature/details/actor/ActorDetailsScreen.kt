@@ -58,6 +58,7 @@ import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 
@@ -173,9 +174,7 @@ private fun Content(
         TopBar(
             onBackClick = actorDetailsContract::onBackClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .detailsTopBar(backgroundAlpha)
                 .zIndex(1f)
         )
     }
@@ -415,13 +414,13 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
     if (uiState.isLoading || uiState.error != null) return
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
-            uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
-            uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
-            uiState.actorDetails.biography.isBlank() &&
-            (uiState.actorDetails.name.isBlank() &&
-                    uiState.actorDetails.birthday.isBlank() &&
-                    uiState.actorDetails.placeOfBirth.isBlank() &&
-                    uiState.actorDetails.knownForDepartment.isBlank())
+        uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
+        uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
+        uiState.actorDetails.biography.isBlank() &&
+        (uiState.actorDetails.name.isBlank() &&
+            uiState.actorDetails.birthday.isBlank() &&
+            uiState.actorDetails.placeOfBirth.isBlank() &&
+            uiState.actorDetails.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -434,12 +433,12 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
 
 private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
     return uiState.actorDetails.name.isNotBlank() ||
-            uiState.actorDetails.birthday.isNotBlank() ||
-            uiState.actorDetails.placeOfBirth.isNotBlank() ||
-            uiState.actorDetails.knownForDepartment.isNotBlank() ||
-            uiState.actorDetails.biography.isNotBlank() ||
-            !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
-            !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
+        uiState.actorDetails.birthday.isNotBlank() ||
+        uiState.actorDetails.placeOfBirth.isNotBlank() ||
+        uiState.actorDetails.knownForDepartment.isNotBlank() ||
+        uiState.actorDetails.biography.isNotBlank() ||
+        !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
+        !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
 }
 
 @Preview
