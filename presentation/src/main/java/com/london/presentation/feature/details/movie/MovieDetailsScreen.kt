@@ -118,7 +118,7 @@ fun MovieDetailsScreen(
     ) {
         Content(
             uiState = state,
-            movieDetailsContract = viewModel
+            contract = viewModel
         )
     }
 }
@@ -126,7 +126,7 @@ fun MovieDetailsScreen(
 @Composable
 private fun Content(
     uiState: MovieDetailsUiState,
-    movieDetailsContract: MovieDetailsContract
+    contract: MovieDetailsContract
 ) {
     val screenWidthDp =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
@@ -159,15 +159,15 @@ private fun Content(
     ) {
 
         TopBar(
-            onBackClick = movieDetailsContract::onBackClick,
+            onBackClick = contract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
-            onClickOption1 = { movieDetailsContract.onManageBookmarkClicked(uiState.movieId) },
+            onClickOption1 = { contract.onManageBookmarkClicked(uiState.movieId) },
             option1Icon = R.drawable.icon_remove,
         )
 
         HomeLazyVerticalGrid(
             uiState = uiState,
-            movieDetailsContract = movieDetailsContract,
+            movieDetailsContract = contract,
             lazyState = lazyState,
             footerHeight = footerHeight,
             screenWidthDp = screenWidthDp
@@ -181,14 +181,14 @@ private fun Content(
                 }
                 .align(Alignment.BottomCenter),
             onVideoClick = { uriHandler.openUrl(uiState.movieVideo) },
-            onRateClick = movieDetailsContract::onRateBottomSheetClick,
+            onRateClick = contract::onRateBottomSheetClick,
             isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
         )
 
-        BottomSheetsHandler(uiState, movieDetailsContract)
+        BottomSheetsHandler(uiState, contract)
 
         BookmarkBottomSheet(
-            onSheetDismiss = movieDetailsContract::onBookmarkSheetDismiss,
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
             isSheetVisible = uiState.isBookmarkSheetVisible,
             bookmarkedMovieId = uiState.bookmarkedMovieId
         )

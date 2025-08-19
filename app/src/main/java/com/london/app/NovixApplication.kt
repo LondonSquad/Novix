@@ -26,7 +26,7 @@ class NovixApplication : Application(), Configuration.Provider {
         super.onCreate()
         timberConfig()
 
-        WorkManager.initialize(this, workManagerConfiguration)
+        WorkManager.initialize(context = this, configuration = workManagerConfiguration)
     }
 
     private fun timberConfig() {

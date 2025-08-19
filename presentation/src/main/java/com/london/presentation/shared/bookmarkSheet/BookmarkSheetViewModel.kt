@@ -67,9 +67,7 @@ class BookmarkSheetViewModel @Inject constructor(
                     )
                 }
             },
-            onCompleted = {
-                updateState { copy(isAddingToList = false) }
-            }
+            onCompleted = { updateState { copy(isAddingToList = false) } }
         )
     }
 

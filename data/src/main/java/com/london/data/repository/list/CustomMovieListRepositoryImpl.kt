@@ -11,6 +11,7 @@ import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.utils.CrashReporter
+import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.movie.MovieList
@@ -37,18 +38,17 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return localDataSource.isMovieListed(movieId)
     }
 
-    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> {
-        return localDataSource.isMovieListedFlow(movieId)
-    }
+    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> = localDataSource.isMovieListedFlow(movieId)
+
 
     override suspend fun getMovieListIds(movieId: Int, forceRefresh: Boolean): List<Int> {
         refreshMovieListCacheIfNecessary(forceRefresh)
         return localDataSource.getMovieListIds(movieId)
     }
 
-    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> {
-        return localDataSource.getMovieListIdsFlow(movieId)
-    }
+    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> =
+        localDataSource.getMovieListIdsFlow(movieId)
+
 
     override suspend fun deleteMovieList(id: Int): Boolean {
         val success = deleteListRemotely(id)
@@ -75,9 +75,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return localDataSource.getAllListedMovieIds()
     }
 
-    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> {
-        return localDataSource.getAllListedMovieIdsFlow()
-    }
+    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> = localDataSource.getAllListedMovieIdsFlow()
+
 
     override suspend fun createMovieList(name: String): Boolean {
         val response = createListRemotely(name)
@@ -142,13 +141,13 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return true
     }
 
-    private suspend fun addMovieRemotely(listId: Int, movieId: Int) {
+    private suspend fun addMovieRemotely(listId: Int, movieId: Int) =
         remoteDataSource.addMovieToList(
             listId = listId,
             movieId = movieId,
             sessionId = authenticationPreferences.getSessionId()
         ).getOrThrow()
-    }
+
 
     private suspend fun updateLocalCacheAfterAddingMovie(listId: Int, movieId: Int) {
         localDataSource.addMovieToListCache(movieId, listId)
@@ -183,13 +182,13 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return true
     }
 
-    private suspend fun removeMovieRemotely(listId: Int, movieId: Int) {
+    private suspend fun removeMovieRemotely(listId: Int, movieId: Int) =
         remoteDataSource.removeMovieFromList(
             listId = listId,
             movieId = movieId,
             sessionId = authenticationPreferences.getSessionId()
         ).getOrThrow()
-    }
+
 
     private suspend fun updateLocalCacheAfterRemovingMovie(listId: Int, movieId: Int) {
         localDataSource.removeMovieFromListCache(movieId, listId)
@@ -240,9 +239,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     ): List<MovieListMembershipLocal> {
         val memberships = mutableListOf<MovieListMembershipLocal>()
 
-        for (list in listsPage) {
-            if (list.id == null) continue
-            memberships.addAll(fetchAllMembershipsForList(list.id))
+        listsPage.forEach { list ->
+            list.id?.let { listId -> memberships.addAll(fetchAllMembershipsForList(listId)) }
         }
 
         return memberships
@@ -260,14 +258,9 @@ class CustomMovieListRepositoryImpl @Inject constructor(
 
             val items = listDetailsResponse.items.orEmpty()
 
-            for (movie in items) {
-                if (movie.id != null) {
-                    memberships.add(
-                        MovieListMembershipLocal(
-                            movieId = movie.id,
-                            listId = listId
-                        )
-                    )
+            items.forEach { movie ->
+                movie.id?.let { movieId ->
+                    memberships.add(MovieListMembershipLocal(movieId = movieId, listId = listId))
                 }
             }
 
@@ -293,6 +286,6 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     private companion object {
-        const val MAX_PAGES = 10
+        const val MAX_PAGES = 100
     }
 }

@@ -1,15 +1,15 @@
 package com.london.designsystem.snackbar
 
-interface SnackbarController {
+interface SnackBarController {
     fun showMessage(
         message: String,
         icon: Int?,
-        snackbarType: SnackbarType,
+        snackBarType: SnackBarType,
         onComplete: () -> Unit
     )
 }
 
-enum class SnackbarType {
+enum class SnackBarType {
     Success,
     Error;
 }

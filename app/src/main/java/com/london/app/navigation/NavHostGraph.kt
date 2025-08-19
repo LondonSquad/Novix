@@ -17,9 +17,9 @@ import com.london.app.navigation.graph.mainNavGraph
 import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
-import com.london.designsystem.snackbar.CustomSnackbarUI
-import com.london.designsystem.snackbar.ScaffoldWithSnackbar
-import com.london.designsystem.snackbar.SnackbarData
+import com.london.designsystem.snackbar.CustomSnackBarUI
+import com.london.designsystem.snackbar.ScaffoldWithSnackBar
+import com.london.designsystem.snackbar.SnackBarData
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen.Account
@@ -34,7 +34,7 @@ fun NavHostGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val showBottomNav = navBackStackEntry.hasRoute(Home, Search, Categories, Lists(), Account)
 
-    ScaffoldWithSnackbar(
+    ScaffoldWithSnackBar(
         containerColor = NovixTheme.colors.surface,
         bottomBar = {
             AnimatedVisibility(
@@ -51,7 +51,7 @@ fun NavHostGraph() {
                 )
             }
         },
-        snackbar = { data: SnackbarData -> CustomSnackbarUI(data = data) }
+        snackBar = { data: SnackBarData -> CustomSnackBarUI(data = data) }
     ) { innerPadding ->
         CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(

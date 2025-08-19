@@ -40,7 +40,7 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.snackbar.LocalSnackbarController
-import com.london.designsystem.snackbar.SnackbarType
+import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
@@ -159,22 +159,22 @@ private fun BookmarkBottomSheetContent(
         }
     }
 
-    val snackbarController = LocalSnackbarController.current
+    val snackBarController = LocalSnackbarController.current
 
     if (state.isSuccessSnackbarVisible) {
-        snackbarController.showMessage(
+        snackBarController.showMessage(
             message = R.string.item_added_success.string,
             icon = com.london.designsystem.R.drawable.ic_success,
-            snackbarType = SnackbarType.Success,
+            snackBarType = SnackBarType.Success,
             onComplete = contract::onSnackbarShown
         )
     }
 
     if (state.isErrorSnackbarVisible) {
-        snackbarController.showMessage(
+        snackBarController.showMessage(
             message = R.string.item_added_fail.string,
             icon = com.london.designsystem.R.drawable.ic_failed,
-            snackbarType = SnackbarType.Error,
+            snackBarType = SnackBarType.Error,
             onComplete = contract::onSnackbarShown
         )
     }

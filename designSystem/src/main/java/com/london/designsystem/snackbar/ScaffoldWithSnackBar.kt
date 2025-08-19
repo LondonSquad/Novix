@@ -31,36 +31,36 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class SnackbarData(
+data class SnackBarData(
     val message: String,
     @DrawableRes val icon: Int?,
-    val snackbarType: SnackbarType,
+    val snackBarType: SnackBarType,
 )
 
-private class SnackbarManager(
+private class SnackBarManager(
     private val coroutineScope: CoroutineScope
-) : SnackbarController {
-    val snackbarData = mutableStateOf<SnackbarData?>(null)
+) : SnackBarController {
+    val snackBarData = mutableStateOf<SnackBarData?>(null)
     private var job: Job? = null
 
     override fun showMessage(
         message: String,
         icon: Int?,
-        snackbarType: SnackbarType,
+        snackBarType: SnackBarType,
         onComplete: () -> Unit
     ) {
         job?.cancel()
         job = coroutineScope.launch {
-            snackbarData.value = SnackbarData(message, icon, snackbarType)
+            snackBarData.value = SnackBarData(message, icon, snackBarType)
             delay(3000L)
             onComplete()
-            snackbarData.value = null
+            snackBarData.value = null
         }
     }
 }
 
 @Composable
-fun CustomSnackbarUI(data: SnackbarData) {
+fun CustomSnackBarUI(data: SnackBarData) {
     SnackBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,21 +72,21 @@ fun CustomSnackbarUI(data: SnackbarData) {
 }
 
 @Composable
-fun ScaffoldWithSnackbar(
+fun ScaffoldWithSnackBar(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
-    snackbar: @Composable (data: SnackbarData) -> Unit,
+    snackBar: @Composable (data: SnackBarData) -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val snackbarManager = remember(coroutineScope) { SnackbarManager(coroutineScope) }
-    val currentSnackbarData by snackbarManager.snackbarData
+    val snackBarManager = remember(coroutineScope) { SnackBarManager(coroutineScope) }
+    val currentSnackbarData by snackBarManager.snackBarData
 
-    CompositionLocalProvider(LocalSnackbarController provides snackbarManager) {
+    CompositionLocalProvider(LocalSnackbarController provides snackBarManager) {
         Scaffold(
             modifier = modifier,
             topBar = topBar,
@@ -109,9 +109,7 @@ fun ScaffoldWithSnackbar(
                         animationSpec = tween()
                     )
                 ) {
-                    currentSnackbarData?.let {
-                        snackbar(it)
-                    }
+                    currentSnackbarData?.let { snackBar(it) }
                 }
             }
         }
