@@ -4,7 +4,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import com.london.presentation.feature.welcome.onboarding.OnboardingEffect
 import com.london.presentation.feature.welcome.onboarding.OnboardingViewModel
 import io.mockk.MockKAnnotations
@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -240,21 +241,12 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `when navigateToWelcome is called, onboarding should be marked as shown`() = runTest {
-        // When
-        viewModel?.navigateToWelcome()
-        advanceUntilIdle()
-
-        // Then
-        coVerify(exactly = 1) {
-            appPreferencesService.setOnBoardingShown()
-        }
-    }
-
-    @Test
     fun `when onboardingFinished is called, preferences service should be invoked`() = runTest {
         // When
         viewModel?.onboardingFinished()
+
+        // Wait for IO operations to complete
+        advanceTimeBy(1000) // Advance virtual time
         advanceUntilIdle()
 
         // Then
@@ -270,6 +262,9 @@ class OnboardingViewModelTest {
 
         // When
         viewModel?.onboardingFinished()
+
+        // Wait for IO operations to complete
+        advanceTimeBy(1000)
         advanceUntilIdle()
 
         // Then - Should not crash and service should still be called
@@ -277,6 +272,35 @@ class OnboardingViewModelTest {
             appPreferencesService.setOnBoardingShown()
         }
     }
+
+    @Test
+    fun `when navigateToWelcome is called, onboarding should be marked as shown`() = runTest {
+        // When
+        viewModel?.navigateToWelcome()
+
+        // Wait for IO operations to complete
+        advanceTimeBy(1000)
+        advanceUntilIdle()
+
+        // Then
+        coVerify(exactly = 1) {
+            appPreferencesService.setOnBoardingShown()
+        }
+    }
+
+    // Alternative approach using coVerify with timeout
+    @Test
+    fun `when onboardingFinished is called, preferences service should be invoked - with timeout`() =
+        runTest {
+            // When
+            viewModel?.onboardingFinished()
+            advanceUntilIdle()
+
+            // Then - Use timeout in coVerify to wait for async operations
+            coVerify(timeout = 2000, exactly = 1) {
+                appPreferencesService.setOnBoardingShown()
+            }
+        }
 
     @Test
     fun `when page changes multiple times, state should be updated correctly`() = runTest {

@@ -3,7 +3,6 @@ package com.london.presentation.feature.welcome.onboarding
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
-import androidx.lifecycle.viewModelScope
 import com.london.domain.service.AppPreferencesService
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
