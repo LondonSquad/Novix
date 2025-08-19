@@ -116,14 +116,12 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateBack = ::navigateUp
             )
         }
-
         composable<Reviews> {
-            ReviewsScreen(onNavigateBack = ::navigateUp)
-        }
+            ReviewsScreen(onNavigateBack = ::navigateUp) }
     }
 }
 
-fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
     with(navController) {
         trendingNavGraph(navController)
         continueWatchingNavGraph(navController)
@@ -147,7 +145,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
         }
     }
 
-fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
     with(navController) {
         composable<ContinueWatching> {
             ContinueWatchingScreen(
@@ -168,7 +166,7 @@ fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
         }
     }
 
-fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
     with(navController) {
         appComposable<Lists> {
             ListScreen(
@@ -184,7 +182,7 @@ fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         }
     }
 
-fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
     with(navController) {
         appComposable<MovieDetails> {
             MovieDetailsScreen(
@@ -206,7 +204,7 @@ fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
     }
 
 
-fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
     with(navController) {
         appComposable<TvShowDetails> {
             TvShowsDetailsScreen(
@@ -235,7 +233,7 @@ fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
         }
     }
 
-fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostController) =
     with(navController) {
         appComposable<TopTvShowsPicksDetails> {
             TopTvShowsPicksScreen(
@@ -243,7 +241,6 @@ fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostController) =
                 onNavigateBack = ::navigateUp,
             )
         }
-
         composable<ActorTopMoviesPicksDetails> {
             TopMoviesPicksScreen(
                 onNavigateToMovieDetails = ::navigateToMovieDetails,
@@ -263,7 +260,7 @@ fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostController) =
         composable<ActorGallery> { ActorsGalleryScreen(onNavigateBack = ::navigateUp) }
     }
 
-fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
+private fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
     with(navController) {
         composable<TrendingMovies> {
             TrendingMoviesScreen(

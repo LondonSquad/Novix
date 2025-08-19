@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -44,13 +45,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hasRoute
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.topBorder
 
-data class NavigationTab<T>(
+data class NavigationTab<out T>(
     val idleIcon: Painter,
     val selectedIcon: Painter,
     val destination: T,
@@ -64,12 +67,13 @@ data class NavBarColors(
     val topBorderColor: Color
 )
 
+@SuppressLint("RestrictedApi")
 @Composable
-fun <T> NavBar(
+fun NavBar(
     modifier: Modifier = Modifier,
-    navDestinations: List<NavigationTab<T>>,
-    currentSelectedDestination: T,
-    onNavDestinationClicked: (T) -> Unit,
+    navDestinations: List<NavigationTab<Any>>,
+    onNavDestinationClicked: (Any) -> Unit,
+    navBackStackEntry: NavBackStackEntry? = null,
     navBarColors: NavBarColors = NavBarColors(
         backgroundColor = NovixTheme.colors.surface,
         selectedIconColor = NovixTheme.colors.primary,
@@ -99,12 +103,11 @@ fun <T> NavBar(
             navDestinations.forEach { item ->
                 NavBarItem(
                     item = item,
-                    isSelected = currentSelectedDestination == item.destination,
                     selectedIconColor = navBarColors.selectedIconColor,
-                    idleIconColor = navBarColors.idleIconColor,
-                    onClick = {
-                        onNavDestinationClicked(item.destination)
-                    }
+                idleIconColor = navBarColors.idleIconColor,
+                onClick = { onNavDestinationClicked(item.destination) },
+                screen = item.destination,
+                    backStackEntry = navBackStackEntry
                 )
             }
         }
@@ -114,11 +117,13 @@ fun <T> NavBar(
 @Composable
 private fun <T> NavBarItem(
     item: NavigationTab<T>,
-    isSelected: Boolean,
+    screen: Any,
+    backStackEntry: NavBackStackEntry?,
     selectedIconColor: Color,
     idleIconColor: Color,
     onClick: () -> Unit
 ) {
+    val isSelected = backStackEntry?.destination?.hasRoute(screen::class) == true
     Box(
         modifier = Modifier.size(width = 60.dp, height = 56.dp),
         contentAlignment = Alignment.Center
@@ -299,10 +304,9 @@ private fun NavBarPreview() {
                     destination = MockDestination("account"),
                 )
             ),
-            currentSelectedDestination = currentSelectedDestination,
             onNavDestinationClicked = { destination ->
                 if (destination != currentSelectedDestination) {
-                    currentSelectedDestination = destination
+                    currentSelectedDestination
                 }
             },
         )
