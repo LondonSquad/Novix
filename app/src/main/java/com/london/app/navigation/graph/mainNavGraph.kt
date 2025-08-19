@@ -141,8 +141,8 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
         composable<TopRated> {
             TopRatedScreen(
                 onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails
             )
         }
     }
