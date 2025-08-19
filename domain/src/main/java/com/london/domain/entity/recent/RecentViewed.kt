@@ -1,5 +1,7 @@
 package com.london.domain.entity.recent
 
+import com.london.domain.entity.shared.MediaType
+
 data class RecentViewed(
     val id: Int,
     val imageUrl: String,

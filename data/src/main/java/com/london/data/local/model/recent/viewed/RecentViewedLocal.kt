@@ -1,5 +1,7 @@
 package com.london.data.local.model.recent.viewed
 
+import com.london.data.local.model.recent.MediaTypeLocal
+
 @androidx.room.Entity(
     tableName = "recent_viewed_table",
     primaryKeys = ["id","type"]
@@ -7,6 +9,6 @@ package com.london.data.local.model.recent.viewed
 data class RecentViewedLocal(
     val id : Int,
     val imageUrl : String,
-    val type : com.london.data.local.model.recent.MediaTypeLocal,
+    val type : MediaTypeLocal,
     val viewDate : Long,
 )

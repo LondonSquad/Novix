@@ -5,7 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.usecase.details.movie.GetMovieUseCase

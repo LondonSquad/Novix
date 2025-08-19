@@ -20,7 +20,7 @@ import com.london.data.local.source.recent.RecentViewedDataSourceImpl
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSourceImpl
 import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSourceImpl
-import com.london.domain.AppPreferencesService
+import com.london.domain.service.AppPreferencesService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

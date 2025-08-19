@@ -1,8 +1,5 @@
 package com.london.domain.entity.actor
 
-import com.london.domain.KoverIgnore
-
-@KoverIgnore
 data class ActorDetails(
     val id: Int = 0,
     val name: String = "",

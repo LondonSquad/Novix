@@ -1,7 +1,7 @@
 package com.london.data.mapper.trending
 
 import com.london.data.mapper.home.trending.toEntityActor
-import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.data.remote.model.trending.TrendingResponse
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

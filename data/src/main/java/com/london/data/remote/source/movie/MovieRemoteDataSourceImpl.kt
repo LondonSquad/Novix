@@ -1,19 +1,19 @@
 package com.london.data.remote.source.movie
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImagesResponse
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
+import com.london.data.remote.model.details.actor.movie.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.image.ImagesResponse
+import com.london.data.remote.model.details.movie.details.MovieDetailsResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
-import com.london.data.remote.model.home.popular.PopularMovieResponse
-import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
-import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.model.popular.PopularMovieResponse
 import com.london.data.remote.model.reviews.ReviewResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchMovieRemote
+import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.remote.service.movie.MovieApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.data.utils.getCurrentDate
@@ -29,7 +29,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             mapper = { it })
     }
 
-    override suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>> {
+    override suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<SearchMovieRemote>> {
         return callApiWithRetry(
             apiCall = { movieApiService.getSimilarMovies(movieId = movieId) },
             mapper = { it })
@@ -150,7 +150,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         categoryId: Int?,
         pageNumber: Int,
         includeAdult: Boolean
-    ): Result<ApiResponse<MovieRemote>> {
+    ): Result<ApiResponse<SearchMovieRemote>> {
         return callApiWithRetry(
             {
                 movieApiService.getUpComingMoviesByCategory(
@@ -168,7 +168,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         categoryId: Int,
         pageNumber: Int,
         includeAdult: Boolean
-    ): Result<ApiResponse<MovieRemote>> {
+    ): Result<ApiResponse<SearchMovieRemote>> {
         return callApiWithRetry(
             apiCall = {
                 movieApiService.getMoviesByCategory(
