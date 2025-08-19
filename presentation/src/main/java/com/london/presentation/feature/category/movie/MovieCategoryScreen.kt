@@ -18,6 +18,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.shared.MediaLazyPagingGrid
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.isLoading
@@ -85,9 +86,17 @@ private fun Content(
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                onSaveClick = { /* TODO: Implement save functionality */ },
+                onSaveClick = { contract.onManageBookmarkClicked(it.id) },
                 isItemSaved = { false },
+                hasSaveIcon = true
             )
+
+            BookmarkBottomSheet(
+                onSheetDismiss = contract::onBookmarkSheetDismiss,
+                isSheetVisible = state.isBookmarkSheetVisible,
+                bookmarkedMovieId = state.bookmarkedMovieId
+            )
+
         }
     }
 }
@@ -98,8 +107,9 @@ private fun MoviesByCategoryContentPreview() {
     Content(
         state = MovieCategoryUiState(),
         contract = object : MovieCategoryContract {
-            override fun onSavedClick(movieId: Int) {}
             override fun onMovieClick(movieId: Int) {}
+            override fun onBookmarkSheetDismiss() {}
+            override fun onManageBookmarkClicked(movieId: Int) {}
             override fun onBack() {}
         },
     )

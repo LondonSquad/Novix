@@ -36,8 +36,23 @@ class MovieCategoryViewModel @Inject constructor(
     override fun onBack() =
         emitEffect(MovieCategoryEffect.BackNavigation)
 
-    override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
 
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
     private fun initializeMovies(genreUi: MovieGenreUi) {
         tryToExecute(
             onStart = { onInitializeMoviesStarted(genre = genreUi) },
