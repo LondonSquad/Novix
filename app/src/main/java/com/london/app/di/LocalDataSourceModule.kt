@@ -18,8 +18,8 @@ import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.RecentSearchDataSourceImpl
 import com.london.data.local.source.recent.RecentViewedDataSourceImpl
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
-import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
-import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource
+import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSourceImpl
+import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSourceImpl
 import com.london.domain.AppPreferencesService
 import dagger.Binds
 import dagger.Module
@@ -34,15 +34,14 @@ abstract class LocalDataSourceModule {
     @Binds
     @Singleton
     abstract fun provideRecentWatchedTvShowsDataSource(
-        implementation: RecentWatchedTvShowsDataSource
+        implementation: RecentWatchedTvShowsDataSourceImpl
     ): RecentWatchedDataSource<RecentWatchedTvShowLocal>
 
     @Binds
     @Singleton
     abstract fun provideRecentWatchedMovieDataSource(
-        implementation: RecentWatchedMoviesDataSource
+        implementation: RecentWatchedMoviesDataSourceImpl
     ): RecentWatchedDataSource<RecentWatchedMovieLocal>
-
 
     @Binds
     @Singleton

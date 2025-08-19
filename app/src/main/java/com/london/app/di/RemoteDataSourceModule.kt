@@ -1,7 +1,7 @@
 package com.london.app.di
 
 import com.london.data.remote.source.account.AccountRemoteDataSource
-import com.london.data.remote.source.account.AccountRemoteDataSourceImp
+import com.london.data.remote.source.account.AccountRemoteDataSourceImpl
 import com.london.data.remote.source.actor.ActorRemoteDataSource
 import com.london.data.remote.source.actor.ActorRemoteDataSourceImpl
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
@@ -63,6 +63,6 @@ abstract class RemoteDataSourceModule {
     @Binds
     @Singleton
     abstract fun provideAccountRemoteDataSource(
-        implementation: AccountRemoteDataSourceImp
+        implementation: AccountRemoteDataSourceImpl
     ): AccountRemoteDataSource
 }

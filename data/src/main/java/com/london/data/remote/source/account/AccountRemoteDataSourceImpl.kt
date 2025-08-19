@@ -5,7 +5,7 @@ import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
-class AccountRemoteDataSourceImp @Inject constructor(
+class AccountRemoteDataSourceImpl @Inject constructor(
     private val accountApiService: AccountApiService
 ) : AccountRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getAccountDetails(sessionId: String): Result<AccountInfoResponse> =

@@ -25,57 +25,45 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    fun provideRecentViewedDao(database: NovixDatabase) =
-        database.recentViewedDao()
+    fun provideRecentViewedDao(database: NovixDatabase) = database.recentViewedDao()
 
     @Provides
     @Singleton
-    fun provideRecentSearchDao(database: NovixDatabase) =
-        database.recentSearchDao()
+    fun provideRecentSearchDao(database: NovixDatabase) = database.recentSearchDao()
 
     @Provides
     @Singleton
-    fun provideRecentWatchedMoviesDao(database: NovixDatabase) =
-        database.recentWatchedMoviesDao()
+    fun provideRecentWatchedMoviesDao(database: NovixDatabase) = database.recentWatchedMoviesDao()
 
     @Provides
     @Singleton
-    fun provideRecentWatchedTvShowsDao(database: NovixDatabase) =
-        database.recentWatchedTvShowsDao()
+    fun provideRecentWatchedTvShowsDao(database: NovixDatabase) = database.recentWatchedTvShowsDao()
 
     @Provides
     @Singleton
-    fun providePopularSectionDao(database: NovixDatabase) =
-        database.popularSectionDao()
+    fun providePopularSectionDao(database: NovixDatabase) = database.popularSectionDao()
 
     @Provides
     @Singleton
-    fun provideTopRatedDao(database: NovixDatabase) =
-        database.topRatedDao()
+    fun provideTopRatedDao(database: NovixDatabase) = database.topRatedDao()
 
     @Provides
     @Singleton
-    fun provideUpComingMoviesDao(database: NovixDatabase) =
-        database.upComingSectionDao()
+    fun provideUpComingMoviesDao(database: NovixDatabase) = database.upComingSectionDao()
 
     @Provides
     @Singleton
-    fun provideGenreInterestDao(database: NovixDatabase) =
-        database.genreInterestDao()
+    fun provideGenreInterestDao(database: NovixDatabase) = database.genreInterestDao()
 
     @Provides
     @Singleton
-    fun provideMovieListDao(database: NovixDatabase) =
-        database.movieListDao()
+    fun provideMovieListDao(database: NovixDatabase) = database.movieListDao()
 
     @Provides
     @Singleton
-    fun provideMovieListMembershipDao(database: NovixDatabase) =
-        database.listMembershipDao()
+    fun provideMovieListMembershipDao(database: NovixDatabase) = database.listMembershipDao()
 
     @Provides
     @Singleton
-    fun provideSyncMetadataDao(database: NovixDatabase) =
-        database.syncMetadataDao()
-
+    fun provideSyncMetadataDao(database: NovixDatabase) = database.syncMetadataDao()
 }
