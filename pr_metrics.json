@@ -33030,10 +33030,20 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-19T00:07:00Z",
+        "commit_id": "183294cc6e7a8f9ba49341d79dc5bf67454c74aa"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-19T00:07:00Z",
+    "time_to_first_approval_minutes": 30.15,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
