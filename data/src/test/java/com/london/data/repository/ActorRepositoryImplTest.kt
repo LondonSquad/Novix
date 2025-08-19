@@ -3,7 +3,7 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
-import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
@@ -62,13 +62,13 @@ class ActorRepositoryImplTest {
     @Test
     fun `getMovieCastById return expected result`() = runTest {
         coEvery { remoteDataSource.getMovieActors(ACTOR_ID) } returns Result.failure(
-            NetworkException.UnAuthorizedException(
+            ResponseException(
                 message = "unauthorized",
-                status = 401
+                code = 401
             )
         )
 
-        assertThrows<NetworkException.UnAuthorizedException> {
+        assertThrows<ResponseException> {
             repository.getMovieActors(ACTOR_ID)
         }
     }
@@ -90,13 +90,13 @@ class ActorRepositoryImplTest {
     @Test
     fun `getActorDetailsById throws HttpLockedException on failure`() = runTest {
         coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns Result.failure(
-            NetworkException.HttpLockedException(
+            ResponseException(
                 message = "locked",
-                status = 423
+                code = 423
             )
         )
 
-        assertThrows<NetworkException.HttpLockedException> {
+        assertThrows<ResponseException> {
             repository.getActorDetailsById(ACTOR_ID)
         }
     }
@@ -104,13 +104,13 @@ class ActorRepositoryImplTest {
     @Test
     fun `getActorImagePath throws ValidationException on failure`() = runTest {
         coEvery { remoteDataSource.getActorImagePathById(ACTOR_ID) } returns Result.failure(
-            NetworkException.ValidationException(
+            ResponseException(
                 message = "validation failed",
-                status = 400
+                code = 400
             )
         )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.getActorImagesById(ACTOR_ID)
         }
     }
@@ -118,13 +118,13 @@ class ActorRepositoryImplTest {
     @Test
     fun `getTrendingActors should return expected result`() = runTest {
         coEvery { remoteDataSource.getTrendingActors(ACTOR_ID) } returns Result.failure(
-            NetworkException.TimeoutException(
+            ResponseException(
                 message = "timeout",
-                status = 408
+                code = 408
             )
         )
 
-        assertThrows<NetworkException.TimeoutException> {
+        assertThrows<ResponseException> {
             repository.getTrendingActors(ACTOR_ID)
         }
     }
@@ -147,12 +147,12 @@ class ActorRepositoryImplTest {
     @Test
     fun `getMovieCast should throw ValidationException when remote fails`() = runTest {
         coEvery { remoteDataSource.getMovieActors(123) } throws
-                NetworkException.ValidationException(
+                ResponseException(
                     message = "validation error",
-                    status = 400
+                    code = 400
                 )
 
-        assertThrows<NetworkException.ValidationException> {
+        assertThrows<ResponseException> {
             repository.getMovieActors(123)
         }
     }
@@ -231,12 +231,12 @@ class ActorRepositoryImplTest {
     fun `getCastsByTvShowId should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowActors(123)
-        } throws NetworkException.UnAuthorizedException(
+        } throws ResponseException(
             message = "unAuthorized error",
-            status = 401
+            code = 401
         )
 
-        assertThrows<NetworkException.UnAuthorizedException> {
+        assertThrows<ResponseException> {
             repository.getTvShowActors(123)
         }
     }
@@ -249,7 +249,7 @@ class ActorRepositoryImplTest {
                 profilePath = "/actor.jpg",
                 roles = listOf(
                     Role(
-                       character = "Main Character", episodeCount = 10
+                        character = "Main Character", episodeCount = 10
                     )
                 ),
             )
