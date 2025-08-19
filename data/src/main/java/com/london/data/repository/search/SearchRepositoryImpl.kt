@@ -29,7 +29,6 @@ class SearchRepositoryImpl @Inject constructor(
         pageNumber: Int
     ): PagedFetchResponse<Movie> {
         val response = getMovieSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -43,7 +42,6 @@ class SearchRepositoryImpl @Inject constructor(
         pageNumber: Int
     ): PagedFetchResponse<TvShow> {
         val response = getTvShowSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -55,20 +53,17 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun getTvShowSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<SearchTvShowRemote> {
-        return remoteDataSource.searchForTvShows(
+    ): ApiResponse<SearchTvShowRemote> = remoteDataSource.searchForTvShows(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     override suspend fun searchForActors(
         name: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor> {
         val response = getActorsSearchResult(name = name, pageNumber = pageNumber)
-
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -101,24 +96,20 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun getMovieSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<MovieRemote> {
-        return remoteDataSource.searchForMovies(
+    ): ApiResponse<MovieRemote> = remoteDataSource.searchForMovies(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     private suspend fun getActorsSearchResult(
         name: String,
         pageNumber: Int
-    ): ApiResponse<SearchActorRemote> {
-        return remoteDataSource.searchForActors(
+    ): ApiResponse<SearchActorRemote> = remoteDataSource.searchForActors(
             query = name,
             includeAdult = false,
             pageNumber = pageNumber,
         ).getOrThrow()
-    }
 
     private suspend fun updateGenreInterest(current: GenreInterestEntity) {
         genreInterestDao.updateGenreInterest(

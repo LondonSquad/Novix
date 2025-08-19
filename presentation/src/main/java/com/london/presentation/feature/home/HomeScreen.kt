@@ -43,7 +43,7 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.UpComingMovie
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection
 import com.london.presentation.feature.home.section.ContinueWatchingSection

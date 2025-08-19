@@ -2,7 +2,7 @@
 package com.london.domain.entity.popular
 
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 data class PopularMedia(
     val id: Int,

@@ -43,8 +43,8 @@ import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshow.TvShow

@@ -2,7 +2,7 @@ package com.london.data.local.model.home.topRated
 
 import androidx.room.Entity
 import com.london.data.mapper.genre.GenreMapper
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 @Entity(
     tableName = "top_rated_table",

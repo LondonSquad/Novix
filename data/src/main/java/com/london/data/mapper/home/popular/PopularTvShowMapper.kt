@@ -10,7 +10,7 @@ import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 fun PopularTvShowResponse.toTvShowEntity(): PopularMedia =
     PopularMedia(

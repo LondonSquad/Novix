@@ -2,7 +2,7 @@ package com.london.data.mapper.trending
 
 import com.london.data.mapper.home.trending.toEntityMedia
 import com.london.data.remote.model.home.trending.TrendingResponse
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -3,7 +3,7 @@ package com.london.data.mapper.genre
 import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 interface GenreMapper {
 

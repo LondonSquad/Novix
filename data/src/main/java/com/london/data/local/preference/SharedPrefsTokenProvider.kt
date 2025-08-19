@@ -7,5 +7,5 @@ import javax.inject.Singleton
 class SharedPrefsTokenProvider(
     private val authenticationPreferences: AuthenticationPreferences
 ) : SessionTokenProvider {
-    override fun getAuthKey(): String = authenticationPreferences.getAuthKey()
+    override fun getAuthenticationKey(): String = authenticationPreferences.getAuthKey()
 }

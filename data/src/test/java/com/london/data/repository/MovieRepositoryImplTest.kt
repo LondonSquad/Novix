@@ -41,9 +41,9 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.movie.Movie
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.Review
 import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.MovieRepository
 import io.mockk.Runs

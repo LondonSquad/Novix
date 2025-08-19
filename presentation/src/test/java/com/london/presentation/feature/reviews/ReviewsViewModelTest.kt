@@ -3,8 +3,8 @@ package com.london.presentation.feature.reviews
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase

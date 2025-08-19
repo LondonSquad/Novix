@@ -44,9 +44,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> {
-        return localDataSource.isMovieListedFlow(movieId)
-    }
+    override fun isMovieListedFlow(movieId: Int): Flow<Boolean> =
+        localDataSource.isMovieListedFlow(movieId)
 
     override suspend fun getMovieListIds(movieId: Int, forceRefresh: Boolean): List<Int> {
         return fetchAndSync(
@@ -61,9 +60,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> {
-        return localDataSource.getMovieListIdsFlow(movieId)
-    }
+    override fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>> =
+        localDataSource.getMovieListIdsFlow(movieId)
 
     override suspend fun deleteMovieList(id: Int): Boolean {
         return try {
@@ -88,9 +86,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return localDataSource.getAllListedMovieIds()
     }
 
-    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> {
-        return localDataSource.getAllListedMovieIdsFlow()
-    }
+    override fun getAllListedMovieIdsFlow(): Flow<List<Int>> =
+        localDataSource.getAllListedMovieIdsFlow()
 
     override suspend fun createMovieList(name: String): Boolean {
         return try {
@@ -102,7 +99,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
 
             if (result.isSuccess) {
                 result.getOrNull()?.let { response ->
-                    response.id?.let { listId ->
+                    response.id?.let {
                         localDataSource.addMovieListCache(
                             MovieListLocal(
                                 id = response.id,
@@ -125,18 +122,13 @@ class CustomMovieListRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieListName(listId: Int): String {
         return fetchAndSync(
-            cacheBlock = {
-                localDataSource.getMovieList(listId)?.name
-            },
+            cacheBlock = { localDataSource.getMovieList(listId)?.name },
             networkBlock = {
-                remoteDataSource.getDetails(listId = listId, page = 1)
-                    .getOrThrow().name.orEmpty()
+                remoteDataSource.getDetails(listId = listId, page = 1).getOrThrow().name.orEmpty()
             },
             syncBlock = { name ->
                 localDataSource.getMovieList(listId)?.let { existing ->
-                    localDataSource.addMovieListCache(
-                        existing.copy(name = name)
-                    )
+                    localDataSource.addMovieListCache(existing.copy(name = name))
                 }
             },
             crashReporter = crashReporter
@@ -306,9 +298,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     private suspend fun refreshMovieListCacheIfNecessary(forceRefresh: Boolean) {
-        if (forceRefresh || localDataSource.shouldRefreshCache()) {
-            refreshMovieListCache()
-        }
+        if (forceRefresh || localDataSource.shouldRefreshCache()) refreshMovieListCache()
     }
 
     private companion object {

@@ -26,10 +26,10 @@ import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.Review
 import com.london.domain.entity.shared.ImagesEntity
 import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.shared.RatedMedia
 import com.london.domain.entity.shared.Trending
@@ -116,11 +116,10 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(
         cacheBlock = { getCachedPopularTvShows() },
-        networkBlock = {
-            tvShowRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows()
-        },
+        networkBlock = { tvShowRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows() },
         syncBlock = { popularList ->
-            homeLocalDataSource.insertAll(popularList.map { it.toPopularTvShowSectionLocal(MediaType.TvShow) })
+            homeLocalDataSource.insertAll(
+                popularList.map { it.toPopularTvShowSectionLocal(MediaType.TvShow) })
         },
         crashReporter = crashReporter
     )
@@ -150,8 +149,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int
-    ): SeasonEpisodes =
-        tvShowRemoteDataSource.getTvShowSeasonEpisodes(
+    ): SeasonEpisodes = tvShowRemoteDataSource.getTvShowSeasonEpisodes(
             id = tvShowId,
             seasonNumber = seasonNumber
         ).getOrThrow().toEpisodesEntity()
@@ -160,8 +158,7 @@ class TvShowRepositoryImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): EpisodeDetails =
-        tvShowRemoteDataSource.getEpisodeDetails(
+    ): EpisodeDetails = tvShowRemoteDataSource.getEpisodeDetails(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber,
             episodeNumber = episodeNumber
@@ -171,8 +168,7 @@ class TvShowRepositoryImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): List<String> =
-        tvShowRemoteDataSource.getEpisodeVideos(
+    ): List<String> = tvShowRemoteDataSource.getEpisodeVideos(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber,
             episodeNumber = episodeNumber
@@ -186,9 +182,8 @@ class TvShowRepositoryImpl @Inject constructor(
         tvShowId: Int,
         pageNumber: Int
     ): PagedFetchResponse<Review> = fetchAndSync(
-        networkBlock = {
-            getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber)
-        }).run {
+        networkBlock = { getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber) }
+    ).run {
         PagedFetchResponse(
             currentPage = currentPage,
             items = items,
@@ -197,8 +192,7 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAccountTvShowStateById(
-        id: Int,
+    override suspend fun getAccountTvShowStateById(id: Int
     ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
         tvShowId = id,
         guestSessionId = authenticationPreferences.getGuestSessionId(),
@@ -220,8 +214,10 @@ class TvShowRepositoryImpl @Inject constructor(
     private suspend fun getTvShowReviewsFromRemote(
         tvShowId: Int,
         pageNumber: Int
-    ): PagedFetchResponse<Review> =
-        tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow().toReviewEntity()
+    ): PagedFetchResponse<Review> = tvShowRemoteDataSource.getTvShowReviews(
+        tvShowId = tvShowId,
+        pageNumber = pageNumber
+    ).getOrThrow().toReviewEntity()
 
 
     private suspend fun getTopRatedPages(pageNumber: Int): PagedFetchResponse<TopRatedMedia> {
@@ -235,12 +231,10 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    private suspend fun getTopRatedRemoteTvShows(pageNumber: Int): List<TopRatedMedia> {
-        return tvShowRemoteDataSource
+    private suspend fun getTopRatedRemoteTvShows(pageNumber: Int) = tvShowRemoteDataSource
             .getTopRatedTvShows(pageNumber = pageNumber)
             .getOrThrow()
             .items.map { it.toEntity() }
-    }
 
     private suspend fun fetchFirstTopRatedPageTvShows(): List<TopRatedMedia> {
         return tvShowRemoteDataSource

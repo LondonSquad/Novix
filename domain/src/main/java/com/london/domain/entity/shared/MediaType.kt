@@ -1,4 +1,4 @@
-package com.london.domain.entity.recent
+package com.london.domain.entity.shared
 
 enum class MediaType {
     TvShow,
