@@ -61,6 +61,7 @@ import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
+import com.london.presentation.utils.navBarBottomPadding
 
 @Composable
 fun HomeScreen(
@@ -182,7 +183,7 @@ private fun HomeScreenLayout(
     homeScreenContract: HomeScreenContract
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().navBarBottomPadding()
     ) {
         BackgroundGradient(
             screenWidth = screenWidth,
