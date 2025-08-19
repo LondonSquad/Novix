@@ -27,7 +27,8 @@ data class MovieDetailsUiState(
     val similarMovies: List<Movie> = listOf(),
     val isRateBottomSheetVisible: Boolean = false,
     val isGuestUserBottomSheetVisible: Boolean = false,
-){
+    val isBookmarkSheetVisible: Boolean = false,
+) {
     val hasTrailer: Boolean
         get() = movieVideo.isNotEmpty()
 }
