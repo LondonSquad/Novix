@@ -1,6 +1,6 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import com.london.domain.entity.MovieList
+import com.london.domain.entity.movie.MovieList
 
 fun List<MovieList>.toBookmarkUiLists(): List<BookmarkUiList> =
     map { movieList ->

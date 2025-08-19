@@ -1,8 +1,8 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.Movie
-import com.london.domain.entity.MovieList
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieList
+import com.london.domain.entity.shared.PagedFetchResponse
 import kotlinx.coroutines.flow.Flow
 
 interface CustomMovieListRepository {

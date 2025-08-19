@@ -1,8 +1,8 @@
 package com.london.domain
 
-import com.london.domain.contentrestriction.ContentRestrictionLevel
-import com.london.domain.language.AppLanguage
-import com.london.domain.theme.AppTheme
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.language.AppLanguage
+import com.london.domain.entity.theme.AppTheme
 import kotlinx.coroutines.flow.StateFlow
 
 interface AppPreferencesService {

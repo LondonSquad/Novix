@@ -4,9 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

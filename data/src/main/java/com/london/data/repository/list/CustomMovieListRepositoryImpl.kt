@@ -12,9 +12,9 @@ import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.data.utils.orZero
 import com.london.domain.AppPreferencesService
-import com.london.domain.entity.Movie
-import com.london.domain.entity.MovieList
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieList
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.CustomMovieListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex

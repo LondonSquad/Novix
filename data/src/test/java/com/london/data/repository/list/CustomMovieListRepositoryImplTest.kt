@@ -12,7 +12,7 @@ import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.domain.AppPreferencesService
-import com.london.domain.language.AppLanguage
+import com.london.domain.entity.language.AppLanguage
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

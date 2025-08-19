@@ -1,18 +1,18 @@
 package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Actor
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.AuthorDetails
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshow.TvShow
+import com.london.domain.entity.tvshow.TvShowDetails
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -486,7 +486,7 @@ class GetTvShowUseCaseTest {
         private const val SEASON_NUMBER = 1
         private const val NAME = "Tv Tv"
 
-        private fun pagedFetchReviewResponse(items: List<ReviewEntity> = mockReviews) =
+        private fun pagedFetchReviewResponse(items: List<Review> = mockReviews) =
             PagedFetchResponse(
                 currentPage = 1,
                 items = items,
@@ -495,7 +495,7 @@ class GetTvShowUseCaseTest {
             )
 
         private val mockReviews = listOf(
-            ReviewEntity(
+            Review(
                 id = "1",
                 content = "Great show!",
                 authorName = "John Doe",
@@ -506,7 +506,7 @@ class GetTvShowUseCaseTest {
                 ),
                 createdAt = "2023-09-01"
             ),
-            ReviewEntity(
+            Review(
                 id = "2",
                 content = "I loved it!",
                 authorName = "Jane Smith",
@@ -602,7 +602,7 @@ class GetTvShowUseCaseTest {
             postersUrl = postersUrl
         )
 
-        val mockTvShowDetails = TvShowDetailsEntity(
+        val mockTvShowDetails = TvShowDetails(
             firstAirDate = "2020-01-01",
             tvShowGenres = listOf(TvShowGenre.TALK),
             id = TV_SHOW_ID,

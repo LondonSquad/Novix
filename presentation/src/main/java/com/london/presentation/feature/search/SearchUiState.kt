@@ -2,11 +2,11 @@ package com.london.presentation.feature.search
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.paging.PagingData
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.tvshow.TvShow
 import com.london.presentation.shared.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

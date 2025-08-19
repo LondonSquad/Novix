@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.tvshow.info
 
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.episode.Episodes
-import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
+import com.london.domain.entity.tvshow.cast.TvShowCast
+import com.london.domain.entity.tvshow.episode.Episodes
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.TvShowGenreUi
 
@@ -21,7 +21,7 @@ data class TvShowDetailsUiState(
     val videoProvider: String = "",
     val isLoading: Boolean = false,
     val isGuestUser: Boolean = false,
-    val cast: TvShowCastEntity? = null,
+    val cast: TvShowCast? = null,
     val isSuccessfullyRated: Boolean? = null,
     val isRateBottomSheetVisible: Boolean = false,
     val tvImages: List<String>? = listOf(),

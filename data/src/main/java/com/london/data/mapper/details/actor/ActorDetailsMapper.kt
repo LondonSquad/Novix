@@ -4,7 +4,7 @@ import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.actordetails.ActorDetails
+import com.london.domain.entity.actor.ActorDetails
 
 @KoverIgnore
 fun ActorDetailsResponse.toEntity(): ActorDetails {

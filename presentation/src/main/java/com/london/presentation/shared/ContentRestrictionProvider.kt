@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.london.domain.AppPreferencesService
-import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 
 @Composable
 fun ContentRestrictionProvider(

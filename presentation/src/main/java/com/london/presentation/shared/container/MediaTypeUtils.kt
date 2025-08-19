@@ -2,8 +2,8 @@ package com.london.presentation.shared.container
 
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 
 fun <T : Any> T.getName(): String {
     return when (this) {

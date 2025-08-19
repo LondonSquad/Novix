@@ -1,10 +1,9 @@
 package com.london.presentation.feature.list.viewitems
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
 import com.london.domain.usecase.movielist.GetMovieListNameUseCase
+import com.london.domain.usecase.movielist.ManageGetMovieUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
-import com.london.domain.usecase.movielist.RemoveMovieFromListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -15,8 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
-    private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
-    private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
+    private val manageGetMovieUseCase: ManageGetMovieUseCase,
     private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     savedStateHandle: SavedStateHandle
@@ -74,7 +72,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                removeMovieFromListUseCase.invoke(listId = listId, movieId = id)
+                manageMovieListUseCase.removeMovieFromList(listId = listId, movieId = id)
             },
             onStart = {
                 updateState { copy(error = null, isSnackBarSuccessVisible = false) }
@@ -97,7 +95,7 @@ class ViewItemsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getMovieListDetailsUseCase.invoke(
+                    val movies = manageGetMovieUseCase.getMovieListDetails(
                         listId = listId,
                         pageNumber = pageNumber
                     )

@@ -1,11 +1,11 @@
 package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
-import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
+import com.london.domain.entity.tvshow.cast.TvShowCast
+import com.london.domain.entity.tvshow.cast.TvShowCastMember
+import com.london.domain.entity.tvshow.cast.TvShowRole
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -304,25 +304,25 @@ class GetTvEpisodesUseCaseTest {
         const val SEASON_NUMBER = 1
         const val EPISODE_NUMBER = 1
 
-        val mockCast = TvShowCastEntity(
+        val mockCast = TvShowCast(
             cast = listOf(
-                TvShowCastMemberEntity(
+                TvShowCastMember(
                     id = 1,
                     name = "John Doe",
                     profileUrl = "/profile1.jpg",
                     roles = listOf(
-                        TvShowRoleEntity(
+                        TvShowRole(
                             character = "Main Character",
                             episodeCount = 24
                         )
                     ),
                 ),
-                TvShowCastMemberEntity(
+                TvShowCastMember(
                     id = 2,
                     name = "Jane Smith",
                     profileUrl = "/profile2.jpg",
                     roles = listOf(
-                        TvShowRoleEntity(
+                        TvShowRole(
                             character = "Supporting Character",
                             episodeCount = 18
                         )

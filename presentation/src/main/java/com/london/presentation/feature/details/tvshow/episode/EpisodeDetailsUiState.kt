@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.tvshow.episode
 
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class EpisodeDetailsUiState(

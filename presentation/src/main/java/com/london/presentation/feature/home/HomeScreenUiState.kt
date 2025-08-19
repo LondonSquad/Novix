@@ -1,7 +1,7 @@
 package com.london.presentation.feature.home
 
 import androidx.paging.PagingData
-import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
