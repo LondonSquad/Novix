@@ -1,6 +1,6 @@
 package com.london.presentation.feature.home
 
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 data class HomeUiMedia(
     val id: Int,

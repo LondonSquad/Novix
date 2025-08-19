@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.movie
 
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.presentation.shared.genre.MovieGenreUi
 
 sealed interface MovieDetailsEffect {

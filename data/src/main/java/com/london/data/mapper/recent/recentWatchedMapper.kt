@@ -1,11 +1,8 @@
-@file:KoverIgnore
-
 package com.london.data.mapper.recent
 
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.mapper.genre.getId
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.tvshow.TvShow
 

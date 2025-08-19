@@ -1,11 +1,8 @@
-@file:KoverIgnore
-
 package com.london.data.local.model.recent.watched
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.london.data.mapper.genre.GenreMapper
-import com.london.domain.KoverIgnore
 
 @Entity(tableName = "recent_watched_tv_show_table")
 data class RecentWatchedTvShowLocal(

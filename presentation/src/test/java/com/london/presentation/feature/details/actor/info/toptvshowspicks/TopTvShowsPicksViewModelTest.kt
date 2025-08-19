@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actor.cast.ActorMediaDetails
-import com.london.domain.entity.actor.cast.ActorMediaItems
+import com.london.domain.entity.actor.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaItems
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs

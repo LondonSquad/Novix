@@ -18,7 +18,6 @@ class AccountRepositoryImpl @Inject constructor(
                 .toEntity()
         } ?: AccountInfo(id = 0, userName = "", avatarPath = "")
 
-    override suspend fun getAccountId(): Int {
-        return authenticationPreferences.getAccountId()
-    }
+    override suspend fun getAccountId(): Int = authenticationPreferences.getAccountId()
+
 }

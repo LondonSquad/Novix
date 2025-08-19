@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.tvshow.info
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase

@@ -1,6 +1,6 @@
 package com.london.presentation.feature.home.popular
 
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 
 data class PopularUiMedia(
     val id: Int,

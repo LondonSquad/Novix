@@ -4,8 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.recent.MediaTypeLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.source.recent.RecentDataSource
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs
 import io.mockk.coEvery

@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
-import com.london.domain.entity.actor.cast.ActorMediaDetails
+import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class TopTvShowsPicksUiState(

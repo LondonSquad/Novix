@@ -8,17 +8,13 @@ class RecentViewedDataSourceImpl @Inject constructor(
     private val recentViewedDao: RecentViewedDao
 ) : RecentDataSource<RecentViewedLocal> {
 
-    override suspend fun insert(item: RecentViewedLocal) {
-        runCatching {
-            recentViewedDao.insert(item)
-        }
-    }
+    override suspend fun insert(item: RecentViewedLocal) = runCatching {
+        recentViewedDao.insert(item)
+    }.getOrDefault(Unit)
 
-    override suspend fun clearOlderThanTen() {
-        runCatching {
-            recentViewedDao.clearOlderThanTen()
-        }
-    }
+    override suspend fun clearOlderThanTen() = runCatching {
+        recentViewedDao.clearOlderThanTen()
+    }.getOrDefault(Unit)
 
     override suspend fun getAll(): List<RecentViewedLocal> = runCatching {
         recentViewedDao.getAll()
@@ -28,21 +24,15 @@ class RecentViewedDataSourceImpl @Inject constructor(
         recentViewedDao.getRecentTen()
     }.getOrDefault(emptyList())
 
-    override suspend fun insertAndKeepLastTen(item: RecentViewedLocal) {
-        runCatching {
-            recentViewedDao.insertAndKeepLastTen(item)
-        }
-    }
+    override suspend fun insertAndKeepLastTen(item: RecentViewedLocal) = runCatching {
+        recentViewedDao.insertAndKeepLastTen(item)
+    }.getOrDefault(Unit)
 
-    override suspend fun clearAll() {
-        runCatching {
-            recentViewedDao.clearAll()
-        }
-    }
+    override suspend fun clearAll() = runCatching {
+        recentViewedDao.clearAll()
+    }.getOrDefault(Unit)
 
-    override suspend fun delete(item: RecentViewedLocal) {
-            runCatching {
-            recentViewedDao.delete(item)
-        }
-    }
+    override suspend fun delete(item: RecentViewedLocal) = runCatching {
+        recentViewedDao.delete(item)
+    }.getOrDefault(Unit)
 }

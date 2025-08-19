@@ -1,6 +1,6 @@
 package com.london.data.mapper.details
 
-import com.london.data.remote.model.details.rating.AccountStatesResponse
+import com.london.data.remote.model.account.AccountStatesResponse
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.data.utils.parseRatingValue

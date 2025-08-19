@@ -1,9 +1,9 @@
 package com.london.data.mapper.home.trending
 
-import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.data.remote.model.trending.TrendingResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.Trending
 
 fun TrendingResponse.toEntityMedia(mediaType: MediaType): Trending = Trending(
