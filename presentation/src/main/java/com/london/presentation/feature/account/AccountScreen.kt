@@ -21,6 +21,7 @@ import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.navBarBottomPadding
 
 @Composable
 fun AccountScreen(
@@ -60,7 +61,7 @@ private fun Content(
     uiState: AccountUiState,
     accountContract: AccountContract,
 ) {
-    Column {
+    Column(Modifier.navBarBottomPadding()) {
         TopBar(
             title = stringResource(R.string.my_account),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
