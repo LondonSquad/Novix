@@ -1,11 +1,8 @@
 package com.london.presentation.shared
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -57,11 +54,7 @@ fun FooterSection(
             .padding(WindowInsets.navigationBars.asPaddingValues()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AnimatedVisibility(
-            visible = isRateEnabled,
-            enter = slideInHorizontally(tween()),
-            exit = slideOutHorizontally(tween())
-        ) {
+        if (isRateEnabled) {
             PrimaryButton(
                 text = null,
                 onClick = onRateClick,
