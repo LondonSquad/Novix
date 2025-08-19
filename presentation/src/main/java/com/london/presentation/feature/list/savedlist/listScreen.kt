@@ -49,6 +49,7 @@ import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.navBarBottomPadding
 import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
@@ -86,14 +87,9 @@ private fun Content(
         isError = state.error is ErrorState.NoInternet,
         pagingFlow = pagingItems,
         isGuest = state.isGuest,
-        guestContent = {
-            NoListFoundAsGuest(
-                onLoginClick = contract::onLoginClick
-            )
-        },
-        emptyContent = {
-            EmptyList(contract = contract, addListSheetState = state.addListSheetState)
-        }
+        guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
+        emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
+        handlePagingLoadingAutomatically = true
     ) {
         ScreenScaffold(
             titleRes = R.string.saved_list_title,
@@ -146,6 +142,7 @@ private fun ScreenScaffold(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .navBarBottomPadding()
             .background(NovixTheme.colors.surface)
     ) {
         TopBar(
