@@ -33580,20 +33580,10 @@
         "count": 1
       }
     ],
-    "approvals": [
-      {
-        "reviewer": {
-          "login": "Abdulrahman-Ragab-01",
-          "id": 76666355,
-          "url": "https://github.com/Abdulrahman-Ragab-01"
-        },
-        "submitted_at": "2025-08-19T13:43:00Z",
-        "commit_id": "e7cac2a418cd8cab9f91cf43a046a4878513300d"
-      }
-    ],
+    "approvals": [],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-19T13:43:00Z",
-    "time_to_first_approval_minutes": 32.55,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -33602,9 +33592,9 @@
     "week": "2025-W34",
     "status": "pending",
     "diff_stats": {
-      "additions": 601,
-      "deletions": 849,
-      "changed_files": 174
+      "additions": 622,
+      "deletions": 870,
+      "changed_files": 184
     }
   }
 ]
