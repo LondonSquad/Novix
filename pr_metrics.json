@@ -34151,5 +34151,42 @@
       "deletions": 66,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 715,
+    "url": "https://github.com/LondonSquad/Novix/pull/715",
+    "title": "Refactor: Remove inset shadow from PrimaryButton",
+    "opened_at": "2025-08-20T10:19:44Z",
+    "head_ref": "hotfix/primary-button-glow",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "assignees": [
+      {
+        "login": "ahmeddsamii",
+        "id": 154278495,
+        "url": "https://github.com/ahmeddsamii"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 49,
+      "changed_files": 1
+    }
   }
 ]
