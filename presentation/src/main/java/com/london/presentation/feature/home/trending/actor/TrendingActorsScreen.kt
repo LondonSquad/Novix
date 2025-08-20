@@ -26,8 +26,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingActorsScreen(
-    onNavigateBackClick: () -> Unit,
-    onNavigateToActorDetailsClick: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
     viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -35,11 +35,11 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetailsClick(
+            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetails(
                 currentEffect.actorId
             )
 
-            is TrendingActorsEffect.BackNavigation -> onNavigateBackClick()
+            is TrendingActorsEffect.BackNavigation -> onNavigateBack()
         }
     }
 
