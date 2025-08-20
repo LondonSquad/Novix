@@ -127,7 +127,9 @@ private fun Content(
     ) {
 
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         EmptyScreen(uiState)

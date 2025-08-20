@@ -161,7 +161,10 @@ private fun Content(
     ) {
 
         BackgroundGradient(
-            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(2f)
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(2f)
         )
 
         TopBar(

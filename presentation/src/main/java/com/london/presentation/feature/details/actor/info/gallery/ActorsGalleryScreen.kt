@@ -66,10 +66,13 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
 
         BackgroundGradient(
-            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         Column(
