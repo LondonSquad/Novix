@@ -222,6 +222,7 @@ class OnboardingViewModelTest {
 
             // When
             viewModel?.scrollNext(pagerState, scope)
+            advanceTimeBy(1000)
             advanceUntilIdle()
 
             // Then
