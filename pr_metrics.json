@@ -30400,15 +30400,15 @@
     "head_ref": "hotfix/actor-gallery-conflict",
     "base_ref": "develop",
     "creator": {
-      "login": "Abdulrahman1890",
+      "login": "Abdulrahman-Ragab-01",
       "id": 76666355,
-      "url": "https://github.com/Abdulrahman1890"
+      "url": "https://github.com/Abdulrahman-Ragab-01"
     },
     "assignees": [
       {
-        "login": "Abdulrahman1890",
+        "login": "Abdulrahman-Ragab-01",
         "id": 76666355,
-        "url": "https://github.com/Abdulrahman1890"
+        "url": "https://github.com/Abdulrahman-Ragab-01"
       }
     ],
     "comments": [],
@@ -30449,9 +30449,9 @@
     "closed_at": "2025-08-13T02:20:31Z",
     "merged_at": "2025-08-13T02:20:31Z",
     "merged_by": {
-      "login": "Abdulrahman1890",
+      "login": "Abdulrahman-Ragab-01",
       "id": 76666355,
-      "url": "https://github.com/Abdulrahman1890"
+      "url": "https://github.com/Abdulrahman-Ragab-01"
     },
     "week": "2025-W33",
     "status": "merged",
@@ -30553,9 +30553,9 @@
       },
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-13T22:13:43Z",
         "last_comment_at": "2025-08-13T22:21:22Z",
@@ -30584,9 +30584,9 @@
       },
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-14T09:19:59Z",
         "commit_id": "cb4e219f8f49bf196b61bec5476335264ba843d5"
@@ -30644,9 +30644,9 @@
       },
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-13T21:54:21Z",
         "last_comment_at": "2025-08-17T13:54:49Z",
@@ -30676,9 +30676,9 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-17T17:54:34Z",
         "commit_id": "9a451927edb57385d79d55ba7685e55c7ca2c096"
@@ -30785,9 +30785,9 @@
     "comments": [
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-17T14:00:03Z",
         "last_comment_at": "2025-08-17T14:00:03Z",
@@ -30987,9 +30987,9 @@
     "comments": [
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-17T16:41:30Z",
         "last_comment_at": "2025-08-17T16:45:27Z",
@@ -31227,9 +31227,9 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-15T05:14:57Z",
         "commit_id": "74908b720ea1824688c286f6a0a2f9f64412d7f1"
@@ -31307,9 +31307,9 @@
       },
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-15T20:03:34Z",
         "commit_id": "598e0e3355973bbf75be369eab8bbb2550d4b8a7"
@@ -31447,9 +31447,9 @@
       },
       {
         "author": {
-          "login": "Aseel-AbuKmail",
+          "login": "aabukmail",
           "id": 189210092,
-          "url": "https://github.com/Aseel-AbuKmail"
+          "url": "https://github.com/aabukmail"
         },
         "first_comment_at": "2025-08-16T12:26:51Z",
         "last_comment_at": "2025-08-16T12:26:51Z",
@@ -31559,7 +31559,7 @@
   {
     "pr_number": 643,
     "url": "https://github.com/LondonSquad/Novix/pull/643",
-    "title": "Remove unused serialization annotations and fields",
+    "title": "Remove unused serialization annotations and fields and improve test coverage",
     "opened_at": "2025-08-15T22:05:19Z",
     "head_ref": "refactor/data-entity",
     "base_ref": "develop",
@@ -31606,13 +31606,22 @@
         },
         "submitted_at": "2025-08-17T17:58:56Z",
         "commit_id": "d56087b783bafc75b5cd5221f41ce98c7144f561"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-17T17:59:52Z",
+        "commit_id": "d56087b783bafc75b5cd5221f41ce98c7144f561"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-17T17:58:56Z",
     "time_to_first_approval_minutes": 2633.616666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-17T17:59:52Z",
+    "time_to_required_approvals_minutes": 2634.55,
     "closed_at": "2025-08-17T17:59:53Z",
     "merged_at": "2025-08-17T17:59:53Z",
     "merged_by": {
@@ -31876,29 +31885,39 @@
     "head_ref": "refactor/tv-show-details-screen",
     "base_ref": "develop",
     "creator": {
-      "login": "Aseel-AbuKmail",
+      "login": "aabukmail",
       "id": 189210092,
-      "url": "https://github.com/Aseel-AbuKmail"
+      "url": "https://github.com/aabukmail"
     },
     "assignees": [
       {
-        "login": "Aseel-AbuKmail",
+        "login": "aabukmail",
         "id": 189210092,
-        "url": "https://github.com/Aseel-AbuKmail"
+        "url": "https://github.com/aabukmail"
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "Abdulrahman-Ragab-01",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman-Ragab-01"
+        },
+        "submitted_at": "2025-08-17T17:29:06Z",
+        "commit_id": "3264bec15ae22645db2d925ee01dd4856c409230"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-17T17:29:06Z",
+    "time_to_first_approval_minutes": 1827.0333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-08-18T17:42:12Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
       "additions": 145,
       "deletions": 175,
@@ -31928,9 +31947,9 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "Aseel-AbuKmail",
+          "login": "aabukmail",
           "id": 189210092,
-          "url": "https://github.com/Aseel-AbuKmail"
+          "url": "https://github.com/aabukmail"
         },
         "submitted_at": "2025-08-16T12:17:27Z",
         "commit_id": "0084d7781ecc8dcf468b1f3e6bee3d65d1dad719"
@@ -31997,9 +32016,9 @@
       },
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-17T17:31:48Z",
         "last_comment_at": "2025-08-17T17:34:18Z",
@@ -32035,13 +32054,22 @@
         },
         "submitted_at": "2025-08-17T19:33:19Z",
         "commit_id": "5c818551e47a501eece95de98b191d3fa6e5e755"
+      },
+      {
+        "reviewer": {
+          "login": "Abdulrahman-Ragab-01",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman-Ragab-01"
+        },
+        "submitted_at": "2025-08-17T19:48:24Z",
+        "commit_id": "5c818551e47a501eece95de98b191d3fa6e5e755"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-17T19:33:19Z",
     "time_to_first_approval_minutes": 1766.1833333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-17T19:48:24Z",
+    "time_to_required_approvals_minutes": 1781.2666666666667,
     "closed_at": "2025-08-17T19:48:26Z",
     "merged_at": "2025-08-17T19:48:26Z",
     "merged_by": {
@@ -32097,13 +32125,22 @@
         },
         "submitted_at": "2025-08-17T16:49:52Z",
         "commit_id": "e91f00283b3c64293506e1dbf5d3e7e4bd10e488"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-17T16:56:01Z",
+        "commit_id": "e91f00283b3c64293506e1dbf5d3e7e4bd10e488"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-17T16:49:52Z",
     "time_to_first_approval_minutes": 1149.9166666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-17T16:56:01Z",
+    "time_to_required_approvals_minutes": 1156.0666666666666,
     "closed_at": "2025-08-17T16:56:02Z",
     "merged_at": "2025-08-17T16:56:02Z",
     "merged_by": {
@@ -32141,9 +32178,9 @@
     "comments": [
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-17T18:13:47Z",
         "last_comment_at": "2025-08-17T18:14:26Z",
@@ -32423,9 +32460,9 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-18T13:09:15Z",
         "commit_id": "c4836bc86f4b78cadd65c5d6b465b63030ea4e0d"
@@ -32492,9 +32529,9 @@
       },
       {
         "author": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "first_comment_at": "2025-08-18T16:51:51Z",
         "last_comment_at": "2025-08-18T16:51:51Z",
@@ -32523,9 +32560,9 @@
       },
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-18T18:07:36Z",
         "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
@@ -32541,9 +32578,9 @@
       },
       {
         "reviewer": {
-          "login": "Aseel-AbuKmail",
+          "login": "aabukmail",
           "id": 189210092,
-          "url": "https://github.com/Aseel-AbuKmail"
+          "url": "https://github.com/aabukmail"
         },
         "submitted_at": "2025-08-18T18:07:53Z",
         "commit_id": "fcb9bbc2d72172d90a1fd36ac352f8986cdb91a7"
@@ -33110,9 +33147,9 @@
     "comments": [
       {
         "author": {
-          "login": "Aseel-AbuKmail",
+          "login": "aabukmail",
           "id": 189210092,
-          "url": "https://github.com/Aseel-AbuKmail"
+          "url": "https://github.com/aabukmail"
         },
         "first_comment_at": "2025-08-18T19:25:16Z",
         "last_comment_at": "2025-08-18T19:28:13Z",
@@ -33322,9 +33359,9 @@
       },
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
+          "login": "Abdulrahman-Ragab-01",
           "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "url": "https://github.com/Abdulrahman-Ragab-01"
         },
         "submitted_at": "2025-08-19T00:19:36Z",
         "commit_id": "2701fcee89703989e7f1ceb12729ed07192fd560"
@@ -33345,7 +33382,7 @@
     "week": "2025-W34",
     "status": "merged",
     "diff_stats": {
-      "additions": 164,
+      "additions": 157,
       "deletions": 275,
       "changed_files": 11
     }
@@ -33379,13 +33416,22 @@
         },
         "submitted_at": "2025-08-19T01:26:48Z",
         "commit_id": "69a7593ff162be8d08ebad674fcef2fb0bd275a0"
+      },
+      {
+        "reviewer": {
+          "login": "Abdulrahman-Ragab-01",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman-Ragab-01"
+        },
+        "submitted_at": "2025-08-19T01:36:28Z",
+        "commit_id": "69a7593ff162be8d08ebad674fcef2fb0bd275a0"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-19T01:26:48Z",
     "time_to_first_approval_minutes": 2.683333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-19T01:36:28Z",
+    "time_to_required_approvals_minutes": 12.35,
     "closed_at": "2025-08-19T01:36:29Z",
     "merged_at": "2025-08-19T01:36:29Z",
     "merged_by": {
@@ -33430,13 +33476,22 @@
         },
         "submitted_at": "2025-08-19T19:04:52Z",
         "commit_id": "024405ae1e853e99bc823411d201f3e52884c1eb"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-19T19:12:01Z",
+        "commit_id": "024405ae1e853e99bc823411d201f3e52884c1eb"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-19T19:04:52Z",
     "time_to_first_approval_minutes": 841.7166666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-19T19:12:01Z",
+    "time_to_required_approvals_minutes": 848.8666666666667,
     "closed_at": "2025-08-19T19:12:02Z",
     "merged_at": "2025-08-19T19:12:02Z",
     "merged_by": {
@@ -33481,13 +33536,22 @@
         },
         "submitted_at": "2025-08-19T09:17:29Z",
         "commit_id": "07c482f9d4621e45ec2863f7b670fab9b8c222c0"
+      },
+      {
+        "reviewer": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-19T09:48:20Z",
+        "commit_id": "07c482f9d4621e45ec2863f7b670fab9b8c222c0"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-19T09:17:29Z",
     "time_to_first_approval_minutes": 10.416666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-19T09:48:20Z",
+    "time_to_required_approvals_minutes": 41.266666666666666,
     "closed_at": "2025-08-19T09:48:22Z",
     "merged_at": "2025-08-19T09:48:22Z",
     "merged_by": {
@@ -33645,6 +33709,54 @@
     }
   },
   {
+    "pr_number": 699,
+    "url": "https://github.com/LondonSquad/Novix/pull/699",
+    "title": "Refactor remove old shared composable",
+    "opened_at": "2025-08-19T13:56:17Z",
+    "head_ref": "refactor/remove-old-shared-composable",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "assignees": [
+      {
+        "login": "AsmaaKhaledGomaa",
+        "id": 117874933,
+        "url": "https://github.com/AsmaaKhaledGomaa"
+      }
+    ],
+    "comments": [
+      {
+        "author": {
+          "login": "Mostafa-alsaygh",
+          "id": 106277855,
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "first_comment_at": "2025-08-19T17:26:28Z",
+        "last_comment_at": "2025-08-19T17:26:28Z",
+        "count": 1
+      }
+    ],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 314,
+      "deletions": 777,
+      "changed_files": 52
+    }
+  },
+  {
     "pr_number": 700,
     "url": "https://github.com/LondonSquad/Novix/pull/700",
     "title": "fix: Improve code quality and state priority list screen",
@@ -33673,13 +33785,22 @@
         },
         "submitted_at": "2025-08-19T19:13:20Z",
         "commit_id": "cf7b958ac27e7af98f242e5a6dc788616d37e78e"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-19T19:33:16Z",
+        "commit_id": "cf7b958ac27e7af98f242e5a6dc788616d37e78e"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-19T19:13:20Z",
     "time_to_first_approval_minutes": 24.983333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-19T19:33:16Z",
+    "time_to_required_approvals_minutes": 44.916666666666664,
     "closed_at": "2025-08-19T19:33:18Z",
     "merged_at": "2025-08-19T19:33:18Z",
     "merged_by": {
@@ -33722,8 +33843,8 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "first_comment_at": "2025-08-19T22:40:23Z",
-        "last_comment_at": "2025-08-19T22:53:10Z",
-        "count": 8
+        "last_comment_at": "2025-08-19T23:03:38Z",
+        "count": 14
       },
       {
         "author": {
@@ -33732,8 +33853,8 @@
           "url": "https://github.com/marwanqashwa"
         },
         "first_comment_at": "2025-08-19T21:20:42Z",
-        "last_comment_at": "2025-08-19T22:45:19Z",
-        "count": 9
+        "last_comment_at": "2025-08-19T23:06:15Z",
+        "count": 12
       },
       {
         "author": {
@@ -33746,21 +33867,109 @@
         "count": 13
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "Abdulrahman-Ragab-01",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman-Ragab-01"
+        },
+        "submitted_at": "2025-08-19T23:46:48Z",
+        "commit_id": "35b8e7c337f18222b10603aed9cbf62ae8135da7"
+      },
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-19T23:58:00Z",
+        "commit_id": "35b8e7c337f18222b10603aed9cbf62ae8135da7"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "first_approved_at": "2025-08-19T23:46:48Z",
+    "time_to_first_approval_minutes": 204.9,
+    "required_approvals_met_at": "2025-08-19T23:58:00Z",
+    "time_to_required_approvals_minutes": 216.1,
+    "closed_at": "2025-08-19T23:59:30Z",
+    "merged_at": "2025-08-19T23:59:30Z",
+    "merged_by": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
     "week": "2025-W34",
-    "status": "pending",
+    "status": "merged",
     "diff_stats": {
-      "additions": 824,
-      "deletions": 408,
-      "changed_files": 60
+      "additions": 830,
+      "deletions": 429,
+      "changed_files": 61
+    }
+  },
+  {
+    "pr_number": 702,
+    "url": "https://github.com/LondonSquad/Novix/pull/702",
+    "title": "make functions private and delete unused functions",
+    "opened_at": "2025-08-19T22:34:49Z",
+    "head_ref": "refactor/reformating",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman-Ragab-01",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman-Ragab-01"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      },
+      {
+        "login": "Abdulrahman-Ragab-01",
+        "id": 76666355,
+        "url": "https://github.com/Abdulrahman-Ragab-01"
+      }
+    ],
+    "comments": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-20T02:20:44Z",
+        "commit_id": "055c86a5d66f6f089c8129f68a651f69c90e8fa4"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-20T02:23:45Z",
+        "commit_id": "055c86a5d66f6f089c8129f68a651f69c90e8fa4"
+      }
+    ],
+    "required_approvals": 2,
+    "first_approved_at": "2025-08-20T02:20:44Z",
+    "time_to_first_approval_minutes": 225.91666666666666,
+    "required_approvals_met_at": "2025-08-20T02:23:45Z",
+    "time_to_required_approvals_minutes": 228.93333333333334,
+    "closed_at": "2025-08-20T02:23:46Z",
+    "merged_at": "2025-08-20T02:23:46Z",
+    "merged_by": {
+      "login": "Abdulrahman-Ragab-01",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman-Ragab-01"
+    },
+    "week": "2025-W34",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1102,
+      "deletions": 1117,
+      "changed_files": 379
     }
   }
 ]
