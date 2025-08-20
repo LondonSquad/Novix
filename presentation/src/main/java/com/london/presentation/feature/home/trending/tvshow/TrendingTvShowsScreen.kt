@@ -26,8 +26,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
@@ -48,19 +48,11 @@ fun TrendingTvShowsScreen(
             is TrendingTvShowsEffect.BackNavigation -> onNavigateBack()
         }
     }
+    Content(
+        state = state,
+        contract = viewModel,
+    )
 
-    BuildScreen(
-        isLoading = state.isLoading,
-        isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBackClick,
-        emptyLayoutMessage = R.string.no_trending_shows_in_genre,
-        emptyLayoutImage = R.drawable.img_no_result,
-    ) {
-        Content(
-            state = state,
-            contract = viewModel,
-        )
-    }
 }
 
 @Composable
@@ -71,46 +63,53 @@ private fun Content(
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
+    BuildScreen(
+        isLoading = state.isLoading,
+        isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
+        onBack = contract::onBackClick,
+        emptyLayoutMessage = R.string.no_trending_shows_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
     ) {
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(NovixTheme.colors.surface)
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
+            BackgroundGradient(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                title = stringResource(R.string.trending_tv_shows),
-                onBackClick = contract::onBackClick
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
-            GenresSection(
-                genres = state.tvShowsGenres,
-                selectedGenre = state.selectedGenre,
-                screenWidth = screenWidth,
-                onGenreClick = contract::onGenreClick,
-                modifier = Modifier.padding(bottom = 12.dp),
-                getGenreName = { stringResource(it.stringResId) }
-            )
-            MediaLazyPagingGrid(
-                pagingFlow = tvShowsLazyItems,
-                onItemClick = { contract.onTvShowClick(it.id) },
-                getImageUrl = { it.posterPath },
-                getTitle = { it.title },
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onSaveClick = { /* TODO: Implement save functionality */ },
-                isItemSaved = { false },
-            )
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+            ) {
+                TopBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                    title = stringResource(R.string.trending_tv_shows),
+                    onBackClick = contract::onBackClick
+                )
+                GenresSection(
+                    genres = state.tvShowsGenres,
+                    selectedGenre = state.selectedGenre,
+                    screenWidth = screenWidth,
+                    onGenreClick = contract::onGenreClick,
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    getGenreName = { stringResource(it.stringResId) }
+                )
+
+                MediaLazyVerticalGrid(
+                    pagingItems = tvShowsLazyItems,
+                    imageUrl = { it.posterPath },
+                    name = { it.title },
+                    hasSaveIcon = false,
+                    onNavigateToTvShow = { tvShowId -> contract.onTvShowClick(tvShowId) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                )
+            }
         }
     }
 }

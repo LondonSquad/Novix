@@ -35,11 +35,11 @@ class ViewItemsViewModel @Inject constructor(
         fetchMovieListDetails(listId = listId)
     }
 
-    override fun onBack() {
+    override fun onBackClick() {
         emitEffect(ViewItemsEffect.NavigateBack)
     }
 
-    override fun onRetry() {
+    override fun onRetryClick() {
         updateState { copy(error = null) }
         fetchMovieListDetails(listId)
     }
