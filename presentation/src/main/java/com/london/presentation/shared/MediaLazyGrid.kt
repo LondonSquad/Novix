@@ -73,6 +73,7 @@ fun <T> MediaLazyGrid(
     emptyTitle: String = "",
     emptyImage: Int? = null,
     myRatingList: Boolean = false,
+    hasSaveIcon: Boolean = false,
     rate: String = "5",
     onDeleteClick: () -> Unit = {}
 ) {
@@ -125,6 +126,7 @@ fun <T> MediaLazyGrid(
                             onSaveClick = { onSavedClick(item) },
                             rate = rate,
                             onDeleteClick = onDeleteClick,
+                            hasSaveIcon = hasSaveIcon,
                             modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }

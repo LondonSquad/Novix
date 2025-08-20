@@ -4,5 +4,6 @@ interface TopMoviesPicksContract {
     fun onBackClick()
     fun onRetryClick()
     fun onMovieClick(movieId: Int)
-    fun onSaveMovieClick(movieId: Int)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }

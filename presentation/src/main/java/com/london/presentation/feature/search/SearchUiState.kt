@@ -28,6 +28,8 @@ data class SearchUiState(
     val recentSearches: List<RecentSearch> = emptyList(),
     val searchQuery: TextFieldValue = TextFieldValue(""),
     val selectedCategory: SearchCategory = SearchCategory.Movies,
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )
 
 data class MovieUi(

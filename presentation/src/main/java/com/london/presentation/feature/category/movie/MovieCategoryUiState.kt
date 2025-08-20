@@ -11,5 +11,7 @@ data class MovieCategoryUiState(
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
     val genre: MovieGenreUi = MovieGenreUi.All,
-    val moviesFlow: Flow<PagingData<Movie>> = flow {}
+    val moviesFlow: Flow<PagingData<Movie>> = flow {},
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

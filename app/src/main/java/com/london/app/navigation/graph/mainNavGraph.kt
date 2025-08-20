@@ -115,8 +115,10 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateBack = ::navigateUp
             )
         }
+
         composable<Reviews> {
-            ReviewsScreen(onNavigateBack = ::navigateUp) }
+            ReviewsScreen(onNavigateBack = ::navigateUp)
+        }
     }
 }
 

@@ -13,7 +13,7 @@ interface CustomMovieListRepository {
 
     suspend fun getAllListedMovieIds(): List<Int>
 
-    //    fun getAllListedMovieIdsFlow(): Flow<List<Int>>
+    fun getAllListedMovieIdsFlow(): Flow<List<Int>>
 
     suspend fun addMovieToList(listId: Int, movieId: Int): Boolean
 
@@ -27,12 +27,11 @@ interface CustomMovieListRepository {
 
     suspend fun isMovieListed(movieId: Int, forceRefresh: Boolean = false): Boolean
 
-    suspend fun getMovieListIds(movieId: Int, forceRefresh: Boolean = false): List<Int>
-
-    suspend fun refreshMovieListCache()
-
     fun isMovieListedFlow(movieId: Int): Flow<Boolean>
+
+    suspend fun getMovieListIds(movieId: Int, forceRefresh: Boolean = false): List<Int>
 
     fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>>
 
+    suspend fun refreshMovieListCache()
 }

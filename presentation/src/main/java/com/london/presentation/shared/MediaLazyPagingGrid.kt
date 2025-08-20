@@ -58,6 +58,7 @@ fun <T : Any> MediaLazyPagingGrid(
     modifier: Modifier = Modifier,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    hasSaveIcon: Boolean = false,
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),
@@ -72,6 +73,7 @@ fun <T : Any> MediaLazyPagingGrid(
             if (item != null) {
                 HomeCard(
                     imageUrl = getImageUrl(item),
+                    hasSaveIcon = hasSaveIcon,
                     onSaveClick = { onSaveClick(item) },
                     isSaved = isItemSaved(item),
                     imageDescription = getTitle(item),

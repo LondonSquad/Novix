@@ -33,6 +33,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
@@ -69,7 +70,7 @@ fun TopRatedScreen(
     ) {
         Content(
             state = state,
-            topRatedContract = viewModel
+            contract = viewModel
         )
     }
 }
@@ -77,7 +78,7 @@ fun TopRatedScreen(
 @Composable
 private fun Content(
     state: TopRatedUiState,
-    topRatedContract: TopRatedContract,
+    contract: TopRatedContract,
 ) {
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
@@ -93,7 +94,7 @@ private fun Content(
                 .padding(horizontal = 16.dp)
                 .padding(top = 12.dp),
             title = com.london.presentation.R.string.top_rated.string,
-            onBackClick = topRatedContract::onBackClicked
+            onBackClick = contract::onBackClicked
         )
 
         TabLayout(
@@ -102,18 +103,18 @@ private fun Content(
                 MediaCategory.TvShows
             ),
             selectedTab = state.selectedMediaCategory,
-            onTabSelected = topRatedContract::onMediaCategoryTabSelected,
+            onTabSelected = contract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
         if (state.isMovieSelected)
             MovieGenreRow(
-                onGenreClick = topRatedContract::movieGenre,
+                onGenreClick = contract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
         else
             TvShowRow(
-                onGenreClick = topRatedContract::tvShowGenre,
+                onGenreClick = contract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
             )
@@ -138,11 +139,10 @@ private fun Content(
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
                             isSaved = false,
-                            onSaveClick = {
-                                // TODO
-                            },
+                            hasSaveIcon = true,
+                            onSaveClick = { contract.onManageBookmarkClicked(movieItem.id) },
                             modifier = Modifier.clickable {
-                                topRatedContract.onMovieClick(movieItem.id)
+                                contract.onMovieClick(movieItem.id)
                             }
                         )
                     }
@@ -153,17 +153,21 @@ private fun Content(
                 tvSeries?.let { seriesItem ->
                     HomeCard(
                         imageUrl = seriesItem.posterUrl,
+                        hasSaveIcon = false,
                         isSaved = false,
-                        onSaveClick = {
-                            // TODO
-                        },
-                        modifier = Modifier.clickable {
-                            topRatedContract.onTvShowClick(seriesItem.id)
-                        }
+                        onSaveClick = {},
+                        modifier = Modifier.clickable { contract.onTvShowClick(seriesItem.id) }
                     )
                 }
             }
         }
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = state.isBookmarkSheetVisible,
+            bookmarkedMovieId = state.bookmarkedMovieId
+        )
+
     }
 }
 

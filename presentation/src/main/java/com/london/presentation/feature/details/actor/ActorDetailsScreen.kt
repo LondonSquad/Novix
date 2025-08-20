@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,6 +57,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.TextWithIcon
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
@@ -139,6 +141,7 @@ private fun Content(
                     }
                 }
             }
+
             item { ActorInfoSectionItem(uiState = uiState) }
             item { BiographySection(uiState = uiState) }
             item {
@@ -152,10 +155,8 @@ private fun Content(
             item {
                 MoviesSection(
                     movies = uiState.actorMovieDetails?.mediaItems,
-                    onTopMoviePicksClick = {
-                        actorDetailsContract.onTopMoviePicksClick(uiState.actorDetails.id)
-                    },
-                    onMovieScreenClick = actorDetailsContract::onMovieScreenClick
+                    contract = actorDetailsContract,
+                    actorId = uiState.actorDetails.id
                 )
             }
             item {
@@ -174,6 +175,12 @@ private fun Content(
             modifier = Modifier
                 .detailsTopBar(backgroundAlpha)
                 .zIndex(1f)
+        )
+
+        BookmarkBottomSheet(
+            onSheetDismiss = actorDetailsContract::onBookmarkSheetDismiss,
+            isSheetVisible = uiState.isBookmarkSheetVisible,
+            bookmarkedMovieId = uiState.bookmarkedMovieId
         )
     }
 }
@@ -238,8 +245,8 @@ private fun GallerySection(
 @Composable
 private fun MoviesSection(
     movies: List<ActorMediaItems>?,
-    onTopMoviePicksClick: () -> Unit,
-    onMovieScreenClick: (Int) -> Unit
+    contract: ActorDetailsContract,
+    actorId: Int
 ) {
     movies?.takeIf { it.isNotEmpty() }?.let { movieCast ->
         SectionHeader(
@@ -249,11 +256,12 @@ private fun MoviesSection(
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 12.dp)
                 .padding(horizontal = 16.dp),
-            onClick = onTopMoviePicksClick
+            onClick = { contract.onTopMoviePicksClick(actorId) }
         )
         TopMoviesPicksList(
-            movie = movieCast,
-            onNavigateToMoviePicks = onMovieScreenClick
+            movies = movieCast,
+            onNavigateToMoviePicks = contract::onMovieScreenClick,
+            onManageBookmarkClicked = contract::onManageBookmarkClicked
         )
     }
 }
@@ -283,8 +291,9 @@ private fun TvShowsSection(
 
 @Composable
 private fun TopMoviesPicksList(
-    movie: List<ActorMediaItems>,
-    onNavigateToMoviePicks: (Int) -> Unit
+    movies: List<ActorMediaItems>,
+    onNavigateToMoviePicks: (Int) -> Unit,
+    onManageBookmarkClicked: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
@@ -292,13 +301,13 @@ private fun TopMoviesPicksList(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        items(movie.size) { index ->
+        items(movies) { movie ->
             HomeCard(
-                imageUrl = movie[index].posterUrl,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
-                onSaveClick = { /* TODO: Not yet implemented */ },
+                onSaveClick = { onManageBookmarkClicked(movie.id) },
                 modifier = Modifier.clickable {
-                    onNavigateToMoviePicks(movie[index].id)
+                    onNavigateToMoviePicks(movie.id)
                 }
             )
         }
@@ -320,7 +329,8 @@ private fun TopTvShowsPicksList(
             HomeCard(
                 imageUrl = tvShow[index].posterUrl,
                 isSaved = false,
-                onSaveClick = { /* TODO: Not yet implemented */ },
+                hasSaveIcon = false,
+                onSaveClick = {},
                 modifier = Modifier.clickable {
                     onNavigateToTvShowPicks(tvShow[index].id)
                 }

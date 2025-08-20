@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,13 +39,14 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
+import com.london.designsystem.snackbar.LocalSnackbarController
+import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.getThemeAwarePainter
 import kotlinx.coroutines.launch
@@ -157,25 +159,25 @@ private fun BookmarkBottomSheetContent(
         }
     }
 
-    /**
-     * Currently, these snack-bars aren't showing as the sheet goes out of the
-     * composition before they start to show, to fix this, we need a snack-bar
-     * host to manage and show snack-bars across screens regardless of the parent lifecycle.
-     */
+    val snackBarController = LocalSnackbarController.current
 
     if (state.isSuccessSnackBarVisible) {
-        SnackBarAnimation(
+        snackBarController.showMessage(
             message = R.string.item_added_success.string,
-            icon = com.london.designsystem.R.drawable.ic_success
+            icon = com.london.designsystem.R.drawable.ic_success,
+            snackBarType = SnackBarType.Success,
+            onComplete = contract::onSnackBarShown
         )
     }
 
     if (state.isErrorSnackBarVisible) {
-        SnackBarAnimation(
-            message = R.string.item_added_fail.string
+        snackBarController.showMessage(
+            message = R.string.item_added_fail.string,
+            icon = com.london.designsystem.R.drawable.ic_failed,
+            snackBarType = SnackBarType.Error,
+            onComplete = contract::onSnackBarShown
         )
     }
-
 }
 
 @Composable
@@ -365,7 +367,8 @@ private fun NoListsMessage() {
         Text(
             text = R.string.no_lists_available.string,
             style = NovixTheme.typography.body.small,
-            color = NovixTheme.colors.body
+            color = NovixTheme.colors.body,
+            textAlign = TextAlign.Center
         )
     }
 }

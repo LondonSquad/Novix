@@ -56,11 +56,13 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.entity.shared.MediaType
+import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
@@ -169,6 +171,12 @@ private fun SearchMainContent(
             )
 
             SearchBody(state = state, contract = contract)
+
+            BookmarkBottomSheet(
+                onSheetDismiss = contract::onBookmarkSheetDismiss,
+                isSheetVisible = state.isBookmarkSheetVisible,
+                bookmarkedMovieId = state.bookmarkedMovieId
+            )
         }
     }
 }
@@ -254,7 +262,8 @@ private fun MovieSearchContent(state: SearchUiState, contract: SearchContract) {
                 contract.onMovieGenreClick(it.genres)
             }
             contract.onMovieClick(id)
-        }
+        },
+        hasSaveIcon = true
     )
 }
 
@@ -315,7 +324,8 @@ private fun <T : Any> MediaSearchContent(
     pagingItems: LazyPagingItems<T>,
     contract: SearchContract,
     onNavigateToMovie: (Int) -> Unit = {},
-    onNavigateToTvShow: (Int) -> Unit = {}
+    onNavigateToTvShow: (Int) -> Unit = {},
+    hasSaveIcon: Boolean = false
 ) {
     EmptyContent(
         pagingItems,
@@ -337,8 +347,8 @@ private fun <T : Any> MediaSearchContent(
             content = {
                 MediaLazyVerticalGrid(
                     pagingItems = pagingItems,
-                    hasSaveIcon = true,
-                    onSaveClick = { /* Handle save click */ },
+                    hasSaveIcon = hasSaveIcon,
+                    onSaveClick = contract::onManageBookmarkClicked,
                     isItemSaved = { false },
                     onNavigateToMovie = onNavigateToMovie,
                     onNavigateToTvShow = onNavigateToTvShow
@@ -506,7 +516,8 @@ private fun RecentSectionContent(
                     recentViewed = state.recentViewed,
                     onClearAll = contract::clearRecentViewed,
                     onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-                    onNavigateToMovieDetails = onNavigateToMovieDetails
+                    onNavigateToMovieDetails = onNavigateToMovieDetails,
+                    onManageBookmarkClicked = contract::onManageBookmarkClicked
                 )
             }
         }
@@ -530,6 +541,7 @@ private fun RecentViewedSection(
     onClearAll: () -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
+    onManageBookmarkClicked: (Int) -> Unit
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_viewed),
@@ -551,7 +563,8 @@ private fun RecentViewedSection(
             HomeCard(
                 imageUrl = item.imageUrl,
                 isSaved = false,
-                onSaveClick = { },
+                hasSaveIcon = item.type.isMovie(),
+                onSaveClick = { onManageBookmarkClicked(item.id) },
                 modifier = Modifier.clickable {
                     when (item.type) {
                         MediaType.Movie -> onNavigateToMovieDetails(item.id)

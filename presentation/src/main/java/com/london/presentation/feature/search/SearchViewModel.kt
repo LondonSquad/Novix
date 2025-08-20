@@ -190,6 +190,24 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
+
     private suspend fun getRecentData(): Pair<List<RecentViewed>, List<RecentSearch>> {
         val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
         val recentSearches = manageRecentSearchUseCase.getRecentSearch()

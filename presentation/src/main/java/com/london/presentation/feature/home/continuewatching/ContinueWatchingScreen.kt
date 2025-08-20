@@ -11,10 +11,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.movie.Movie
 import com.london.presentation.R
 import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaGridConfig
 import com.london.presentation.shared.container.MediaLazyGridWithTabs
@@ -76,7 +78,7 @@ private fun Content(
             onMovieGenreClick = contract::onMovieGenreClick,
             onTvShowGenreClick = contract::onTvShowGenreClick,
             config = MediaGridConfig(
-                showSaveIcon = true,
+                showSaveIcon = state.selectedMediaCategory == MediaCategory.Movies,
                 isDarkMode = NovixTheme.isThemeDark,
                 selectedMovieGenre = state.selectedMovieGenre,
                 selectedTvShowGenre = state.selectedTvShowGenre,
@@ -84,7 +86,7 @@ private fun Content(
                 isTvShowSelected = MediaCategory.TvShows == state.selectedMediaCategory,
                 onNavigateToMovie = contract::onNavigateToMovieClick,
                 onNavigateToTvShow = contract::onNavigateToTvShowClick,
-                onSaveClick = { /* TODO: Implement save functionality */ },
+                onSaveClick = { if (it is Movie) contract.onManageBookmarkClicked(it.id) },
                 isItemSaved = { false },
                 rate = null
             ),
@@ -95,6 +97,12 @@ private fun Content(
                 )
             },
             isLoading = state.isLoading
+        )
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = state.isBookmarkSheetVisible,
+            bookmarkedMovieId = state.bookmarkedMovieId
         )
     }
 }

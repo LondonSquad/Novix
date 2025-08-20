@@ -14,5 +14,7 @@ data class TrendingMoviesUiState(
     val errorState: ErrorState? = null,
     val selectedGenre: MovieGenreUi = MovieGenreUi.All,
     val moviesFlow: Flow<PagingData<Trending>> = emptyFlow(),
-    val movieGenres: List<MovieGenreUi> = MovieGenreUi.getList()
+    val movieGenres: List<MovieGenreUi> = MovieGenreUi.getList(),
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

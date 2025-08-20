@@ -28,16 +28,30 @@ class TopMoviesPicksViewModel @Inject constructor(
         getActorMoviePicksData()
     }
 
-    override fun onSaveMovieClick(movieId: Int) {
-        // TODO: Handle save click
-    }
-
     override fun onMovieClick(movieId: Int) {
         emitEffect(TopMoviesPicksEffect.MovieDetailsNavigation(movieId))
     }
 
     override fun onBackClick() {
         emitEffect(TopMoviesPicksEffect.BackNavigation)
+    }
+
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
     }
 
     private fun getActorMoviePicksData() {

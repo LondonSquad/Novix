@@ -16,5 +16,7 @@ data class TopRatedUiState(
     val movies: Flow<PagingData<TopRatedMedia>> = emptyFlow(),
     val selectedTvShowGenre: TvShowGenreUi = TvShowGenreUi.All,
     val tvSeries: Flow<PagingData<TopRatedMedia>> = emptyFlow(),
-    val selectedMediaCategory: MediaCategory = MediaCategory.Movies
+    val selectedMediaCategory: MediaCategory = MediaCategory.Movies,
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

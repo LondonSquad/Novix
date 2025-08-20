@@ -7,4 +7,6 @@ data class TopMoviesPicksUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
     val movieDetails: ActorMediaDetails = ActorMediaDetails(),
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

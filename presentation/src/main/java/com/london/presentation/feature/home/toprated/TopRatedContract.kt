@@ -12,4 +12,6 @@ interface TopRatedContract {
     fun movieGenre(genre: MovieGenreUi)
     fun tvShowGenre(genre: TvShowGenreUi)
     fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }

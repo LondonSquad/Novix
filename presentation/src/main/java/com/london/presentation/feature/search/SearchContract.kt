@@ -26,4 +26,6 @@ interface SearchContract {
     fun performSearch(query: String, category: SearchCategory)
     fun incrementGenreInterest(genre: Genre, mediaType: String)
     fun updateRecentData()
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }

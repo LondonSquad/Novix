@@ -12,4 +12,6 @@ interface ContinueWatchingContract {
     fun onMovieGenreClick(genre: MovieGenreUi)
     fun onTvShowGenreClick(genre: TvShowGenreUi)
     fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }
