@@ -70,6 +70,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
@@ -122,7 +123,7 @@ fun TvShowsDetailsScreen(
     BuildScreen(
         onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = uiState.error != null,
+        isError = uiState.error is ErrorState.NoInternet,
         onRetry = viewModel::onRetry
     ) {
         Content(

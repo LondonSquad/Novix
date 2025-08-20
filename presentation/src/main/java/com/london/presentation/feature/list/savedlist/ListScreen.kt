@@ -86,26 +86,27 @@ private fun Content(
     contract: ListContract,
 ) {
     val pagingItems = state.items.collectAsLazyPagingItems()
-    BuildScreen(
-        onRetry = contract::onRetry,
-        isLoading = state.isLoading,
-        isError = state.error is ErrorState.NoInternet,
-        pagingFlow = pagingItems,
-        isGuest = state.isGuest,
-        guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
-        emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
-        handlePagingLoadingAutomatically = true
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
 
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
+        )
 
-            BackgroundGradient(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .zIndex(1f)
-            )
+        BuildScreen(
+            onRetry = contract::onRetry,
+            isLoading = state.isLoading,
+            isError = state.error is ErrorState.NoInternet,
+            pagingFlow = pagingItems,
+            isGuest = state.isGuest,
+            guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
+            emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
+            handlePagingLoadingAutomatically = true
+        ) {
 
             ScreenScaffold(
                 titleRes = R.string.saved_list_title,
