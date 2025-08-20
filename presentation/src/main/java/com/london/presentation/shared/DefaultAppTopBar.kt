@@ -10,13 +10,13 @@ import com.london.designsystem.component.TopBar
 @Composable
 fun DefaultAppTopBar(
     title: String,
-    onBack: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopBar(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         title = title,
-        onBackClick = onBack
+        onBackClick = onBackClick
     )
 }

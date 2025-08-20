@@ -27,17 +27,17 @@ import com.london.presentation.utils.gridColumns
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
+    rate: (T) -> String? = { null },
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
-    onDeleteClick: (T) -> Unit = {},
-    rate: (T) -> String? = { null },
+    isItemSaved: (T) -> Boolean = { false },
     onItemClick: ((T) -> Unit)? = null,
+    onDeleteClick: (T) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
-    name: (T) -> String = { it.getName() },
-    isItemSaved: (T) -> Boolean = { false },
-    topBar: @Composable (() -> Unit)? = null,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    topBar: @Composable (() -> Unit)? = null
 ) {
     MediaGridContainer(
         modifier = modifier,
@@ -82,7 +82,7 @@ fun <T : Any> MediaLazyVerticalGrid(
     name: (T) -> String = { it.getName() },
     imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
-    onSaveClick: (Int) -> Unit = {},
+    onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null,
@@ -139,7 +139,7 @@ private fun MediaGridContainer(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 12.dp),
             content = content
         )
     }
@@ -153,7 +153,7 @@ private fun <T : Any> RenderPagingGridItem(
     name: (T) -> String,
     isItemSaved: (T) -> Boolean,
     hasSaveIcon: Boolean,
-    onSaveClick: (Int) -> Unit,
+    onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
     rate: (T) -> String?,
     onNavigateToMovie: (Int) -> Unit,
@@ -172,7 +172,7 @@ private fun <T : Any> RenderPagingGridItem(
                 imageDescription = name(item),
                 isSaved = isItemSaved(item),
                 hasSaveIcon = hasSaveIcon,
-                onSaveClick = { if (item is Movie) onSaveClick(item.id) },
+                onSaveClick = { onSaveClick(item) },
                 onDeleteClick = { onDeleteClick(item) },
                 rate = rate(item)
             )
