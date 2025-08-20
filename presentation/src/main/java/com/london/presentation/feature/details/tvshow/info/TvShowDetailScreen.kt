@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
@@ -62,6 +63,7 @@ import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.episode.Episodes
 import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -165,6 +167,10 @@ private fun Content(
             onBackClick = tvShowDetailsContract::onBackClicked,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
             option1Icon = R.drawable.icon_remove,
+        )
+
+        BackgroundGradient(
+            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(1f)
         )
 
         LazyColumn(

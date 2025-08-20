@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -50,6 +51,7 @@ import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -94,50 +96,62 @@ private fun Content(
         emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
         handlePagingLoadingAutomatically = true
     ) {
-        ScreenScaffold(
-            titleRes = R.string.saved_list_title,
-            onFabClick = contract::onFabClick
+
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+
+            BackgroundGradient(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
+            )
+
+            ScreenScaffold(
+                titleRes = R.string.saved_list_title,
+                onFabClick = contract::onFabClick
             ) {
-                items(pagingItems.itemCount) { index ->
-                    val item = pagingItems[index]
-                    item?.let {
-                        SavedListItemRow(
-                            itemUi = item,
-                            onCountClick = contract::onListClick
-                        )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    items(pagingItems.itemCount) { index ->
+                        val item = pagingItems[index]
+                        item?.let {
+                            SavedListItemRow(
+                                itemUi = item,
+                                onCountClick = contract::onListClick
+                            )
+                        }
                     }
                 }
+
+                AddListBottomSheet(
+                    addListInteractions = contract,
+                    addListSheetState = state.addListSheetState
+                )
             }
 
-            AddListBottomSheet(
-                addListInteractions = contract,
-                addListSheetState = state.addListSheetState
-            )
-        }
+            val snackBarController = LocalSnackbarController.current
 
-        val snackBarController = LocalSnackbarController.current
+            if (state.error != null) {
+                snackBarController.showMessage(
+                    message = R.string.list_added_fail.string,
+                    snackBarType = SnackBarType.Error,
+                    onComplete = contract::resetSnackBarErrorState,
+                    icon = null,
+                )
+            }
 
-        if (state.error != null) {
-            snackBarController.showMessage(
-                message = R.string.list_added_fail.string,
-                snackBarType = SnackBarType.Error,
-                onComplete = contract::resetSnackBarErrorState,
-                icon = null,
-            )
-        }
-
-        if (state.isSnackBarSuccessVisible) {
-            snackBarController.showMessage(
-                message = R.string.list_added_success.string,
-                snackBarType = SnackBarType.Success,
-                onComplete = contract::resetSnackBarSuccessState,
-                icon = com.london.designsystem.R.drawable.ic_success,
-            )
+            if (state.isSnackBarSuccessVisible) {
+                snackBarController.showMessage(
+                    message = R.string.list_added_success.string,
+                    snackBarType = SnackBarType.Success,
+                    onComplete = contract::resetSnackBarSuccessState,
+                    icon = com.london.designsystem.R.drawable.ic_success,
+                )
+            }
         }
     }
 }
