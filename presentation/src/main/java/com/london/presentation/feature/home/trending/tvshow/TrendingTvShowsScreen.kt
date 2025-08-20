@@ -94,7 +94,7 @@ private fun Content(
                     selectedGenre = state.selectedGenre,
                     screenWidth = screenWidth,
                     onGenreClick = contract::onGenreClick,
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(vertical = 12.dp),
                     getGenreName = { stringResource(it.stringResId) }
                 )
 
