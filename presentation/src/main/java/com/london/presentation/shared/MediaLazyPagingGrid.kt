@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.presentation.utils.gridColumns
+import com.london.presentation.utils.isNotLoading
 
 @Deprecated(
     message = "Use MediaLazyVerticalGrid or MediaLazyGridWithFilter instead. This composable will be removed in a future version. Note: Both have two overloads - one for List<T> and one for LazyPagingItems<T>.",
@@ -59,6 +60,7 @@ fun <T : Any> MediaLazyPagingGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     hasSaveIcon: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(bottom = 16.dp)
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),
@@ -66,7 +68,7 @@ fun <T : Any> MediaLazyPagingGrid(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = 16.dp)
+        contentPadding = contentPadding
     ) {
         items(pagingFlow.itemCount) { index ->
             val item = pagingFlow[index]
@@ -77,7 +79,8 @@ fun <T : Any> MediaLazyPagingGrid(
                     onSaveClick = { onSaveClick(item) },
                     isSaved = isItemSaved(item),
                     imageDescription = getTitle(item),
-                    modifier = Modifier.clickable { onItemClick(item) }
+                    modifier = Modifier.clickable { onItemClick(item) },
+                    isLoadingShimmer = true
                 )
             }
         }

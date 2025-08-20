@@ -2,6 +2,7 @@ package com.london.presentation.feature.home.trending.actor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -73,42 +74,48 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
-        LazyColumn(
+        Column (
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .background(color = NovixTheme.colors.surface),
-            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            stickyHeader {
-                TopBar(
-                    title = stringResource(R.string.trending_people),
-                    onBackClick = contract::onBackClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(NovixTheme.colors.surface)
-                        .padding(vertical = 12.dp)
-                )
-            }
+            TopBar(
+                title = stringResource(R.string.trending_people),
+                onBackClick = contract::onBackClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(NovixTheme.colors.surface)
+                    .padding(vertical = 12.dp)
+            )
 
-            item {
-                LazyPagingColumn(
-                    pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
-                    modifier = Modifier.fillMaxSize(),
-                    itemContent = { actor ->
-                        ActorItem(
-                            actorName = actor.name,
-                            characterName = null,
-                            imageRes = actor.profilePictureUrl,
-                            onClick = { contract.onActorClick(actor.id) }
-                        )
-                    }
-                )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = NovixTheme.colors.surface),
+                contentPadding = PaddingValues(bottom = 24.dp)
+            ) {
+
+                item {
+                    LazyPagingColumn(
+                        pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
+                        modifier = Modifier.fillMaxSize(),
+                        itemContent = { actor ->
+                            ActorItem(
+                                actorName = actor.name,
+                                characterName = null,
+                                imageRes = actor.profilePictureUrl,
+                                onClick = { contract.onActorClick(actor.id) }
+                            )
+                        }
+                    )
+                }
             }
         }
     }

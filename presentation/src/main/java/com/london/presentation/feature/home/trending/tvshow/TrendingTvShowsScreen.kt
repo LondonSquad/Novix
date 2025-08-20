@@ -3,6 +3,7 @@ package com.london.presentation.feature.home.trending.tvshow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -73,9 +74,11 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
         Column(
             modifier = Modifier
@@ -106,8 +109,9 @@ private fun Content(
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                onSaveClick = { /* TODO: Implement save functionality */ },
+                onSaveClick = { },
                 isItemSaved = { false },
+                contentPadding = PaddingValues(bottom = 24.dp)
             )
         }
     }
