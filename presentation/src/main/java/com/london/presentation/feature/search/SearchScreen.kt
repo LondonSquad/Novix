@@ -53,6 +53,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.entity.shared.MediaType
@@ -193,8 +194,7 @@ private fun SearchBody(
             content = {
                 SearchChipsRow(
                     selected = state.selectedCategory,
-                    onSelect = contract::onCategorySelected,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    onSelect = contract::onCategorySelected
                 )
             }
         )
@@ -224,8 +224,7 @@ private fun SearchResultsWithCategory(
 ) {
     SearchChipsRow(
         selected = state.selectedCategory,
-        onSelect = contract::onCategorySelected,
-        modifier = Modifier.padding(bottom = 12.dp)
+        onSelect = contract::onCategorySelected
     )
 
     if (state.error == ErrorState.NoInternet) {
@@ -300,8 +299,8 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.no_search_result_msg),
-                        image = R.drawable.img_no_search_result,
+                        text = stringResource(R.string.start_exploring_msg),
+                        image = R.drawable.imge_explore,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
@@ -336,8 +335,8 @@ private fun <T : Any> MediaSearchContent(
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.no_search_result_msg),
-                        image = R.drawable.img_no_search_result,
+                        text = stringResource(R.string.start_exploring_msg),
+                        image = R.drawable.imge_explore,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
@@ -348,8 +347,7 @@ private fun <T : Any> MediaSearchContent(
                 MediaLazyVerticalGrid(
                     pagingItems = pagingItems,
                     hasSaveIcon = hasSaveIcon,
-                    onSaveClick = contract::onManageBookmarkClicked,
-                    isItemSaved = { false },
+                    onSaveClick = { if (it is Movie) contract.onManageBookmarkClick(it.id) },
                     onNavigateToMovie = onNavigateToMovie,
                     onNavigateToTvShow = onNavigateToTvShow
                 )
@@ -517,7 +515,7 @@ private fun RecentSectionContent(
                     onClearAll = contract::clearRecentViewed,
                     onNavigateToTvShowDetails = onNavigateToTvShowDetails,
                     onNavigateToMovieDetails = onNavigateToMovieDetails,
-                    onManageBookmarkClicked = contract::onManageBookmarkClicked
+                    onManageBookmarkClicked = contract::onManageBookmarkClick
                 )
             }
         }

@@ -103,10 +103,8 @@ private fun Content(
                     items = items,
                     imageUrl = { it.posterPath },
                     name = { it.title },
-                    rate = { rated -> rated.rating.toLocalizedNumbers() },
                     hasSaveIcon = false,
-                    isItemSaved = { false },
-                    onSaveClick = {},
+                    rate = { rated -> rated.rating.toLocalizedNumbers() },
                     onDeleteClick = { rated ->
                         when (rated.mediaType) {
                             MediaType.Movie -> contract.onDeleteMovieClick(rated.id)
