@@ -1,12 +1,16 @@
 package com.london.presentation.feature.list.viewitems
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -18,6 +22,7 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -52,76 +57,85 @@ private fun Content(
     contract: ViewListItemsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
-    Column {
-        TopBar(
-            title = state.listTitle,
-            onBackClick = contract::onBack,
-            option2Icon = R.drawable.ic_delete,
-            onClickOption2 = contract::onDeleteClick,
-            option2IconTint = NovixTheme.colors.redAccent,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+
+        BackgroundGradient(
+            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
         )
 
-        BuildScreen(
-            onBack = null,
-            onRetry = listItems::refresh,
-            isLoading = state.isLoading,
-            isError = state.error == ErrorState.NoInternet,
-            emptyLayoutMessage = R.string.no_items_found,
-            emptyLayoutImage = R.drawable.img_no_result,
-            pagingFlow = listItems,
-        ) {
-            MediaLazyPagingGrid(
+        Column {
+            TopBar(
+                title = state.listTitle,
+                onBackClick = contract::onBack,
+                option2Icon = R.drawable.ic_delete,
+                onClickOption2 = contract::onDeleteClick,
+                option2IconTint = NovixTheme.colors.redAccent,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            )
+
+            BuildScreen(
+                onBack = null,
+                onRetry = listItems::refresh,
+                isLoading = state.isLoading,
+                isError = state.error == ErrorState.NoInternet,
+                emptyLayoutMessage = R.string.no_items_found,
+                emptyLayoutImage = R.drawable.img_no_result,
                 pagingFlow = listItems,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onItemClick = { contract.onMovieClick(it.id) },
-                getImageUrl = { it.posterUrl },
-                getTitle = { "${it.id} media img" },
-                onSaveClick = {
-                    contract.onRemoveMovieClick(it.id)
-                    contract.onRetry()
-                },
-                isItemSaved = { true },
-                hasSaveIcon = true
+            ) {
+                MediaLazyPagingGrid(
+                    pagingFlow = listItems,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onItemClick = { contract.onMovieClick(it.id) },
+                    getImageUrl = { it.posterUrl },
+                    getTitle = { "${it.id} media img" },
+                    onSaveClick = {
+                        contract.onRemoveMovieClick(it.id)
+                        contract.onRetry()
+                    },
+                    isItemSaved = { true },
+                    hasSaveIcon = true
+                )
+            }
+        }
+
+        DeleteListBottomSheet(
+            isSheetVisible = state.isDeleteBottomSheetVisible,
+            contract = contract,
+        )
+
+        val snackBarController = LocalSnackbarController.current
+
+        if (state.isSnackBarErrorVisible) {
+            snackBarController.showMessage(
+                message = R.string.deletion_failed.string,
+                snackBarType = SnackBarType.Error,
+                onComplete = contract::resetSnackBarErrorState,
+                icon = null,
+            )
+        }
+
+        if (state.isMovieSnackBarSuccessVisible) {
+            snackBarController.showMessage(
+                message = R.string.movie_removed_successfully.string,
+                snackBarType = SnackBarType.Success,
+                onComplete = contract::resetMovieSnackBarSuccessState,
+                icon = com.london.designsystem.R.drawable.ic_success,
+            )
+        }
+
+        if (state.isListSnackBarSuccess) {
+            snackBarController.showMessage(
+                message = R.string.list_removed_successfully.string,
+                snackBarType = SnackBarType.Success,
+                onComplete = contract::resetListSnackBarSuccessState,
+                icon = com.london.designsystem.R.drawable.ic_success,
             )
         }
     }
-
-    DeleteListBottomSheet(
-        isSheetVisible = state.isDeleteBottomSheetVisible,
-        contract = contract,
-    )
-
-    val snackBarController = LocalSnackbarController.current
-
-    if (state.isSnackBarErrorVisible) {
-        snackBarController.showMessage(
-            message = R.string.deletion_failed.string,
-            snackBarType = SnackBarType.Error,
-            onComplete = contract::resetSnackBarErrorState,
-            icon = null,
-        )
-    }
-
-    if (state.isMovieSnackBarSuccessVisible) {
-        snackBarController.showMessage(
-            message = R.string.movie_removed_successfully.string,
-            snackBarType = SnackBarType.Success,
-            onComplete = contract::resetMovieSnackBarSuccessState,
-            icon = com.london.designsystem.R.drawable.ic_success,
-        )
-    }
-
-    if (state.isListSnackBarSuccess) {
-        snackBarController.showMessage(
-            message = R.string.list_removed_successfully.string,
-            snackBarType = SnackBarType.Success,
-            onComplete = contract::resetListSnackBarSuccessState,
-            icon = com.london.designsystem.R.drawable.ic_success,
-        )
-    }
-
 }
 
 @Composable
