@@ -1,6 +1,5 @@
 package com.london.data.remote.model.toprated
 
-
 import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

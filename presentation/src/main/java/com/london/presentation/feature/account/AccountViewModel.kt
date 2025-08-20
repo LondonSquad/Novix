@@ -18,7 +18,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
     private val authenticationUseCase: AuthenticationUseCase,
-    private val accountDetailsUseCase: GetAccountInfoUseCase
+    private val accountInfoUseCase: GetAccountInfoUseCase
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
@@ -194,7 +194,7 @@ class AccountViewModel @Inject constructor(
 
     private fun fetchAndSetUsername() {
         tryToExecute(
-            block = { accountDetailsUseCase.invoke() },
+            block = { accountInfoUseCase.invoke() },
             onSuccess = { accountInfo ->
                 updateState {
                     copy(

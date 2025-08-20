@@ -54,18 +54,19 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
-import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.container.ActorLazyVerticalColumn
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
@@ -112,6 +113,23 @@ private fun Content(
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
 
+    SearchMainContent(
+        state = state,
+        contract = contract,
+        interactionSource = interactionSource,
+        keyboardController = keyboardController,
+        onClearFocus = { focusManager.clearFocus() }
+    )
+}
+
+@Composable
+private fun SearchMainContent(
+    state: SearchUiState,
+    contract: SearchContract,
+    interactionSource: MutableInteractionSource,
+    keyboardController: SoftwareKeyboardController?,
+    onClearFocus: () -> Unit
+) {
     val currentPagingFlow = when (state.selectedCategory) {
         SearchCategory.Movies -> state.moviesFlow.collectAsLazyPagingItems()
         SearchCategory.TvShows -> state.tvShowsFlow.collectAsLazyPagingItems()
@@ -125,65 +143,48 @@ private fun Content(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        SearchMainContent(
-            state = state,
-            contract = contract,
-            interactionSource = interactionSource,
-            keyboardController = keyboardController,
-            onClearFocus = { focusManager.clearFocus() }
-        )
-    }
-}
-
-@Composable
-private fun SearchMainContent(
-    state: SearchUiState,
-    contract: SearchContract,
-    interactionSource: MutableInteractionSource,
-    keyboardController: SoftwareKeyboardController?,
-    onClearFocus: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navBarBottomPadding()
-            .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
-    ) {
-
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
+                .navBarBottomPadding()
+                .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
         ) {
-            TopBar(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                title = stringResource(R.string.search),
-            )
 
-            SearchBar(
-                uiState = state,
-                contract = contract,
-                interactionSource = interactionSource,
-                keyboardController = keyboardController,
+            BackgroundGradient(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    .fillMaxWidth()
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
 
-            SearchBody(state = state, contract = contract)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface),
+                verticalArrangement = Arrangement.Top
+            ) {
+                TopBar(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    title = stringResource(R.string.search),
+                )
 
-            BookmarkBottomSheet(
-                onSheetDismiss = contract::onBookmarkSheetDismiss,
-                isSheetVisible = state.isBookmarkSheetVisible,
-                bookmarkedMovieId = state.bookmarkedMovieId
-            )
+                SearchBar(
+                    uiState = state,
+                    contract = contract,
+                    interactionSource = interactionSource,
+                    keyboardController = keyboardController,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
+
+                SearchBody(state = state, contract = contract)
+
+                BookmarkBottomSheet(
+                    onSheetDismiss = contract::onBookmarkSheetDismiss,
+                    isSheetVisible = state.isBookmarkSheetVisible,
+                    bookmarkedMovieId = state.bookmarkedMovieId
+                )
+            }
         }
     }
 }
@@ -201,7 +202,6 @@ private fun SearchBody(
                 SearchChipsRow(
                     selected = state.selectedCategory,
                     onSelect = contract::onCategorySelected,
-                    modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
         )
@@ -231,8 +231,7 @@ private fun SearchResultsWithCategory(
 ) {
     SearchChipsRow(
         selected = state.selectedCategory,
-        onSelect = contract::onCategorySelected,
-        modifier = Modifier.padding(bottom = 12.dp)
+        onSelect = contract::onCategorySelected
     )
 
     if (state.error == ErrorState.NoInternet) {
@@ -316,7 +315,7 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
                 }
             },
             content = {
-                ActorsLayout(
+                ActorLazyVerticalColumn(
                     items = actorsLazyList, onActorClick = {
                         contract.onActorClick(it.id)
                     }
@@ -355,8 +354,7 @@ private fun <T : Any> MediaSearchContent(
                 MediaLazyVerticalGrid(
                     pagingItems = pagingItems,
                     hasSaveIcon = hasSaveIcon,
-                    onSaveClick = contract::onManageBookmarkClicked,
-                    isItemSaved = { false },
+                    onSaveClick = { if (it is Movie) contract.onManageBookmarkClick(it.id) },
                     onNavigateToMovie = onNavigateToMovie,
                     onNavigateToTvShow = onNavigateToTvShow
                 )
@@ -524,7 +522,7 @@ private fun RecentSectionContent(
                     onClearAll = contract::clearRecentViewed,
                     onNavigateToTvShowDetails = onNavigateToTvShowDetails,
                     onNavigateToMovieDetails = onNavigateToMovieDetails,
-                    onManageBookmarkClicked = contract::onManageBookmarkClicked
+                    onManageBookmarkClicked = contract::onManageBookmarkClick
                 )
             }
         }
@@ -669,7 +667,7 @@ private fun SearchChipsRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         SearchCategory.entries.forEach { category ->

@@ -36,7 +36,7 @@ class TopRatedDataSourceImpl @Inject constructor(
     private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             topRatedDao.getAll().forEach { popularLocal ->
-                if (popularLocal.date.isDayExpired())
+                if (isDayExpired())
                     topRatedDao.deleteAll()
             }
         }

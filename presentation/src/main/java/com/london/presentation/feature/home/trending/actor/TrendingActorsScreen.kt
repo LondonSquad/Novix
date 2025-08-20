@@ -4,10 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,16 +24,17 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.ActorLazyVerticalColumn
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingActorsScreen(
-    onNavigateBackClick: () -> Unit,
-    onNavigateToActorDetailsClick: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
     viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -41,29 +42,18 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetailsClick(
+            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetails(
                 currentEffect.actorId
             )
 
-            is TrendingActorsEffect.BackNavigation -> onNavigateBackClick()
+            is TrendingActorsEffect.BackNavigation -> onNavigateBack()
         }
     }
 
-    val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
-
-    BuildScreen(
-        isLoading = state.isLoading,
-        isError = actorsLazyItems.loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBackClick,
-        onRetry = viewModel::onRetryClick,
-        emptyLayoutMessage = R.string.no_trending_actors_in_genre,
-        emptyLayoutImage = R.drawable.img_no_result,
-    ) {
-        Content(
-            state = state,
-            contract = viewModel,
-        )
-    }
+    Content(
+        state = state,
+        contract = viewModel
+    )
 }
 
 @Composable
@@ -71,51 +61,40 @@ private fun Content(
     state: TrendingActorsUiState,
     contract: TrendingActorsContract,
 ) {
+    val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
+    BuildScreen(
+        isLoading = actorsLazyItems.isLoading(),
+        isError = actorsLazyItems.loadState.refresh is LoadState.Error,
+        onBack = contract::onBackClick,
+        onRetry = contract::onRetryClick,
+        emptyLayoutMessage = R.string.no_trending_actors_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
+        pagingFlow = actorsLazyItems
     ) {
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
-                title = stringResource(R.string.trending_people),
-                onBackClick = contract::onBackClick,
+            BackgroundGradient(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(NovixTheme.colors.surface)
-                    .padding(vertical = 12.dp)
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
-
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = NovixTheme.colors.surface),
-                contentPadding = PaddingValues(bottom = 24.dp)
+                    .background(color = NovixTheme.colors.surface)
             ) {
-
-                item {
-                    LazyPagingColumn(
-                        pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
-                        modifier = Modifier.fillMaxSize(),
-                        itemContent = { actor ->
-                            ActorItem(
-                                actorName = actor.name,
-                                characterName = null,
-                                imageRes = actor.profilePictureUrl,
-                                onClick = { contract.onActorClick(actor.id) }
-                            )
-                        }
+                TopBar(
+                    title = stringResource(R.string.trending_people),
+                    onBackClick = contract::onBackClick,
+                    modifier = Modifier.detailsTopBar(1f),
                     )
-                }
+
+                ActorLazyVerticalColumn(
+                    items = actorsLazyItems,
+                    onActorClick = { contract.onActorClick(it.id) }
+                )
             }
         }
     }
@@ -126,6 +105,10 @@ private fun Content(
 private fun Preview() = NovixTheme {
     Content(
         state = TrendingActorsUiState(),
-        contract = defaultTrendingActorsContract()
+        contract = object : TrendingActorsContract {
+            override fun onActorClick(id: Int) {}
+            override fun onBackClick() {}
+            override fun onRetryClick() {}
+        }
     )
 }

@@ -338,7 +338,6 @@ private fun TopTvShowsPicksList(
                 imageUrl = tvShow[index].posterUrl,
                 isSaved = false,
                 hasSaveIcon = false,
-                onSaveClick = {},
                 modifier = Modifier.clickable {
                     onNavigateToTvShowPicks(tvShow[index].id)
                 }

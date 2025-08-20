@@ -59,7 +59,7 @@ class AuthenticationRepositoryImplTest {
         coEvery { authRemoteDataSource.createSession(REQUEST_TOKEN) } returns Result.success(
             SessionResponse(true, SESSION_ID)
         )
-        coEvery { accountRemoteDataSource.getAccountDetails(SESSION_ID) } returns Result.success(
+        coEvery { accountRemoteDataSource.getAccountInfo(SESSION_ID) } returns Result.success(
             AccountInfoResponse(
                 id = ACCOUNT_ID,
                 userName = USERNAME,
@@ -78,7 +78,7 @@ class AuthenticationRepositoryImplTest {
             authenticationPreferences.setGuestMode(false)
             authenticationPreferences.saveAccountId(ACCOUNT_ID)
         }
-        coVerify { accountRemoteDataSource.getAccountDetails(SESSION_ID) }
+        coVerify { accountRemoteDataSource.getAccountInfo(SESSION_ID) }
     }
 
     @Test
@@ -100,7 +100,7 @@ class AuthenticationRepositoryImplTest {
 
         assertFalse(result)
         coVerify(exactly = 0) { authenticationPreferences.saveSessionId(any()) }
-        coVerify(exactly = 0) { accountRemoteDataSource.getAccountDetails(any()) }
+        coVerify(exactly = 0) { accountRemoteDataSource.getAccountInfo(any()) }
     }
 
     @Test
@@ -154,7 +154,7 @@ class AuthenticationRepositoryImplTest {
         coEvery { authRemoteDataSource.createSession(REQUEST_TOKEN) } returns Result.success(
             SessionResponse(true, SESSION_ID)
         )
-        coEvery { accountRemoteDataSource.getAccountDetails(SESSION_ID) } returns Result.failure(
+        coEvery { accountRemoteDataSource.getAccountInfo(SESSION_ID) } returns Result.failure(
             accountError
         )
 

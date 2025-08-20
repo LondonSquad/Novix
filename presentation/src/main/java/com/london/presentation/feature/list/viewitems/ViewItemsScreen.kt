@@ -23,9 +23,9 @@ import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
@@ -60,22 +60,24 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
 
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         Column {
             TopBar(
                 title = state.listTitle,
-                onBackClick = contract::onBack,
+                onBackClick = contract::onBackClick,
                 option2Icon = R.drawable.ic_delete,
                 onClickOption2 = contract::onDeleteClick,
                 option2IconTint = NovixTheme.colors.redAccent,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            )
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+
+                )
 
             BuildScreen(
                 onBack = null,
@@ -86,18 +88,17 @@ private fun Content(
                 emptyLayoutImage = R.drawable.img_no_result,
                 pagingFlow = listItems,
             ) {
-                MediaLazyPagingGrid(
-                    pagingFlow = listItems,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onItemClick = { contract.onMovieClick(it.id) },
-                    getImageUrl = { it.posterUrl },
-                    getTitle = { "${it.id} media img" },
+                MediaLazyVerticalGrid(
+                    pagingItems = listItems,
+                    imageUrl = { it.posterUrl },
+                    name = { it.id.toString() },
+                    hasSaveIcon = true,
                     onSaveClick = {
                         contract.onRemoveMovieClick(it.id)
-                        contract.onRetry()
+                        contract.onRetryClick()
                     },
                     isItemSaved = { true },
-                    hasSaveIcon = true
+                    onNavigateToMovie = { id -> contract.onMovieClick(id) },
                 )
             }
         }
@@ -145,8 +146,8 @@ private fun Preview() {
         Content(
             state = ViewItemsUiState(),
             contract = object : ViewListItemsContract {
-                override fun onBack() {}
-                override fun onRetry() {}
+                override fun onBackClick() {}
+                override fun onRetryClick() {}
                 override fun onDeleteClick() {}
                 override fun onConfirmDelete() {}
                 override fun onMovieClick(id: Int) {}

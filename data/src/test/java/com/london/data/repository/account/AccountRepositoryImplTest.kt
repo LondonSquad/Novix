@@ -43,7 +43,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -52,7 +52,7 @@ class AccountRepositoryImplTest {
         assertThat(result.userName).isEqualTo(expectedUsername)
         assertThat(result.id).isEqualTo(1)
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -68,7 +68,7 @@ class AccountRepositoryImplTest {
         assertThat(result.id).isEqualTo(0)
         assertThat(result.avatarPath).isEqualTo("")
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify(exactly = 0) { remoteDataSource.getAccountDetails(any()) }
+        coVerify(exactly = 0) { remoteDataSource.getAccountInfo(any()) }
     }
 
     @Test
@@ -78,7 +78,7 @@ class AccountRepositoryImplTest {
         val accountResponse = AccountInfoResponse(id = 1, userName = null, name = null, avatar = null)
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -87,7 +87,7 @@ class AccountRepositoryImplTest {
         assertThat(result.userName).isEqualTo("")
         assertThat(result.id).isEqualTo(1)
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -97,7 +97,7 @@ class AccountRepositoryImplTest {
         val accountResponse = AccountInfoResponse(id = 1, userName = "", name = "", avatar = null)
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -106,7 +106,7 @@ class AccountRepositoryImplTest {
         assertThat(result.userName).isEqualTo("")
         assertThat(result.id).isEqualTo(1)
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -116,7 +116,7 @@ class AccountRepositoryImplTest {
         val expectedException = RuntimeException("Network error")
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.failure(expectedException)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.failure(expectedException)
 
         // When & Then
         try {
@@ -127,7 +127,7 @@ class AccountRepositoryImplTest {
         }
 
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -148,7 +148,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -159,7 +159,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("https://image.tmdb.org/t/p/w500/path/to/avatar.jpg")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -174,7 +174,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -185,7 +185,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -200,7 +200,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -211,7 +211,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -226,7 +226,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -237,7 +237,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -252,7 +252,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -263,7 +263,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -280,7 +280,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -291,7 +291,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -308,7 +308,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -319,7 +319,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("https://image.tmdb.org/t/p/w500")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -334,7 +334,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -345,7 +345,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -360,7 +360,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -371,7 +371,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -386,7 +386,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -397,7 +397,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -412,7 +412,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -423,7 +423,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -438,7 +438,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -449,7 +449,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -464,7 +464,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -476,7 +476,7 @@ class AccountRepositoryImplTest {
         
         // Verify
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     @Test
@@ -493,7 +493,7 @@ class AccountRepositoryImplTest {
         assertThat(result.avatarPath).isEqualTo("")
         
         // Verify
-        coVerify(exactly = 0) { remoteDataSource.getAccountDetails(any()) }
+        coVerify(exactly = 0) { remoteDataSource.getAccountInfo(any()) }
     }
 
     @Test
@@ -508,7 +508,7 @@ class AccountRepositoryImplTest {
         )
 
         coEvery { authenticationPreferences.getSessionId() } returns sessionId
-        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+        coEvery { remoteDataSource.getAccountInfo(sessionId) } returns Result.success(accountResponse)
 
         // When
         val result = repository.getAccountInfo()
@@ -520,7 +520,7 @@ class AccountRepositoryImplTest {
         
         // Verify
         coVerify { authenticationPreferences.getSessionId() }
-        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+        coVerify { remoteDataSource.getAccountInfo(sessionId) }
     }
 
     // region: getAccountId()

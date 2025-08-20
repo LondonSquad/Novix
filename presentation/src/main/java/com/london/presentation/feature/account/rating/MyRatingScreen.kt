@@ -31,6 +31,7 @@ import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as dsR
 
@@ -92,11 +93,10 @@ private fun Content(
 
             Column(
                 modifier = Modifier.fillMaxSize()
+
             ) {
                 TopBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    modifier = Modifier.detailsTopBar(1f),
                     title = stringResource(R.string.my_rating),
                     onBackClick = contract::onBackClick
                 )
@@ -104,7 +104,7 @@ private fun Content(
                 RatingChipsRow(
                     selected = selectedCategory,
                     onSelect = contract::onRatingCategorySelected,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp)
                 )
 
                 if (items.isEmpty()) {
@@ -117,10 +117,8 @@ private fun Content(
                         items = items,
                         imageUrl = { it.posterPath },
                         name = { it.title },
-                        rate = { rated -> rated.rating.toLocalizedNumbers() },
                         hasSaveIcon = false,
-                        isItemSaved = { false },
-                        onSaveClick = {},
+                        rate = { rated -> rated.rating.toLocalizedNumbers() },
                         onDeleteClick = { rated ->
                             when (rated.mediaType) {
                                 MediaType.Movie -> contract.onDeleteMovieClick(rated.id)

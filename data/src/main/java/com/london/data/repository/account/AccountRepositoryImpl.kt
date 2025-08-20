@@ -14,7 +14,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountInfo(): AccountInfo =
         authenticationPreferences.getSessionId()?.let { sessionId ->
-            accountRemoteDataSource.getAccountDetails(sessionId)
+            accountRemoteDataSource.getAccountInfo(sessionId)
                 .getOrThrow()
                 .toEntity()
         } ?: AccountInfo(id = 0, userName = "", avatarPath = "")

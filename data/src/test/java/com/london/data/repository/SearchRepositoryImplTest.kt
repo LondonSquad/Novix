@@ -7,7 +7,7 @@ import com.london.data.remote.exception.ResponseException
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
-import com.london.data.utils.fetchAndSync
+import com.london.data.utils.loadFromCacheOrFetch
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
 import io.mockk.coEvery
@@ -52,7 +52,7 @@ class SearchRepositoryImplTest {
         val actualException = assertThrows<RuntimeException>(
             expectedException::class.java.simpleName
         ) {
-            fetchAndSync(
+            loadFromCacheOrFetch(
                 cacheBlockAction,
                 networkBlockAction,
                 syncBlockAction,
@@ -129,7 +129,7 @@ class SearchRepositoryImplTest {
 
 
         val actualException = assertThrows<RuntimeException> {
-            fetchAndSync(
+            loadFromCacheOrFetch(
                 cacheBlock = { throw cacheException },
                 networkBlock = { throw networkException },
                 syncBlock = { /* Do nothing */ },

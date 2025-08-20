@@ -22,7 +22,7 @@ import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
-import com.london.data.utils.fetchAndSync
+import com.london.data.utils.loadFromCacheOrFetch
 import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
@@ -70,7 +70,7 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override suspend fun getTopRatedTvShows(
         pageNumber: Int
-    ): PagedFetchResponse<TopRatedMedia> = fetchAndSync(
+    ): PagedFetchResponse<TopRatedMedia> = loadFromCacheOrFetch(
         cacheBlock = { getTopRatedCachedTvShows() },
         networkBlock = { getTopRatedRemoteTvShows(pageNumber) },
         syncBlock = { topRatedTvShows ->
@@ -79,7 +79,7 @@ class TvShowRepositoryImpl @Inject constructor(
         crashReporter = crashReporter
     ).run { getTopRatedPages(pageNumber) }
 
-    override suspend fun getFirstPageTopRatedTvShows() = fetchAndSync(
+    override suspend fun getFirstPageTopRatedTvShows() = loadFromCacheOrFetch(
         cacheBlock = { getTopRatedCachedTvShows() },
         networkBlock = { fetchFirstTopRatedPageTvShows() },
         syncBlock = { topRatedTvShows ->
@@ -114,7 +114,7 @@ class TvShowRepositoryImpl @Inject constructor(
             sessionId = authenticationPreferences.getSessionId()
         ).isSuccess
 
-    override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(
+    override suspend fun getPopularTvShows(): List<PopularMedia> = loadFromCacheOrFetch(
         cacheBlock = { getCachedPopularTvShows() },
         networkBlock = { tvShowRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows() },
         syncBlock = { popularList ->
@@ -181,7 +181,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getTvShowReviews(
         tvShowId: Int,
         pageNumber: Int
-    ): PagedFetchResponse<Review> = fetchAndSync(
+    ): PagedFetchResponse<Review> = loadFromCacheOrFetch(
         networkBlock = { getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber) }
     ).run {
         PagedFetchResponse(

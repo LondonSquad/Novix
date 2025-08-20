@@ -23,7 +23,7 @@ import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
-import com.london.data.utils.fetchAndSync
+import com.london.data.utils.loadFromCacheOrFetch
 import com.london.domain.entity.actor.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.movie.Movie
@@ -71,7 +71,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieReviews(
         movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<Review> = fetchAndSync(
+    ): PagedFetchResponse<Review> = loadFromCacheOrFetch(
         networkBlock = { getMovieReviewsFromRemote(movieId = movieId, pageNumber = pageNumber) }
     ).run {
         PagedFetchResponse(
@@ -95,7 +95,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getUpcomingMoviesByGenre(
         genre: MovieGenre,
         pageNumber: Int
-    ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
+    ): PagedFetchResponse<UpComingMovie> = loadFromCacheOrFetch(
         cacheBlock = { getUpComingCachedMovies(pageNumber = pageNumber, genre = genre) },
         crashReporter = crashReporter,
         syncBlock = { upComingLocalDataSource.insert(it) },
@@ -110,7 +110,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTopRatedMovies(pageNumber: Int): PagedFetchResponse<TopRatedMedia> =
-        fetchAndSync(
+        loadFromCacheOrFetch(
             cacheBlock = { getTopRatedCashedMovies() },
             networkBlock = { getTopRatedRemoteMovies(pageNumber) },
             syncBlock = { topRatedMovies ->
@@ -119,7 +119,7 @@ class MovieRepositoryImpl @Inject constructor(
             crashReporter = crashReporter
         ).run { getTopRatedPages(pageNumber) }
 
-    override suspend fun getFirstPageTopRatedMovies() = fetchAndSync(
+    override suspend fun getFirstPageTopRatedMovies() = loadFromCacheOrFetch(
         cacheBlock = { getTopRatedCashedMovies() },
         networkBlock = { fetchFirstTopRatedPageMovies() },
         syncBlock = { topRatedMovies ->
@@ -156,7 +156,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).isSuccess
     }
 
-    override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
+    override suspend fun getPopularMovies(): List<PopularMedia> = loadFromCacheOrFetch(
         cacheBlock = { getCachedPopularMovies() },
         networkBlock = { movieRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies() },
         syncBlock = { popularList ->
