@@ -4,20 +4,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.movie.Movie
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
@@ -25,6 +28,7 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaGridConfig
 import com.london.presentation.shared.container.MediaLazyGridWithTabs
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 
 @Composable
 fun ContinueWatchingScreen(
@@ -83,6 +87,8 @@ private fun Content(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .navigationBarsPadding()
+                .padding(bottom = 16.dp)
                 .background(color = NovixTheme.colors.surface)
         ) {
             MediaLazyGridWithTabs(
@@ -104,7 +110,8 @@ private fun Content(
                     isItemSaved = { false }
                 ),
                 topBar = {
-                    DefaultAppTopBar(
+                    TopBar(
+                        modifier = Modifier.detailsTopBar(1f),
                         title = screenTitle,
                         onBackClick = contract::onBackClick
                     )

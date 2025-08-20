@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +32,7 @@ import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as dsR
 
@@ -80,6 +82,7 @@ private fun Content(
         onBack = contract::onBackClick,
         onRetry = contract::onRetryClick
     ) {
+
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -90,12 +93,14 @@ private fun Content(
             )
 
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .padding(bottom = 16.dp)
+
             ) {
                 TopBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    modifier = Modifier.detailsTopBar(1f),
                     title = stringResource(R.string.my_rating),
                     onBackClick = contract::onBackClick
                 )
@@ -103,7 +108,7 @@ private fun Content(
                 RatingChipsRow(
                     selected = selectedCategory,
                     onSelect = contract::onRatingCategorySelected,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp)
                 )
 
                 if (items.isEmpty()) {
