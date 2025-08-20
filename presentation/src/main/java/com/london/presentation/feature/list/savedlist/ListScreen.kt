@@ -205,13 +205,14 @@ private fun SavedListItemRow(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .clickable { onCountClick(itemUi.id) }
-            .background(NovixTheme.colors.surface)
+            .background(NovixTheme.colors.surfaceHigh)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(horizontal = 12.dp, vertical = 16.dp)
+            .zIndex(2f)
     ) {
         Text(
             text = itemUi.name,
