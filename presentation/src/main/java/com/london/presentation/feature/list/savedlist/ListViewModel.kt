@@ -49,13 +49,9 @@ class ListViewModel @Inject constructor(
     override fun onListNameChanged(listName: TextFieldValue) =
         updateState { copy(addListSheetState = addListSheetState.copy(listName = listName)) }
 
-    override fun resetSnackBarErrorState() {
-        updateState { copy(isSnackBarSuccessVisible = false) }
-    }
+    override fun resetSnackBarErrorState() = updateState { copy(error = null) }
 
-    override fun resetSnackBarSuccessState() {
-        updateState { copy(error = null) }
-    }
+    override fun resetSnackBarSuccessState() = updateState { copy(isSnackBarSuccessVisible = false) }
 
     override fun onAddList(listName: String) {
         tryToExecute(

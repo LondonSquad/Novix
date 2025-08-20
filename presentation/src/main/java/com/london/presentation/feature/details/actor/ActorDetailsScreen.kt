@@ -136,7 +136,7 @@ private fun Content(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp),
+            contentPadding = PaddingValues(bottom = 24.dp),
             state = lazyState
         ) {
             item {

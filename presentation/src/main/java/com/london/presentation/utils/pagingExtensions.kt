@@ -20,4 +20,6 @@ fun <T : Any> LazyPagingItems<T>.isEmpty(): Boolean = itemSnapshotList.isEmpty()
 
 fun <T : Any> LazyPagingItems<T>.isLoading(): Boolean = loadState.refresh is LoadState.Loading
 
+fun <T : Any> LazyPagingItems<T>.isNotLoading(): Boolean = loadState.refresh !is LoadState.Loading
+
 fun <T : Any> LazyPagingItems<T>.isError(): Boolean = loadState.refresh is LoadState.Error

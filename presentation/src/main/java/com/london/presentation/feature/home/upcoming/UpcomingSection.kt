@@ -27,6 +27,7 @@ import com.london.presentation.feature.home.HomeScreenContract
 import com.london.presentation.feature.home.HomeScreenUiState
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.HomeCard
+import com.london.presentation.shared.ShimmerMovieCard
 
 @Composable
 fun UpcomingSectionTitle(isLoading: Boolean) {
@@ -101,14 +102,4 @@ fun UpcomingMovieItem(
             )
         }
     }
-}
-
-@Composable
-private fun ShimmerMovieCard() {
-    Box(
-        modifier = Modifier
-            .height(240.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .shimmerEffect()
-    )
 }
