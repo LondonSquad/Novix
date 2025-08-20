@@ -11,6 +11,7 @@ data class NovixColors(
     val hint: Color,
     val stroke: Color,
     val surface: Color,
+    val surfaceHigh: Color,
     val strokeHigh: Color,
     val onPrimary: Color,
     val onPrimaryHint: Color,
