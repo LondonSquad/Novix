@@ -6,18 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.snackbar.LocalSnackbarController
+import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
 import com.london.presentation.shared.MediaLazyPagingGrid
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -82,6 +83,7 @@ private fun Content(
                     contract.onRetry()
                 },
                 isItemSaved = { true },
+                hasSaveIcon = true
             )
         }
     }
@@ -91,18 +93,35 @@ private fun Content(
         contract = contract,
     )
 
+    val snackBarController = LocalSnackbarController.current
+
     if (state.isSnackBarErrorVisible) {
-        SnackBarAnimation(
-            stringResource(R.string.deletion_failed),
+        snackBarController.showMessage(
+            message = R.string.deletion_failed.string,
+            snackBarType = SnackBarType.Error,
+            onComplete = contract::resetSnackBarErrorState,
+            icon = null,
         )
     }
 
-    if (state.isSnackBarSuccessVisible) {
-        SnackBarAnimation(
-            stringResource(R.string.movie_removed_successfully),
-            icon = com.london.designsystem.R.drawable.ic_success
+    if (state.isMovieSnackBarSuccessVisible) {
+        snackBarController.showMessage(
+            message = R.string.movie_removed_successfully.string,
+            snackBarType = SnackBarType.Success,
+            onComplete = contract::resetMovieSnackBarSuccessState,
+            icon = com.london.designsystem.R.drawable.ic_success,
         )
     }
+
+    if (state.isListSnackBarSuccess) {
+        snackBarController.showMessage(
+            message = R.string.list_removed_successfully.string,
+            snackBarType = SnackBarType.Success,
+            onComplete = contract::resetListSnackBarSuccessState,
+            icon = com.london.designsystem.R.drawable.ic_success,
+        )
+    }
+
 }
 
 @Composable
@@ -119,6 +138,9 @@ private fun Preview() {
                 override fun onMovieClick(id: Int) {}
                 override fun onRemoveMovieClick(id: Int) {}
                 override fun onDeleteBottomSheetDismiss() {}
+                override fun resetSnackBarErrorState() {}
+                override fun resetMovieSnackBarSuccessState() {}
+                override fun resetListSnackBarSuccessState() {}
             },
         )
     }

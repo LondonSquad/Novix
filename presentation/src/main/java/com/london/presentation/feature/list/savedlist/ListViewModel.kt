@@ -35,26 +35,27 @@ class ListViewModel @Inject constructor(
 
     override fun onRetry() =
         fetchSavedLists()
-    
+
 
     override fun onFabClick() = setAddListSheetVisible(true)
 
-    override fun onLoginClick() =
-        emitEffect(ListEffect.NavigateToLogin)
-    
+    override fun onLoginClick() = emitEffect(ListEffect.NavigateToLogin)
 
-    override fun onListClick(id: Int) {
-        updateState { copy(isSnackBarSuccessVisible = false) }
-        emitEffect(ListEffect.NavigateToDetails(id))
-    }
+    override fun onListClick(id: Int) = emitEffect(ListEffect.NavigateToDetails(id))
 
     override fun setAddListSheetVisible(visible: Boolean) =
         updateState { copy(addListSheetState = addListSheetState.copy(isSheetVisible = visible)) }
 
-
     override fun onListNameChanged(listName: TextFieldValue) =
         updateState { copy(addListSheetState = addListSheetState.copy(listName = listName)) }
 
+    override fun resetSnackBarErrorState() {
+        updateState { copy(isSnackBarSuccessVisible = false) }
+    }
+
+    override fun resetSnackBarSuccessState() {
+        updateState { copy(error = null) }
+    }
 
     override fun onAddList(listName: String) {
         tryToExecute(
@@ -84,7 +85,7 @@ class ListViewModel @Inject constructor(
             block = { createListsPagingSource() },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { moviesFlow -> updateState { copy(items = moviesFlow) } },
-            onError = { errorState -> updateState { copy(error = errorState,) } },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }

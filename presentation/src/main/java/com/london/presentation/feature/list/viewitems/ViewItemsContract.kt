@@ -8,4 +8,7 @@ interface ViewListItemsContract {
     fun onMovieClick(id: Int)
     fun onRemoveMovieClick(id: Int)
     fun onDeleteBottomSheetDismiss()
+    fun resetSnackBarErrorState()
+    fun resetMovieSnackBarSuccessState()
+    fun resetListSnackBarSuccessState()
 }

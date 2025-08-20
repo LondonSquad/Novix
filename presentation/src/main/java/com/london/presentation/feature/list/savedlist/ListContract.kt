@@ -10,6 +10,8 @@ interface ListContract {
     fun onAddList(listName: String)
     fun setAddListSheetVisible(visible: Boolean)
     fun onListNameChanged(listName: TextFieldValue)
+    fun resetSnackBarErrorState()
+    fun resetSnackBarSuccessState()
 }
 
 fun defaultContractList() = object : ListContract {
@@ -20,4 +22,6 @@ fun defaultContractList() = object : ListContract {
     override fun onAddList(listName: String) {}
     override fun setAddListSheetVisible(visible: Boolean) {}
     override fun onListNameChanged(listName: TextFieldValue) {}
+    override fun resetSnackBarErrorState() {}
+    override fun resetSnackBarSuccessState() {}
 }

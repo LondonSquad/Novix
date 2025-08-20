@@ -11,7 +11,8 @@ data class ViewItemsUiState(
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
     val isSnackBarErrorVisible: Boolean = false,
-    val isSnackBarSuccessVisible: Boolean = false,
+    val isMovieSnackBarSuccessVisible: Boolean = false,
+    val isListSnackBarSuccess: Boolean = false,
     val isDeleteBottomSheetVisible: Boolean = false,
     val listItems: Flow<PagingData<Movie>> = flow {},
 )

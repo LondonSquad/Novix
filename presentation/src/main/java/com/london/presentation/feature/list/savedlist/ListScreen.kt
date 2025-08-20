@@ -39,9 +39,12 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.FloatingActionButton
 import com.london.designsystem.component.button.OutlineButton
+import com.london.designsystem.snackbar.LocalSnackbarController
+import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
+import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
@@ -116,16 +119,23 @@ private fun Content(
             )
         }
 
-        if (state.isSnackBarSuccessVisible) {
-            SnackBarAnimation(
-                message = stringResource(R.string.list_added_success),
-                icon = com.london.designsystem.R.drawable.ic_success
+        val snackBarController = LocalSnackbarController.current
+
+        if (state.error != null) {
+            snackBarController.showMessage(
+                message = R.string.list_added_fail.string,
+                snackBarType = SnackBarType.Error,
+                onComplete = contract::resetSnackBarErrorState,
+                icon = null,
             )
         }
 
-        if (state.error != null) {
-            SnackBarAnimation(
-                message = stringResource(R.string.list_added_fail)
+        if (state.isSnackBarSuccessVisible) {
+            snackBarController.showMessage(
+                message = R.string.list_added_success.string,
+                snackBarType = SnackBarType.Success,
+                onComplete = contract::resetSnackBarSuccessState,
+                icon = com.london.designsystem.R.drawable.ic_success,
             )
         }
     }

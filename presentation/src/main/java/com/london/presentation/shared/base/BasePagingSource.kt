@@ -23,11 +23,12 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
             val fetchResponse = onFetchPage(pageNumber = page)
             val isFirstPage = fetchResponse.currentPage == 1
             val isLastPage = fetchResponse.totalPages == page
+            val isEmptyPage = fetchResponse.items.isEmpty()
 
             LoadResult.Page(
                 data = fetchResponse.items,
                 prevKey = if (isFirstPage) null else page.minus(1),
-                nextKey = if (isLastPage) null else page.plus(1),
+                nextKey = if (isLastPage || isEmptyPage) null else page.plus(1),
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
