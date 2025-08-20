@@ -34327,5 +34327,42 @@
       "deletions": 96,
       "changed_files": 26
     }
+  },
+  {
+    "pr_number": 719,
+    "url": "https://github.com/LondonSquad/Novix/pull/719",
+    "title": "Refactor: presentation",
+    "opened_at": "2025-08-20T20:21:59Z",
+    "head_ref": "refactor/presentation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "assignees": [
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 333,
+      "deletions": 527,
+      "changed_files": 71
+    }
   }
 ]
