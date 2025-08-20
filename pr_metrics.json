@@ -34267,5 +34267,42 @@
       "deletions": 56,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 718,
+    "url": "https://github.com/LondonSquad/Novix/pull/718",
+    "title": "Refactor data - domain",
+    "opened_at": "2025-08-20T19:57:22Z",
+    "head_ref": "refactor/refactor-data-domain",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "assignees": [
+      {
+        "login": "AsmaaKhaledGomaa",
+        "id": 117874933,
+        "url": "https://github.com/AsmaaKhaledGomaa"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 86,
+      "deletions": 96,
+      "changed_files": 26
+    }
   }
 ]
