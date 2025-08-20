@@ -201,7 +201,7 @@ private fun SearchBody(
             content = {
                 SearchChipsRow(
                     selected = state.selectedCategory,
-                    onSelect = contract::onCategorySelected
+                    onSelect = contract::onCategorySelected,
                 )
             }
         )
@@ -306,8 +306,8 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.start_exploring_msg),
-                        image = R.drawable.imge_explore,
+                        text = stringResource(R.string.no_search_result_msg),
+                        image = R.drawable.img_no_search_result,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
@@ -342,8 +342,8 @@ private fun <T : Any> MediaSearchContent(
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.start_exploring_msg),
-                        image = R.drawable.imge_explore,
+                        text = stringResource(R.string.no_search_result_msg),
+                        image = R.drawable.img_no_search_result,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
@@ -667,7 +667,7 @@ private fun SearchChipsRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         SearchCategory.entries.forEach { category ->
