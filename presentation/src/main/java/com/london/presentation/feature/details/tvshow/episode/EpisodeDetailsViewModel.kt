@@ -87,9 +87,8 @@ class EpisodeDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun setLoadingState() {
-        updateState { copy(isLoading = true) }
-    }
+    private fun setLoadingState() = updateState { copy(isLoading = true) }
+
 
     private fun handleEpisodeDataLoaded(data: EpisodeDetailsData) {
         updateState {
@@ -101,14 +100,16 @@ class EpisodeDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun handleError(errorState: ErrorState) {
-        updateState { copy(error = errorState) }
-    }
+    private fun handleError(errorState: ErrorState) = updateState { copy(error = errorState) }
 
-    private fun clearLoadingState() {
-        updateState { copy(isLoading = false) }
-    }
 
+    private fun clearLoadingState() = updateState { copy(isLoading = false) }
+
+    override fun onRetryClick() {
+        updateState { copy(error = null) }
+        loadEpisodeDetails()
+        loadVideoProvider()
+    }
     data class EpisodeDetailsData(
         val episode: EpisodeDetails,
         val images: List<String>,

@@ -84,7 +84,7 @@ fun EpisodeDetailsScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error == ErrorState.NoInternet,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,

@@ -5,4 +5,6 @@ interface EpisodeDetailsContract {
     fun onLoginClick()
     fun onRateEpisodeClick()
     fun onSelectRatingClick(rating: Int)
+
+    fun onRetryClick()
 }
