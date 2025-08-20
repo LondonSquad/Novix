@@ -33971,5 +33971,42 @@
       "deletions": 1117,
       "changed_files": 379
     }
+  },
+  {
+    "pr_number": 709,
+    "url": "https://github.com/LondonSquad/Novix/pull/709",
+    "title": "Hotfix/UI issues",
+    "opened_at": "2025-08-20T07:33:41Z",
+    "head_ref": "hotfix/ui-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "assignees": [
+      {
+        "login": "marwanqashwa",
+        "id": 100484790,
+        "url": "https://github.com/marwanqashwa"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 10,
+      "deletions": 7,
+      "changed_files": 4
+    }
   }
 ]
