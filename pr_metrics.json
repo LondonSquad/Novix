@@ -34052,18 +34052,27 @@
         },
         "submitted_at": "2025-08-20T09:45:12Z",
         "commit_id": "627734a0f80cfddceb44fa8808c507642b665819"
+      },
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-20T10:00:52Z",
+        "commit_id": "627734a0f80cfddceb44fa8808c507642b665819"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-20T09:45:12Z",
     "time_to_first_approval_minutes": 37.416666666666664,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-20T10:00:52Z",
+    "time_to_required_approvals_minutes": 53.083333333333336,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W34",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 807,
       "deletions": 534,
