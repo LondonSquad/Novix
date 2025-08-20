@@ -1,9 +1,6 @@
 package com.london.data.utils
 
-suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
-    runCatching { getOrElse { elseBlock() } ?: elseBlock() }
-
-suspend fun <T> fetchAndSync(
+suspend fun <T> loadFromCacheOrFetch(
     cacheBlock: (suspend () -> T?)? = null,
     networkBlock: suspend () -> T,
     syncBlock: (suspend (T) -> Unit)? = null,
@@ -13,3 +10,6 @@ suspend fun <T> fetchAndSync(
         syncBlock?.invoke(it)
     }
 }.onFailure { crashReporter?.logException(it) }.getOrThrow()
+
+private suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
+    runCatching { getOrElse { elseBlock() } ?: elseBlock() }

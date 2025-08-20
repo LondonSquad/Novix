@@ -25,7 +25,7 @@ class UpComingLocalDataSourceImpl @Inject constructor(
     private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             upcomingSectionDao.getAll().forEach { upcomingSectionLocal ->
-                if (upcomingSectionLocal.date.isDayExpired())
+                if (isDayExpired())
                     upcomingSectionDao.deleteAll()
             }
         }

@@ -1,7 +1,6 @@
 package com.london.data.remote.model
 
 object ApiConstants {
-
     const val SEARCH_PATH_MOVIES = "search/movie"
     const val SEARCH_PATH_TVS = "search/tv"
     const val SEARCH_PATH_ACTORS = "search/person"

@@ -35,7 +35,7 @@ fun String.extractYear() =
 
 fun Int.orDefault(default: Int = 1): Int = if (this != 0) this else default
 
-fun Long.isDayExpired(): Boolean {
+fun isDayExpired(): Boolean {
     val oneDayInMillis = 24 * 60 * 60 * 1000L
     val oneDayAgo = System.currentTimeMillis() - oneDayInMillis
     return System.currentTimeMillis() < oneDayAgo
