@@ -20,7 +20,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.ActorItem
-import com.london.presentation.shared.LazyPagingColumn
+import com.london.presentation.shared.container.LazyPagingColumn
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
