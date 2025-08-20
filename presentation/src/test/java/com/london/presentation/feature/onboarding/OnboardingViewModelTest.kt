@@ -18,11 +18,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -209,7 +209,9 @@ class OnboardingViewModelTest {
                 viewModel?.scrollNext(pagerState, scope)
                 advanceUntilIdle()
 
-                assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
+                withTimeout(2000) {
+                    assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
+                }
             }
         }
 
@@ -222,11 +224,10 @@ class OnboardingViewModelTest {
 
             // When
             viewModel?.scrollNext(pagerState, scope)
-            advanceTimeBy(1000)
             advanceUntilIdle()
 
-            // Then
-            coVerify(exactly = 1) {
+            // Then - Use timeout for IO operations
+            coVerify(timeout = 2000, exactly = 1) {
                 appPreferencesService.setOnBoardingShown()
             }
         }
@@ -237,7 +238,10 @@ class OnboardingViewModelTest {
             // When & Then
             viewModel?.effect?.test {
                 viewModel?.navigateToWelcome()
-                assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
+
+                withTimeout(2000) {
+                    assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
+                }
             }
         }
 
@@ -245,13 +249,9 @@ class OnboardingViewModelTest {
     fun `when onboardingFinished is called, preferences service should be invoked`() = runTest {
         // When
         viewModel?.onboardingFinished()
-
-        // Wait for IO operations to complete
-        advanceTimeBy(1000)
         advanceUntilIdle()
 
-        // Then
-        coVerify(exactly = 1) {
+        coVerify(timeout = 2000, exactly = 1) {
             appPreferencesService.setOnBoardingShown()
         }
     }
@@ -263,12 +263,9 @@ class OnboardingViewModelTest {
 
         // When
         viewModel?.onboardingFinished()
-
-        // Wait for IO operations to complete
-        advanceTimeBy(1000)
         advanceUntilIdle()
 
-        coVerify(exactly = 1) {
+        coVerify(timeout = 2000, exactly = 1) {
             appPreferencesService.setOnBoardingShown()
         }
     }
@@ -277,29 +274,12 @@ class OnboardingViewModelTest {
     fun `when navigateToWelcome is called, onboarding should be marked as shown`() = runTest {
         // When
         viewModel?.navigateToWelcome()
-
-        // Wait for IO operations to complete
-        advanceTimeBy(1000)
         advanceUntilIdle()
 
-        // Then
-        coVerify(exactly = 1) {
+        coVerify(timeout = 2000, exactly = 1) {
             appPreferencesService.setOnBoardingShown()
         }
     }
-
-    @Test
-    fun `when onboardingFinished is called, preferences service should be invoked - with timeout`() =
-        runTest {
-            // When
-            viewModel?.onboardingFinished()
-            advanceUntilIdle()
-
-            // Then - Use timeout in coVerify to wait for async operations
-            coVerify(timeout = 2000, exactly = 1) {
-                appPreferencesService.setOnBoardingShown()
-            }
-        }
 
     @Test
     fun `when page changes multiple times, state should be updated correctly`() = runTest {
@@ -343,7 +323,7 @@ class OnboardingViewModelTest {
     @Test
     fun `when scrollToPage is called with last page, animation should work correctly`() = runTest {
         // Given
-        val lastPage = 2
+        val lastPage = 2 // pageCount - 1
         val scope = this
 
         // When
@@ -358,5 +338,4 @@ class OnboardingViewModelTest {
             )
         }
     }
-
 }
