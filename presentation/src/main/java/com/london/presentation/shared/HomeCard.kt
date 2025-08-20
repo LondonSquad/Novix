@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +35,8 @@ fun HomeCard(
     hasSaveIcon: Boolean = true,
     onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
-    hasOverlay: Boolean = false
+    hasOverlay: Boolean = false,
+    isLoadingShimmer: Boolean = false
 ) {
     Box(
         modifier = Modifier
@@ -56,7 +58,14 @@ fun HomeCard(
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
             errorContent = { ErrorImage() },
-            loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
+            loadingContent = {
+                if (isLoadingShimmer) ShimmerMovieCard(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                )
+                else CircularLoading(modifier = Modifier.align(Alignment.Center))
+            },
             moderatedContent = { UnSuitableEye() }
         )
         if (hasSaveIcon)
