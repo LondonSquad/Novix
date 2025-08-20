@@ -84,6 +84,7 @@ fun <T : Any> MediaLazyVerticalGrid(
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onItemClick: ((T) -> Unit)? = null,
     onDeleteClick: (T) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
@@ -111,6 +112,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 isItemSaved = isItemSaved,
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = onSaveClick,
+                onItemClick = onItemClick,
                 onDeleteClick = onDeleteClick,
                 rate = rate,
                 onNavigateToMovie = onNavigateToMovie,
@@ -154,6 +156,7 @@ private fun <T : Any> RenderPagingGridItem(
     isItemSaved: (T) -> Boolean,
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
+    onItemClick: ((T) -> Unit)?,
     onDeleteClick: (T) -> Unit,
     rate: (T) -> String?,
     onNavigateToMovie: (Int) -> Unit,
@@ -164,9 +167,13 @@ private fun <T : Any> RenderPagingGridItem(
             HomeCard(
                 imageUrl = it,
                 modifier = Modifier.clickable {
-                    when (item) {
-                        is Movie -> onNavigateToMovie(item.id)
-                        is TvShow -> onNavigateToTvShow(item.id)
+                    if (onItemClick != null) {
+                        onItemClick(item)
+                    } else {
+                        when (item) {
+                            is Movie -> onNavigateToMovie(item.id)
+                            is TvShow -> onNavigateToTvShow(item.id)
+                        }
                     }
                 },
                 imageDescription = name(item),

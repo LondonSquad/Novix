@@ -104,7 +104,7 @@ private fun Content(
                     imageUrl = { it.posterPath },
                     name = { it.title },
                     hasSaveIcon = false,
-                    onNavigateToTvShow = { tvShowId -> contract.onTvShowClick(tvShowId) },
+                    onItemClick = { item -> contract.onTvShowClick(item.id) },
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()

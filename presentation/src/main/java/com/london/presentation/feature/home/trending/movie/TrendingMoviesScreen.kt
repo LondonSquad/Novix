@@ -106,7 +106,7 @@ private fun Content(
                     name = { it.title },
                     hasSaveIcon = true,
                     onSaveClick = { contract.onManageBookmarkClicked(it.id) },
-                    onNavigateToMovie = { contract.onMovieClick(it) },
+                    onItemClick = { item -> contract.onMovieClick(item.id) },
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
