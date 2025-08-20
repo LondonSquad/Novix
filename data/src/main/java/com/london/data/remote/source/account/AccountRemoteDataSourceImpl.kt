@@ -8,8 +8,8 @@ import javax.inject.Inject
 class AccountRemoteDataSourceImpl @Inject constructor(
     private val accountApiService: AccountApiService
 ) : AccountRemoteDataSource, BaseRemoteDatasource {
-    override suspend fun getAccountDetails(sessionId: String): Result<AccountInfoResponse> = callApi(
-        apiCall = { accountApiService.getAccountDetails(sessionId) },
+    override suspend fun getAccountInfo(sessionId: String): Result<AccountInfoResponse> = callApi(
+        apiCall = { accountApiService.getAccountInfo(sessionId) },
         mapper = { it }
     )
 }

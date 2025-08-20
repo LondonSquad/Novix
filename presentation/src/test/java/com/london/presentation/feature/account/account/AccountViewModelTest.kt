@@ -31,7 +31,7 @@ class   AccountViewModelTest {
 
     private lateinit var appPreferencesService: AppPreferencesService
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    private lateinit var accountDetailsUseCase: GetAccountInfoUseCase
+    private lateinit var accountInfoUseCase: GetAccountInfoUseCase
     private lateinit var viewModel: AccountViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -39,7 +39,7 @@ class   AccountViewModelTest {
     fun setUp() {
         appPreferencesService = mockk(relaxed = true)
         authenticationUseCase = mockk(relaxed = true)
-        accountDetailsUseCase = mockk(relaxed = true)
+        accountInfoUseCase = mockk(relaxed = true)
         
         Dispatchers.setMain(testDispatcher)
         
@@ -59,11 +59,11 @@ class   AccountViewModelTest {
         // Given
         every { appPreferencesService.isAppDarkMode } returns MutableStateFlow(true)
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
+        coEvery { accountInfoUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
         viewModel =
-            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountInfoUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -75,11 +75,11 @@ class   AccountViewModelTest {
         // Given
         every { appPreferencesService.appLanguage } returns MutableStateFlow(AppLanguage.ARABIC)
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
+        coEvery { accountInfoUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
         viewModel =
-            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountInfoUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -259,11 +259,11 @@ class   AccountViewModelTest {
     fun `should handle user not logged in during initialization`() = runTest {
         // Given
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
+        coEvery { accountInfoUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
         viewModel =
-            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountInfoUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -277,11 +277,11 @@ class   AccountViewModelTest {
         val contentRestrictionFlow = MutableStateFlow(ContentRestrictionLevel.MODERATE)
         every { appPreferencesService.contentRestrictionLevel } returns contentRestrictionFlow
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
+        coEvery { accountInfoUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
         viewModel =
-            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountInfoUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
         
         contentRestrictionFlow.value = ContentRestrictionLevel.STRICT
@@ -294,10 +294,10 @@ class   AccountViewModelTest {
 
     private fun setupViewModel() {
         coEvery { authenticationUseCase.isLoggedIn() } returns true
-        coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "TestUser", "avatar.jpg")
+        coEvery { accountInfoUseCase.invoke() } returns AccountInfo(1, "TestUser", "avatar.jpg")
 
         viewModel =
-            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountInfoUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
     }
 }
