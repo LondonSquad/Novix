@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.GuestUserLoginBottomSheet
@@ -44,6 +45,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -120,6 +122,11 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
+
+        BackgroundGradient(
+            modifier = Modifier.align(Alignment.TopStart).zIndex(2f)
+        )
+
         TopBar(
             onBackClick = contract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),

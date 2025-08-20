@@ -1,6 +1,7 @@
 package com.london.presentation.feature.account.rating
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.NovixChip
@@ -21,6 +24,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
@@ -76,52 +80,62 @@ private fun Content(
         onBack = contract::onBackClick,
         onRetry = contract::onRetryClick
     ) {
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
+            BackgroundGradient(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                title = stringResource(R.string.my_rating),
-                onBackClick = contract::onBackClick
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
 
-            RatingChipsRow(
-                selected = selectedCategory,
-                onSelect = contract::onRatingCategorySelected,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TopBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    title = stringResource(R.string.my_rating),
+                    onBackClick = contract::onBackClick
+                )
 
-            if (items.isEmpty()) {
-                EmptyGenreLayout(
-                    message = stringResource(R.string.there_is_no_items),
-                    modifier = Modifier.fillMaxSize()
+                RatingChipsRow(
+                    selected = selectedCategory,
+                    onSelect = contract::onRatingCategorySelected,
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
-            } else {
-                MediaLazyVerticalGrid(
-                    items = items,
-                    imageUrl = { it.posterPath },
-                    name = { it.title },
-                    hasSaveIcon = false,
-                    rate = { rated -> rated.rating.toLocalizedNumbers() },
-                    onDeleteClick = { rated ->
-                        when (rated.mediaType) {
-                            MediaType.Movie -> contract.onDeleteMovieClick(rated.id)
-                            MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
+
+                if (items.isEmpty()) {
+                    EmptyGenreLayout(
+                        message = stringResource(R.string.there_is_no_items),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    MediaLazyVerticalGrid(
+                        items = items,
+                        imageUrl = { it.posterPath },
+                        name = { it.title },
+                        hasSaveIcon = false,
+                        rate = { rated -> rated.rating.toLocalizedNumbers() },
+                        onDeleteClick = { rated ->
+                            when (rated.mediaType) {
+                                MediaType.Movie -> contract.onDeleteMovieClick(rated.id)
+                                MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
+                            }
+                        },
+                        onItemClick = { rated ->
+                            when (rated.mediaType) {
+                                MediaType.Movie -> contract.onMovieClick(rated.id)
+                                MediaType.TvShow -> contract.onTvShowClick(rated.id)
+                            }
                         }
-                    },
-                    onItemClick = { rated ->
-                        when (rated.mediaType) {
-                            MediaType.Movie -> contract.onMovieClick(rated.id)
-                            MediaType.TvShow -> contract.onTvShowClick(rated.id)
-                        }
-                    }
-                )
+                    )
+                }
             }
-        }
 
-        RatingSnackBar(state)
+            RatingSnackBar(state)
+        }
     }
 }
 

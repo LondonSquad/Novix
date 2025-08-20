@@ -52,6 +52,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.actor.ActorMediaItems
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
@@ -124,6 +125,11 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
+
+        BackgroundGradient(
+            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+        )
+
         EmptyScreen(uiState)
 
         LazyColumn(
@@ -133,10 +139,10 @@ private fun Content(
         ) {
             item {
                 if (hasOtherContent(uiState)) {
-                    uiState.actorImageDetails?.let { image ->
+                    uiState.actorImageDetails?.let { images ->
                         CustomBackDropImagePager(
-                            images = image,
-                            isVisibleDots = false
+                            images = images,
+                            isVisibleDots = (images.size) > 1
                         )
                     }
                 }

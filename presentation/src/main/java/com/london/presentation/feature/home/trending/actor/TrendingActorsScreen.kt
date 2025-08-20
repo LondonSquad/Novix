@@ -1,6 +1,7 @@
 package com.london.presentation.feature.home.trending.actor
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,10 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -19,8 +22,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.container.ActorLazyVerticalColumn
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.ActorLazyVerticalColumn
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.isLoading
 
@@ -65,24 +69,33 @@ private fun Content(
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = actorsLazyItems
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = NovixTheme.colors.surface)
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
-                title = stringResource(com.london.designsystem.R.string.tv_shows),
-                onBackClick = contract::onBackClick,
+            BackgroundGradient(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(NovixTheme.colors.surface)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = NovixTheme.colors.surface)
+            ) {
+                TopBar(
+                    title = stringResource(com.london.designsystem.R.string.tv_shows),
+                    onBackClick = contract::onBackClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(NovixTheme.colors.surface)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                )
 
-            ActorLazyVerticalColumn(
-                items = actorsLazyItems,
-                onActorClick = { contract.onActorClick(it.id) }
-            )
+                ActorLazyVerticalColumn(
+                    items = actorsLazyItems,
+                    onActorClick = { contract.onActorClick(it.id) }
+                )
+            }
         }
     }
 }

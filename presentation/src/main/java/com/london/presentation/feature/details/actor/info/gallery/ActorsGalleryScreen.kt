@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
@@ -29,6 +30,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -61,24 +63,34 @@ private fun Content(
     uiState: ActorsGalleryUiState,
     actorsGalleryContract: ActorsGalleryContract
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-    ) {
-        TopBar(
-            modifier = Modifier.padding(bottom = 16.dp),
-            title = stringResource(R.string.gallery),
-            onBackClick = actorsGalleryContract::onBackClick
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+
+        BackgroundGradient(
+            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(1f)
         )
 
-        Box(modifier = Modifier.weight(1f)) {
-            if (uiState.isLoading) {
-                CircularLoading(modifier = Modifier.align(Alignment.Center))
-            } else {
-                GalleryContent(uiState = uiState)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface)
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            TopBar(
+                modifier = Modifier.padding(bottom = 16.dp),
+                title = stringResource(R.string.gallery),
+                onBackClick = actorsGalleryContract::onBackClick
+            )
+
+            Box(modifier = Modifier.weight(1f)) {
+                if (uiState.isLoading) {
+                    CircularLoading(modifier = Modifier.align(Alignment.Center))
+                } else {
+                    GalleryContent(uiState = uiState)
+                }
             }
         }
     }

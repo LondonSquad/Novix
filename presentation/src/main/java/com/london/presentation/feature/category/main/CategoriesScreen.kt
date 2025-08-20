@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +20,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.NovixChip
@@ -29,6 +32,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.CategoriesItem
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.genre.MovieGenreUi
@@ -64,23 +68,32 @@ private fun Content(
     state: CategoriesUiState,
     contract: CategoriesContract,
 ) {
-    Column(Modifier.navBarBottomPadding()) {
-        TopBar(
-            title = stringResource(R.string.categories),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+        BackgroundGradient(
+            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
         )
-        CategoriesSelection(
-            onClick = contract::onCategoryClick,
-            selectedCategory = state.selectedCategory,
-            modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
-        )
-        GenresGrid(
-            state = state,
-            contract = contract,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-        )
+
+        Column(Modifier.navBarBottomPadding()) {
+            TopBar(
+                title = stringResource(R.string.categories),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            )
+            CategoriesSelection(
+                onClick = contract::onCategoryClick,
+                selectedCategory = state.selectedCategory,
+                modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
+            )
+            GenresGrid(
+                state = state,
+                contract = contract,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 }
 
