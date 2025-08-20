@@ -69,7 +69,7 @@ class ContinueWatchingViewModel @Inject constructor(
         if (!alreadySelected) onNotSelected()
     }
 
-    private fun getRecentWatchedMedia() {
+    fun getRecentWatchedMedia() {
         tryToExecute(
             block = ::fetchRecentWatchedMedia,
             onStart = { setLoadingState(true) },

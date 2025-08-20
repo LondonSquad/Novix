@@ -40,7 +40,7 @@ class MovieCategoryViewModelTest {
         every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
             category = CATEGORY,
         )
-        viewModel = MovieCategoryViewModel(getMovieUseCase, savedStateHandle)
+        viewModel = MovieCategoryViewModel(savedStateHandle, getMovieUseCase)
         coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY.toDomain(), PAGE) } returns moviesPagingData
     }
 
