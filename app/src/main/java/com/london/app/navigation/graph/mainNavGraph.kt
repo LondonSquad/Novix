@@ -172,7 +172,7 @@ private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         appComposable<Lists> {
             ListScreen(
                 onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLoginWithPopUp,
+                onNavigateToLogin = ::navigateToLogin,
             )
         }
         appComposable<ViewListItems> {
