@@ -59,6 +59,7 @@ fun <T : Any> MediaLazyPagingGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     hasSaveIcon: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(bottom = 16.dp)
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),
@@ -66,7 +67,7 @@ fun <T : Any> MediaLazyPagingGrid(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = 16.dp)
+        contentPadding = contentPadding
     ) {
         items(pagingFlow.itemCount) { index ->
             val item = pagingFlow[index]
