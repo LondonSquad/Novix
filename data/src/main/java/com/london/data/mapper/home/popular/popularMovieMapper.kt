@@ -17,7 +17,6 @@ fun PopularMovieResponse.toPopularMovie(): PopularMedia = PopularMedia(
     mediaType = MediaType.Movie
 )
 
-
 fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMedia> =
     items.map { it.toPopularMovie() }
 

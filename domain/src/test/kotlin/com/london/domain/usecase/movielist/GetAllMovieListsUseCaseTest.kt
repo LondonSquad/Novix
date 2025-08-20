@@ -45,7 +45,6 @@ class GetAllMovieListsUseCaseTest {
 
    private companion object {
         const val LIST_ID = 10
-        const val MOVIE_ID = 20
         val movieLists = PagedFetchResponse(
             currentPage = 1,
             totalPages = 1,

@@ -27,17 +27,17 @@ import com.london.presentation.utils.gridColumns
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    rate: (T) -> String? = { null },
-    name: (T) -> String = { it.getName() },
-    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
-    isItemSaved: (T) -> Boolean = { false },
-    onItemClick: ((T) -> Unit)? = null,
     onDeleteClick: (T) -> Unit = {},
+    rate: (T) -> String? = { null },
+    onItemClick: ((T) -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
-    topBar: @Composable (() -> Unit)? = null
+    name: (T) -> String = { it.getName() },
+    isItemSaved: (T) -> Boolean = { false },
+    topBar: @Composable (() -> Unit)? = null,
+    imageUrl: (T) -> String? = { it.getImageUrl() },
 ) {
     MediaGridContainer(
         modifier = modifier,

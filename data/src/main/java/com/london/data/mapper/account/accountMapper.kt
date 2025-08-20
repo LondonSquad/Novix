@@ -10,4 +10,3 @@ fun AccountInfoResponse.toEntity(): AccountInfo = AccountInfo(
     userName = this.name?.takeIf { it.isNotBlank() } ?: this.userName.orEmpty(),
     avatarPath = this.avatar?.tmdb?.avatarPath.asImageUrlOrEmpty()
 )
-

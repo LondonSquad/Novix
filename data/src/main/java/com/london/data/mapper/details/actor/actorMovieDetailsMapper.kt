@@ -12,10 +12,8 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMediaDetails =
         mediaItems = cast.orEmpty().map { it.toEntity() },
     )
 
-
 fun ActorMovieCastMember.toEntity(): ActorMediaItems =
      ActorMediaItems(
         id = id.orZero(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
     )
-
