@@ -28,9 +28,8 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
-    override fun onBackClick() {
-        emitEffect(TopTvShowsPicksEffect.BackNavigation)
-    }
+    override fun onBackClick() = emitEffect(TopTvShowsPicksEffect.BackNavigation)
+
 
     override fun onTvShowClick(tvShowId: Int) {
         emitEffect(TopTvShowsPicksEffect.TvShowDetailsNavigation(tvShowId))

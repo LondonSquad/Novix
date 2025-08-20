@@ -8,10 +8,4 @@ fun <T> ResultOrEmpty(
     otherItems: List<T>? = null,
     emptyContent: @Composable () -> Unit,
     content: @Composable () -> Unit
-) {
-    if (items.isEmpty() && otherItems.isNullOrEmpty()) {
-        emptyContent()
-    } else {
-        content()
-    }
-}
+) = if (items.isEmpty() && otherItems.isNullOrEmpty()) emptyContent() else content()

@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -7,6 +7,7 @@ import androidx.compose.ui.layout.ContentScale
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.imageharamblur.ui.ImageFilterConfig
 import com.london.imageharamblur.ui.ImageViewFilter
+import com.london.presentation.shared.contentRestriction.LocalContentRestrictionLevel
 
 @Composable
 fun ImageView(

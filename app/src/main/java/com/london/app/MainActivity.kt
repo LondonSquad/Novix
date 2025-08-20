@@ -12,9 +12,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
@@ -25,9 +25,9 @@ import com.london.data.worker.MovieListSyncWorker
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.service.AppPreferencesService
 import com.london.presentation.localization.LocalizationManager
-import com.london.presentation.localization.wrapWithLocale
-import com.london.presentation.shared.ContentRestrictionProvider
-import com.london.presentation.shared.LocalContentRestrictionLevel
+import com.london.presentation.shared.contentRestriction.ContentRestrictionProvider
+import com.london.presentation.shared.contentRestriction.LocalContentRestrictionLevel
+import com.london.presentation.utils.wrapWithLocale
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject

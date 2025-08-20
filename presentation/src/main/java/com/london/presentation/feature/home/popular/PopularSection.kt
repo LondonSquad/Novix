@@ -48,7 +48,7 @@ import com.london.presentation.feature.home.popular.PopularSection.SCALE_SIDE_CA
 import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_X
 import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_Y
 import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.RatingItem
+import com.london.presentation.shared.item.RatingItem
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay

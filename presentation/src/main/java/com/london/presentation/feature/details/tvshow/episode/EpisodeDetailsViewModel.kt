@@ -173,11 +173,8 @@ class EpisodeDetailsViewModel @Inject constructor(
         ).first()
     }
 
-    private fun loadEpisodeRatingSuccess(rating: Int) {
-        updateState {
-            copy(isRated = rating != DEFAULT_RATING && !isGuestUser)
-        }
-    }
+    private fun loadEpisodeRatingSuccess(rating: Int) =
+        updateState { copy(isRated = rating != DEFAULT_RATING && !isGuestUser) }
 
     private fun loadEpisodeRating() {
         tryToExecute(
@@ -196,12 +193,6 @@ class EpisodeDetailsViewModel @Inject constructor(
         } else {
             DEFAULT_RATING
         }
-    }
-
-    fun onRetry() {
-        updateState { copy(error = null) }
-        loadEpisodeDetails()
-        loadVideoProvider()
     }
 
     private companion object {

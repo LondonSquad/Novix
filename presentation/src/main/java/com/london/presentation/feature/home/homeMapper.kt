@@ -1,11 +1,10 @@
-package com.london.presentation.utils
+package com.london.presentation.feature.home
 
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshow.TvShow
-import com.london.presentation.feature.home.HomeUiMedia
 import com.london.presentation.feature.home.popular.PopularUiMedia
 
 @JvmName("topRatedMovieToUiMedia")

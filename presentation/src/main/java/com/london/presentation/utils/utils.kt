@@ -3,6 +3,7 @@ package com.london.presentation.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -112,13 +113,9 @@ fun String?.getValueOf(key: String): String? {
     return this
 }
 
-fun String.isNotZeroRate() = runCatching {
-    this != "0.0" && this != "٠٫٠"
-}.getOrDefault(false)
+fun String.isNotZeroRate() = runCatching { this != "0.0" && this != "٠٫٠" }.getOrDefault(false)
 
-fun Double.isNotZeroRate() = runCatching {
-    this != 0.0
-}.getOrDefault(false)
+fun Double.isNotZeroRate() = runCatching { this != 0.0 }.getOrDefault(false)
 
 @Composable
 fun gridColumns(itemWidth: Int = 158): Int = runCatching {
@@ -128,9 +125,7 @@ fun gridColumns(itemWidth: Int = 158): Int = runCatching {
     ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
 }.getOrDefault(1)
 
-fun Int?.isNotNull(): Boolean {
-    return this != null
-}
+fun Int?.isNotNull(): Boolean = this != null
 
 fun shouldShowLoading(
     isLoading: Boolean,
@@ -138,3 +133,7 @@ fun shouldShowLoading(
     pagingFlow: LazyPagingItems<*>? = null
 ): Boolean = isLoading || (handlePagingLoadingAutomatically
     && pagingFlow?.loadState?.refresh is LoadState.Loading)
+
+fun Int?.orZero(): Int = this ?: 0
+
+fun UriHandler.openUrl(url: String) = runCatching { openUri(url) }

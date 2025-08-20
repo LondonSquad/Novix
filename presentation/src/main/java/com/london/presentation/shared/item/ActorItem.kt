@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.item
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

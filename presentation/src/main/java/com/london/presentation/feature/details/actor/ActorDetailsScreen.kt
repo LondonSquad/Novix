@@ -53,13 +53,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.actor.ActorMediaItems
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.ImageView
-import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.item.ImageView
+import com.london.presentation.shared.text.ConditionalText
+import com.london.presentation.shared.text.TextWithIcon
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.offsetLayout

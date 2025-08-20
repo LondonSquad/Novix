@@ -64,9 +64,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    override fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
-        updateState(updater)
-    }
+    override fun updateSearchState(updater: SearchUiState.() -> SearchUiState) = updateState(updater)
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
@@ -358,5 +356,4 @@ class SearchViewModel @Inject constructor(
             category = state.value.selectedCategory
         )
     }
-
 }

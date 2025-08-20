@@ -26,17 +26,6 @@ fun Modifier.offsetLayout() = layout { measurable, constraints ->
     }
 }
 
-fun Modifier.episodeLayout() = layout { measurable, constraints ->
-    val placeable = measurable.measure(constraints)
-
-    val yOffsetPx = with(this) { 44.dp.roundToPx() }
-    val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
-
-    layout(placeable.width, adjustedHeight) {
-        placeable.placeRelative(0, -yOffsetPx)
-    }
-}
-
 @Composable
 fun Modifier.headerDetailsCard() = fillMaxWidth()
     .episodeLayout()
@@ -59,3 +48,14 @@ fun Modifier.detailsTopBar(backgroundAlpha: Float) = fillMaxWidth()
 fun Modifier.navBarBottomPadding() = padding(bottom = 70.dp).padding(
     bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 )
+
+private fun Modifier.episodeLayout() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+
+    val yOffsetPx = with(this) { 44.dp.roundToPx() }
+    val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
+
+    layout(placeable.width, adjustedHeight) {
+        placeable.placeRelative(0, -yOffsetPx)
+    }
+}

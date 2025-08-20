@@ -1,4 +1,4 @@
-package com.london.presentation.feature.home.section
+package com.london.presentation.shared.section
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke

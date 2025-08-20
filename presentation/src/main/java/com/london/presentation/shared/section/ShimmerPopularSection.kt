@@ -1,4 +1,4 @@
-package com.london.presentation.feature.home.section
+package com.london.presentation.shared.section
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,19 +23,19 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.utils.shimmerEffect
-import com.london.presentation.feature.home.section.ShimmerPopularSection.CARD_HORIZONTAL_PADDING_DP
-import com.london.presentation.feature.home.section.ShimmerPopularSection.CARD_WIDTH_DP
-import com.london.presentation.feature.home.section.ShimmerPopularSection.PAGE_SPACING_DP
-import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_FRACTION_MULTIPLIER
-import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_NEXT_DEGREES
-import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_OFFSET_ADJUSTMENT
-import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_PREVIOUS_DEGREES
-import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_CURRENT
-import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_MAX_FRACTION
-import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_MIN_FRACTION
-import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_SIDE_CARDS
-import com.london.presentation.feature.home.section.ShimmerPopularSection.TRANSFORM_ORIGIN_X
-import com.london.presentation.feature.home.section.ShimmerPopularSection.TRANSFORM_ORIGIN_Y
+import com.london.presentation.shared.section.ShimmerPopularSection.CARD_HORIZONTAL_PADDING_DP
+import com.london.presentation.shared.section.ShimmerPopularSection.CARD_WIDTH_DP
+import com.london.presentation.shared.section.ShimmerPopularSection.PAGE_SPACING_DP
+import com.london.presentation.shared.section.ShimmerPopularSection.ROTATION_FRACTION_MULTIPLIER
+import com.london.presentation.shared.section.ShimmerPopularSection.ROTATION_NEXT_DEGREES
+import com.london.presentation.shared.section.ShimmerPopularSection.ROTATION_OFFSET_ADJUSTMENT
+import com.london.presentation.shared.section.ShimmerPopularSection.ROTATION_PREVIOUS_DEGREES
+import com.london.presentation.shared.section.ShimmerPopularSection.SCALE_CURRENT
+import com.london.presentation.shared.section.ShimmerPopularSection.SCALE_MAX_FRACTION
+import com.london.presentation.shared.section.ShimmerPopularSection.SCALE_MIN_FRACTION
+import com.london.presentation.shared.section.ShimmerPopularSection.SCALE_SIDE_CARDS
+import com.london.presentation.shared.section.ShimmerPopularSection.TRANSFORM_ORIGIN_X
+import com.london.presentation.shared.section.ShimmerPopularSection.TRANSFORM_ORIGIN_Y
 import kotlin.math.abs
 
 @Composable

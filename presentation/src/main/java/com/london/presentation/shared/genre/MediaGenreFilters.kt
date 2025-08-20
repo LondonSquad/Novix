@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.genre
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,8 +15,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.shared.genre.MovieGenreUi
-import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun MediaGenreFilters(

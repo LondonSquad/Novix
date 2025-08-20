@@ -32,7 +32,6 @@ class SplashViewModel @Inject constructor(
                 authenticationUseCase.isLoggedIn() -> SplashEffect.Home
                 else -> SplashEffect.Welcome
             }
-
             _effect.emit(destination)
         }
     }

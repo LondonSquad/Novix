@@ -11,6 +11,7 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
+import com.london.presentation.utils.orZero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -24,56 +25,39 @@ class ReviewsViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
     private val mediaType: MediaType = args?.mediaType ?: MediaType.Movie
-    private val mediaId: Int = args?.mediaId ?: 0
+    private val mediaId: Int = args?.mediaId.orZero()
 
     init {
         loadReviews()
     }
 
     override fun onRetry() {
-        updateState { copy(error = null) }
+        setErrorState(null)
         loadReviews()
     }
 
-    override fun onBackClicked() {
-        emitEffect(ReviewEffect.NavigateBack)
-    }
+    override fun onBackClicked() = emitEffect(ReviewEffect.NavigateBack)
+    
 
     private fun loadReviews() {
         tryToExecute(
-            block = {
-                createPagingSourceFlow { _, pageNumber ->
-                    fetchReviewsByMediaType(pageNumber)
-                }
-            },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
+            block = { createPagingSourceFlow { _, pageNumber -> fetchReviewsByMediaType(pageNumber) } },
+            onStart = { setLoadingState(true) },
             onSuccess = ::handleLoadReviewsSuccess,
             onError = ::handleLoadReviewsError,
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            }
+            onCompleted = { setLoadingState(false) }
         )
     }
 
     private fun handleLoadReviewsSuccess(pagingFlow: Flow<PagingData<Review>>) {
-        updateState {
-            copy(
-                reviews = pagingFlow,
-                isLoading = false,
-                error = null
-            )
-        }
+        setLoadingState(false)
+        setErrorState(null)
+        updateState { copy(reviews = pagingFlow) }
     }
 
     private fun handleLoadReviewsError(errorState: ErrorState) {
-        updateState {
-            copy(
-                error = errorState,
-                isLoading = false
-            )
-        }
+        setErrorState(errorState)
+        setLoadingState(false)
     }
 
     private suspend fun fetchReviewsByMediaType(pageNumber: Int) = when (mediaType) {
@@ -81,4 +65,7 @@ class ReviewsViewModel @Inject constructor(
         MediaType.TvShow -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
     }
 
+    private fun setLoadingState(loading: Boolean) = updateState { copy(isLoading = loading) }
+
+    private fun setErrorState(errorState: ErrorState?) = updateState { copy(error = errorState) }
 }

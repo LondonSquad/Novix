@@ -13,8 +13,10 @@ import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatched
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.shared.genre.toUi
+import com.london.presentation.utils.orZero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,7 +33,7 @@ class TvShowDetailsViewModel @Inject constructor(
     TvShowDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.TvShowDetails>()
-    private val tvShowId: Int = args?.tvShowId ?: 0
+    private val tvShowId: Int = args?.tvShowId.orZero()
 
     init {
         initializeGetTvShowDetailsData()
@@ -43,8 +45,7 @@ class TvShowDetailsViewModel @Inject constructor(
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
         tryToExecute(
             block = {
-                val episodesBySeason =
-                    getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
+                val episodesBySeason = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
                 val videoProvider = getTvShowUseCase.getTvSeasonTrailer(tvShowId, seasonNumber)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
@@ -64,7 +65,7 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     fun onRetry() {
-        updateState { copy(error = null) }
+        setLoadingState(null)
         initializeGetTvShowDetailsData()
         initializeGetCastData()
         initializeGetImagesData()
@@ -101,20 +102,16 @@ class TvShowDetailsViewModel @Inject constructor(
         tryToExecute(
             block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn ->
-                if (isLoggedIn)
-                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                if (isLoggedIn) updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
                 else
                     updateState {
                         copy(
                             isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
                             isGuestUser = true
                         )
-
                     }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
+            onError = ::setErrorState
         )
     }
 
@@ -126,10 +123,8 @@ class TvShowDetailsViewModel @Inject constructor(
             onSuccess = {
                 updateState {
                     copy(
-                        selectedRating = rating,
                         isRateBottomSheetVisible = false,
                         isSuccessfullyRated = true,
-                        isRated = true
                     )
                 }
             },
@@ -141,41 +136,30 @@ class TvShowDetailsViewModel @Inject constructor(
                     )
                 }
             },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onCompleted = { setLoadingState(false) },
         )
     }
 
     override fun onLoginClick() = emitEffect(TvShowDetailsEffect.OnLoginNavigation)
 
-    override fun onBackClicked() {
-        emitEffect(TvShowDetailsEffect.NavigateBack)
-    }
+    override fun onBackClicked() = emitEffect(TvShowDetailsEffect.NavigateBack)
+    
 
     private fun initializeGetImagesData() {
 
         tryToExecute(
-            block = {
-                getTvShowUseCase.getImagesTvShowById(tvShowId)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { images ->
-                updateState {
-                    copy(
-                        tvImages = images,
-                    )
-                }
-            },
-            onError = { error -> updateState { copy(error = error) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            block = { getTvShowUseCase.getImagesTvShowById(tvShowId) },
+            onStart = { setLoadingState(true) },
+            onSuccess = { images -> updateState { copy(tvImages = images) } },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
     private fun initializeGetCastData() {
         tryToExecute(
-            block = {
-                getTvShowUseCase.getTvShowCastById(tvShowId)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { getTvShowUseCase.getTvShowCastById(tvShowId) },
+            onStart = { setLoadingState(true) },
             onSuccess = { cast ->
                 updateState {
                     copy(
@@ -184,15 +168,8 @@ class TvShowDetailsViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { errorState ->
-                updateState {
-                    copy(
-                        isLoading = false,
-                        error = errorState
-                    )
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = { errorState -> setErrorState(errorState);setLoadingState(false) },
+            onCompleted = { setLoadingState(false) },
         )
     }
 
@@ -216,7 +193,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
                 Triple(tvShowDetails, rating, episodes)
             },
-            onStart = { updateState { copy(isLoading = true) } },
+            onStart = { setLoadingState(true) },
             onSuccess = { (tvShowDetails, rating, episodes) ->
                 updateState {
                     copy(
@@ -250,10 +227,8 @@ class TvShowDetailsViewModel @Inject constructor(
                     )
                 )
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { setLoadingState(false) },
         )
     }
 
@@ -264,4 +239,8 @@ class TvShowDetailsViewModel @Inject constructor(
         manageRecentViewedUseCase.addToRecentViewed(tvShow)
 
     private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
+
+    private fun setLoadingState(loading: Boolean?) = updateState { copy(isLoading = loading ?: false) }
+
+    private fun setErrorState(errorState: ErrorState) = updateState { copy(error = errorState) }
 }

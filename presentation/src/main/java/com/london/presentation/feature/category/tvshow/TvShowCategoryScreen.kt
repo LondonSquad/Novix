@@ -102,7 +102,6 @@ private fun Preview() {
     Content(
         state = TvShowCategoryUiState(),
         contract = object : TvShowCategoryContract {
-            override fun onSavedClick(tvShowId: Int) {}
             override fun onTvShowClick(tvShowId: Int) {}
             override fun onBackClick() {}
         }

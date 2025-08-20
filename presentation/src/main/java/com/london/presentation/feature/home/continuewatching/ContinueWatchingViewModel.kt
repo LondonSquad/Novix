@@ -113,5 +113,4 @@ class ContinueWatchingViewModel @Inject constructor(
         updateState { copy(movies = movies, tvSeries = tvSeries) }
 
     private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
-
 }
