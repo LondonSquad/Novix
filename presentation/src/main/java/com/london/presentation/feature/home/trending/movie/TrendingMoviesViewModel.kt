@@ -40,6 +40,24 @@ class TrendingMoviesViewModel @Inject constructor(
 
     override fun onRetryClick() = getTrendingMovies()
 
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
+
     private fun getTrendingMovies() {
         tryToCollect(
             block = ::createTrendingMoviesPagingFlow,

@@ -1,6 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.local.preference.AuthenticationPreferences
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.remote.model.account.AccountInfoResponse
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
@@ -27,14 +28,16 @@ class AuthenticationRepositoryImplTest {
     private val authRemoteDataSource: AuthenticationRemoteDataSource = mockk()
     private val accountRemoteDataSource: AccountRemoteDataSource = mockk()
     private val authenticationPreferences: AuthenticationPreferences = mockk(relaxed = true)
+    private val customMovieListLocalDataSource: CustomMovieListLocalDataSource = mockk(relaxed = true)
 
 
     @Before
     fun setUp() {
         repository = AuthenticationRepositoryImpl(
-            authRemoteDataSource,
-            accountRemoteDataSource,
-            authenticationPreferences
+            authenticationRemoteDataSource = authRemoteDataSource,
+            accountRemoteDataSource = accountRemoteDataSource,
+            authenticationPreferences = authenticationPreferences,
+            customMovieListLocalDataSource = customMovieListLocalDataSource
         )
     }
 

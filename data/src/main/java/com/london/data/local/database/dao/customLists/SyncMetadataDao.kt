@@ -15,6 +15,9 @@ interface SyncMetadataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSyncMetadata(metadata: SyncMetadataLocal)
 
+    @Query("DELETE FROM sync_metadata")
+    suspend fun clearAll()
+
     companion object {
         const val MOVIE_LISTS_SYNC_KEY = "movie_lists_sync"
     }

@@ -57,6 +57,6 @@ object ApiConstants {
     const val GET_LIST_DETAILS_PATH = "list/{list_id}"
     const val ADD_MOVIE_TO_LIST_PATH = "list/{list_id}/add_item"
     const val REMOVE_MOVIE_FROM_LIST_PATH = "list/{list_id}/remove_item"
-    const val GET_ACCOUNT_LISTS_PATH = "account/{account_id}/lists"
+    const val GET_ACCOUNT_LISTS_PATH = "account/0/lists"
 
 }

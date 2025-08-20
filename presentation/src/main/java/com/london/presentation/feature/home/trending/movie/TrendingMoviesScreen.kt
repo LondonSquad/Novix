@@ -22,6 +22,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
@@ -85,6 +86,7 @@ private fun Content(
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreName = { stringResource(it.stringResId) }
         )
+
         MediaLazyPagingGrid(
             pagingFlow = state.moviesFlow.collectAsLazyPagingItems(),
             onItemClick = { contract.onMovieClick(it.id) },
@@ -94,8 +96,14 @@ private fun Content(
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false },
+            onSaveClick = { contract.onManageBookmarkClicked(it.id) },
+            hasSaveIcon = true
+        )
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = state.isBookmarkSheetVisible,
+            bookmarkedMovieId = state.bookmarkedMovieId
         )
     }
 }

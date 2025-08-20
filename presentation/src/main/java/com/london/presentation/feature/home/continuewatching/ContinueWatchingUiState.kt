@@ -16,5 +16,7 @@ data class ContinueWatchingUiState(
     val tvSeries: Flow<List<TvShow>> = emptyFlow(),
     val selectedMovieGenre: MovieGenreUi = MovieGenreUi.All,
     val selectedTvShowGenre: TvShowGenreUi = TvShowGenreUi.All,
-    val selectedMediaCategory: MediaCategory = MediaCategory.Movies
+    val selectedMediaCategory: MediaCategory = MediaCategory.Movies,
+    val isBookmarkSheetVisible: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
 )

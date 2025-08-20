@@ -33,19 +33,19 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TopRatedScreen(
     viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
-    onNaviagteToMovieDetalis: (Int) -> Unit = {},
-    onNaviagteToTvShowDetalis: (Int) -> Unit = {}
+    onNavigateToMovieDetails: (Int) -> Unit = {},
+    onNavigateToTvShowDetails: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -53,8 +53,8 @@ fun TopRatedScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopRatedEffect.NavigateBack -> onNavigateBack()
-            is TopRatedEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(currentEffect.id)
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
         }
     }
 
@@ -64,13 +64,13 @@ fun TopRatedScreen(
     BuildScreen(
         isLoading = state.isLoading,
         isError = topRatedMovieFlow.loadState.refresh is LoadState.Error
-                && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
+            && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBackClicked,
         onRetry = viewModel::onRetry,
     ) {
         Content(
             state = state,
-            topRatedContract = viewModel
+            contract = viewModel
         )
     }
 }
@@ -78,7 +78,7 @@ fun TopRatedScreen(
 @Composable
 private fun Content(
     state: TopRatedUiState,
-    topRatedContract: TopRatedContract,
+    contract: TopRatedContract,
 ) {
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
@@ -94,7 +94,7 @@ private fun Content(
                 .padding(horizontal = 16.dp)
                 .padding(top = 12.dp),
             title = com.london.presentation.R.string.top_rated.string,
-            onBackClick = topRatedContract::onBackClicked
+            onBackClick = contract::onBackClicked
         )
 
         TabLayout(
@@ -103,18 +103,18 @@ private fun Content(
                 MediaCategory.TvShows
             ),
             selectedTab = state.selectedMediaCategory,
-            onTabSelected = topRatedContract::onMediaCategoryTabSelected,
+            onTabSelected = contract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
         if (state.isMovieSelected)
             MovieGenreRow(
-                onGenreClick = topRatedContract::movieGenre,
+                onGenreClick = contract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
         else
             TvShowRow(
-                onGenreClick = topRatedContract::tvShowGenre,
+                onGenreClick = contract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
             )
@@ -139,11 +139,10 @@ private fun Content(
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
                             isSaved = false,
-                            onSaveClick = {
-                                // TODO
-                            },
+                            hasSaveIcon = true,
+                            onSaveClick = { contract.onManageBookmarkClicked(movieItem.id) },
                             modifier = Modifier.clickable {
-                                topRatedContract.onMovieClick(movieItem.id)
+                                contract.onMovieClick(movieItem.id)
                             }
                         )
                     }
@@ -154,17 +153,21 @@ private fun Content(
                 tvSeries?.let { seriesItem ->
                     HomeCard(
                         imageUrl = seriesItem.posterUrl,
+                        hasSaveIcon = false,
                         isSaved = false,
-                        onSaveClick = {
-                            // TODO
-                        },
-                        modifier = Modifier.clickable {
-                            topRatedContract.onTvShowClick(seriesItem.id)
-                        }
+                        onSaveClick = {},
+                        modifier = Modifier.clickable { contract.onTvShowClick(seriesItem.id) }
                     )
                 }
             }
         }
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = state.isBookmarkSheetVisible,
+            bookmarkedMovieId = state.bookmarkedMovieId
+        )
+
     }
 }
 

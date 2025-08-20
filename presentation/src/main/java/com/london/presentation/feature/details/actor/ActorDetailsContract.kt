@@ -8,4 +8,6 @@ interface ActorDetailsContract {
     fun onMovieScreenClick(movieId: Int)
     fun onTopTvShowPicksClick(actorId: Int)
     fun onTvShowScreenClick(tvShowId: Int)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }

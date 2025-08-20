@@ -5,6 +5,7 @@ import com.london.data.local.model.customLists.MovieListLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.remote.exception.ResponseException
+import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.ListDetailsResponse
 import com.london.data.remote.model.search.SearchMovieRemote
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
@@ -51,7 +52,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `deleteMovieList should return true and clear cache on remote success`() = runTest {
+    fun `deleteMovieList returns true and removes cache on success`() = runTest {
         // Given
         coEvery { remoteDataSource.delete(any(), any()) } returns Result.success(mockk())
         val listId = 1
@@ -61,51 +62,63 @@ class CustomMovieListRepositoryImplTest {
 
         // Then
         assertThat(result).isTrue()
-        coVerify { remoteDataSource.delete(listId, "session_123") }
         coVerify { localDataSource.removeMovieListCache(listId) }
     }
 
     @Test
-    fun `deleteMovieList should return false and not touch cache on remote failure`() = runTest {
+    fun `deleteMovieList throws and does not remove cache on failure`() = runTest {
         // Given
-        coEvery { remoteDataSource.delete(any(), any()) } returns Result.failure(Exception("error"))
+        coEvery { remoteDataSource.delete(any(), any()) } throws Exception("error")
         val listId = 1
 
-        // When
-        val result = repository.deleteMovieList(listId)
+        // When & Then
+        assertThrows<Exception> {
+            repository.deleteMovieList(listId)
+        }
 
-        // Then
-        assertThat(result).isFalse()
         coVerify(exactly = 0) { localDataSource.removeMovieListCache(any()) }
     }
 
     @Test
-    fun `createMovieList should return false and not touch cache on remote failure`() = runTest {
+    fun `createMovieList returns true and adds cache on success`() = runTest {
         // Given
-        coEvery {
-            remoteDataSource.create(
-                any(),
-                any(),
-                any()
-            )
-        } returns Result.failure(Exception("error"))
+        val name = "My List"
+        coEvery { remoteDataSource.create(any(), any(), any()) } returns Result.success(
+            CreateCustomListResponse(id = 1)
+        )
 
         // When
-        val result = repository.createMovieList("My List")
+        val result = repository.createMovieList(name)
 
         // Then
-        assertThat(result).isFalse()
-        coVerify(exactly = 0) { localDataSource.markCacheRefreshed(any()) }
+        assertThat(result).isTrue()
+        coVerify { localDataSource.addMovieListCache(any()) }
     }
 
     @Test
-    fun `addMovieToList should return true and update cache on remote success`() = runTest {
+    fun `createMovieList throws and does not add cache on failure`() = runTest {
         // Given
-        coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.success(
-            mockk()
-        )
+        coEvery { remoteDataSource.create(any(), any(), any()) } returns Result.failure(Exception("error"))
+
+        // When & Then
+        assertThrows<Exception> {
+            repository.createMovieList("My List")
+        }
+        coVerify(exactly = 0) { localDataSource.addMovieListCache(any()) }
+    }
+
+    @Test
+    fun `addMovieToList returns true and updates cache on success`() = runTest {
+        // Given
         val listId = 1
         val movieId = 100
+        coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.success(mockk())
+        coEvery { localDataSource.getMovieList(listId) } returns MovieListLocal(
+            id = listId,
+            name = "",
+            description = "",
+            itemCount = 0
+        )
 
         // When
         val result = repository.addMovieToList(listId, movieId)
@@ -116,32 +129,35 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `addMovieToList should return false and not touch cache on remote failure`() = runTest {
-        // Given
-        coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.failure(
-            Exception("error")
-        )
-
-        // When
-        val result = repository.addMovieToList(1, 100)
-
-        // Then
-        assertThat(result).isFalse()
-        coVerify(exactly = 0) { localDataSource.addMovieToListCache(any(), any()) }
-    }
-
-    @Test
-    fun `removeMovieFromList should return true and update cache on remote success`() = runTest {
+    fun `addMovieToList throws and does not update cache on failure`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.removeMovieFromList(
+            remoteDataSource.addMovieToList(
                 any(),
                 any(),
                 any()
             )
-        } returns Result.success(mockk())
+        } returns Result.failure(Exception("error"))
+
+        // When & Then
+        assertThrows<Exception> {
+            repository.addMovieToList(1, 100)
+        }
+        coVerify(exactly = 0) { localDataSource.addMovieToListCache(any(), any()) }
+    }
+
+    @Test
+    fun `removeMovieFromList returns true and updates cache on success`() = runTest {
+        // Given
         val listId = 1
         val movieId = 100
+        coEvery { remoteDataSource.removeMovieFromList(any(), any(), any()) } returns Result.success(mockk())
+        coEvery { localDataSource.getMovieList(listId) } returns MovieListLocal(
+            id = listId,
+            name = "",
+            description = "",
+            itemCount = 1
+        )
 
         // When
         val result = repository.removeMovieFromList(listId, movieId)
@@ -152,73 +168,29 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `removeMovieFromList should return false and not touch cache on remote failure`() =
-        runTest {
-            // Given
-            coEvery {
-                remoteDataSource.removeMovieFromList(
-                    any(),
-                    any(),
-                    any()
-                )
-            } returns Result.failure(Exception("error"))
-
-            // When
-            val result = repository.removeMovieFromList(1, 100)
-
-            // Then
-            assertThat(result).isFalse()
-            coVerify(exactly = 0) { localDataSource.removeMovieFromListCache(any(), any()) }
-        }
-
-    @Test
-    fun `getMovieListDetails should throw exception and not touch cache on remote failure`() =
-        runTest {
-            // Given
-            coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
-                ResponseException(code = 1, message = "error")
+    fun `removeMovieFromList throws and does not update cache on failure`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.removeMovieFromList(
+                any(),
+                any(),
+                any()
             )
+        } returns Result.failure(Exception("error"))
 
-            // When & Then
-            assertThrows<ResponseException> {
-                repository.getMovieListDetails(1, 1)
-            }
-            coVerify(exactly = 0) { localDataSource.replaceMembershipsForList(any(), any()) }
+        // When & Then
+        assertThrows<Exception> {
+            repository.removeMovieFromList(1, 100)
         }
-
-    @Test
-    fun `getMovieListName should return name from local cache if available`() = runTest {
-        // Given
-        val listId = 1
-        coEvery { localDataSource.getMovieList(listId) } returns MovieListLocalMock
-
-        // When
-        val result = repository.getMovieListName(listId)
-
-        // Then
-        assertThat(result).isEqualTo(MovieListLocalMock.name)
-        coVerify(exactly = 0) { remoteDataSource.getDetails(any(), any()) }
+        coVerify(exactly = 0) { localDataSource.removeMovieFromListCache(any(), any()) }
     }
 
     @Test
-    fun `getMovieListName should fetch from remote when not in local cache`() = runTest {
+    fun `getMovieListDetails returns paged response on success`() = runTest {
         // Given
         val listId = 1
-        coEvery { localDataSource.getMovieList(listId) } returns null
-        coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
-            MovieListDetailsMock
-        )
-
-        // When
-        val result = repository.getMovieListName(listId)
-
-        // Then
-        assertThat(result).isEqualTo(MovieListDetailsMock.name)
-        coVerify { remoteDataSource.getDetails(listId, any()) }
-    }
-
-    private companion object {
-        val MovieListDetailsMock = ListDetailsResponse(
+        val page = 1
+        val response = ListDetailsResponse(
             itemCount = 1,
             items = listOf(
                 SearchMovieRemote(
@@ -227,12 +199,66 @@ class CustomMovieListRepositoryImplTest {
                     posterPath = "",
                     releaseDate = "2021-01-01",
                     voteAverage = 7.5,
-                    name = ""
+                    name = "Movie"
                 )
             ),
             id = "1",
-            name = "My Detailed List",
+            name = "My List"
         )
+        coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(response)
+
+        // When
+        val result = repository.getMovieListDetails(listId, page)
+
+        // Then
+        assertThat(result.totalItems).isEqualTo(1)
+    }
+
+    @Test
+    fun `getMovieListDetails throws on failure`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.getDetails(
+                any(),
+                any()
+            )
+        } returns Result.failure(ResponseException(code = 1, message = "error"))
+
+        // When & Then
+        assertThrows<ResponseException> {
+            repository.getMovieListDetails(1, 1)
+        }
+    }
+
+    @Test
+    fun `getMovieListName returns name from local if available`() = runTest {
+        // Given
+        val listId = 1
+        coEvery { localDataSource.shouldRefreshCache() } returns false
+        coEvery { localDataSource.getMovieList(listId) } returns MovieListLocalMock
+
+        // When
+        val result = repository.getMovieListName(listId)
+
+        // Then
+        assertThat(result).isEqualTo(MovieListLocalMock.name)
+    }
+
+    @Test
+    fun `getMovieListName returns empty if not available locally`() = runTest {
+        // Given
+        val listId = 1
+        coEvery { localDataSource.shouldRefreshCache() } returns false
+        coEvery { localDataSource.getMovieList(listId) } returns null
+
+        // When
+        val result = repository.getMovieListName(listId)
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    private companion object {
         val MovieListLocalMock = MovieListLocal(
             id = 1,
             name = "Local My List",

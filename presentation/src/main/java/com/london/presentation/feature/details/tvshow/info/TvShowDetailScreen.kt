@@ -164,7 +164,6 @@ private fun Content(
         TopBar(
             onBackClick = tvShowDetailsContract::onBackClicked,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
-            onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )
 

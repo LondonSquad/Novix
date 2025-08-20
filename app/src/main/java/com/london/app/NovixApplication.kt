@@ -26,8 +26,7 @@ class NovixApplication : Application(), Configuration.Provider {
         super.onCreate()
         timberConfig()
 
-        WorkManager.initialize(this, workManagerConfiguration)
-        MovieListSyncWorker.schedulePeriodicSync(WorkManager.getInstance(applicationContext))
+        WorkManager.initialize(context = this, configuration = workManagerConfiguration)
     }
 
     private fun timberConfig() {

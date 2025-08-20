@@ -7,7 +7,6 @@ interface MovieDetailsContract {
     fun onRetryClick()
     fun onBackClick()
     fun onLoginClick()
-    fun onSavedClick()
     fun onExpandClick()
     fun onRateBottomSheetClick()
     fun onMovieClick(movieId: Int)
@@ -15,4 +14,6 @@ interface MovieDetailsContract {
     fun onSelectRatingClick(rating: Int)
     fun onGenreClick(genre: MovieGenreUi)
     fun onReviewsClick(movieId: Int, mediaType: MediaType)
+    fun onBookmarkSheetDismiss()
+    fun onManageBookmarkClicked(movieId: Int)
 }

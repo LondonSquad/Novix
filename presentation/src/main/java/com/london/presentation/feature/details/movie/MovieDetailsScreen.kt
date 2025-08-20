@@ -69,6 +69,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.TextWithIcon
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
@@ -117,7 +118,7 @@ fun MovieDetailsScreen(
     ) {
         Content(
             uiState = state,
-            movieDetailsContract = viewModel
+            contract = viewModel
         )
     }
 }
@@ -125,7 +126,7 @@ fun MovieDetailsScreen(
 @Composable
 private fun Content(
     uiState: MovieDetailsUiState,
-    movieDetailsContract: MovieDetailsContract
+    contract: MovieDetailsContract
 ) {
     val screenWidthDp =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
@@ -158,15 +159,15 @@ private fun Content(
     ) {
 
         TopBar(
-            onBackClick = movieDetailsContract::onBackClick,
+            onBackClick = contract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
-            onClickOption1 = { /*todo on click on save*/ },
+            onClickOption1 = { contract.onManageBookmarkClicked(uiState.movieId) },
             option1Icon = R.drawable.icon_remove,
         )
 
         HomeLazyVerticalGrid(
             uiState = uiState,
-            movieDetailsContract = movieDetailsContract,
+            movieDetailsContract = contract,
             lazyState = lazyState,
             footerHeight = footerHeight,
             screenWidthDp = screenWidthDp
@@ -180,11 +181,17 @@ private fun Content(
                 }
                 .align(Alignment.BottomCenter),
             onVideoClick = { uriHandler.openUrl(uiState.movieVideo) },
-            onRateClick = movieDetailsContract::onRateBottomSheetClick,
+            onRateClick = contract::onRateBottomSheetClick,
             isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
         )
 
-        BottomSheetsHandler(uiState, movieDetailsContract)
+        BottomSheetsHandler(uiState, contract)
+
+        BookmarkBottomSheet(
+            onSheetDismiss = contract::onBookmarkSheetDismiss,
+            isSheetVisible = uiState.isBookmarkSheetVisible,
+            bookmarkedMovieId = uiState.bookmarkedMovieId
+        )
     }
 
     uiState.isSuccessfullyRated?.let { isSuccessful ->
@@ -344,11 +351,10 @@ private fun HomeLazyVerticalGrid(
                 HomeCard(
                     imageUrl = movie.posterUrl,
                     isSaved = false,
-                    onSaveClick = {},
-                    modifier = Modifier
-                        .clickable {
-                            movieDetailsContract.onMovieClick(movie.id)
-                        }
+                    onSaveClick = { movieDetailsContract.onManageBookmarkClicked(movie.id) },
+                    modifier = Modifier.clickable {
+                        movieDetailsContract.onMovieClick(movie.id)
+                    }
                 )
             }
         }
