@@ -26,6 +26,7 @@ import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.ActorLazyVerticalColumn
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -85,11 +86,8 @@ private fun Content(
                 TopBar(
                     title = stringResource(com.london.designsystem.R.string.tv_shows),
                     onBackClick = contract::onBackClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(NovixTheme.colors.surface)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                )
+                    modifier = Modifier.detailsTopBar(1f),
+                    )
 
                 ActorLazyVerticalColumn(
                     items = actorsLazyItems,

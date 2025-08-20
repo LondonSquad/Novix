@@ -29,6 +29,7 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 
 @Composable
 fun TrendingTvShowsScreen(
@@ -84,9 +85,7 @@ private fun Content(
                     .background(NovixTheme.colors.surface)
             ) {
                 TopBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                    modifier = Modifier.detailsTopBar(1f),
                     title = stringResource(R.string.trending_tv_shows),
                     onBackClick = contract::onBackClick
                 )

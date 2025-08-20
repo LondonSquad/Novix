@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.TopBar
+import com.london.presentation.utils.detailsTopBar
 
 @Composable
 fun DefaultAppTopBar(
@@ -13,9 +14,7 @@ fun DefaultAppTopBar(
     onBackClick: () -> Unit,
 ) {
     TopBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.detailsTopBar(1f),
         title = title,
         onBackClick = onBackClick
     )

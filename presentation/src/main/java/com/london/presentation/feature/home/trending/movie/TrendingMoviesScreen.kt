@@ -30,6 +30,7 @@ import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 
 @Composable
 fun TrendingMoviesScreen(
@@ -84,10 +85,9 @@ private fun Content(
                     .fillMaxSize()
                     .background(NovixTheme.colors.surface)
             ) {
+
                 TopBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                    modifier = Modifier.detailsTopBar(1f),
                     title = stringResource(R.string.trending_movies),
                     onBackClick = contract::onBackClick
                 )
@@ -96,7 +96,7 @@ private fun Content(
                     selectedGenre = state.selectedGenre,
                     screenWidth = screenWidth,
                     onGenreClick = contract::onGenreClick,
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(vertical = 12.dp),
                     getGenreName = { stringResource(it.stringResId) }
                 )
 
