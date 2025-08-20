@@ -3,24 +3,28 @@ package com.london.presentation.feature.category.tvshow
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -62,9 +66,11 @@ private fun Content(
         emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
         emptyLayoutImage = R.drawable.empty
     ) {
-
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .padding(bottom = 16.dp)
         ) {
             BackgroundGradient(
                 modifier = Modifier
@@ -79,7 +85,10 @@ private fun Content(
                 hasSaveIcon = false,
                 onNavigateToTvShow = { id -> contract.onTvShowClick(id) },
                 topBar = {
-                    DefaultAppTopBar(
+                    TopBar(
+                        modifier = Modifier
+                            .detailsTopBar(1f)
+                            .padding(bottom = 12.dp),
                         title = stringResource(state.genre.stringResId),
                         onBackClick = contract::onBackClick
                     )
