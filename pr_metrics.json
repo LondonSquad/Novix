@@ -34211,5 +34211,57 @@
       "deletions": 49,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 716,
+    "url": "https://github.com/LondonSquad/Novix/pull/716",
+    "title": "Fix: several design issues",
+    "opened_at": "2025-08-20T12:51:47Z",
+    "head_ref": "fix/design-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      },
+      {
+        "login": "marwanqashwa",
+        "id": 100484790,
+        "url": "https://github.com/marwanqashwa"
+      },
+      {
+        "login": "ahmeddsamii",
+        "id": 154278495,
+        "url": "https://github.com/ahmeddsamii"
+      },
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 91,
+      "deletions": 55,
+      "changed_files": 10
+    }
   }
 ]
