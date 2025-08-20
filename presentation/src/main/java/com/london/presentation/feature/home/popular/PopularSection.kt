@@ -173,7 +173,8 @@ private fun Content(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    }
+                    },
+                    hasOverlay = true
                 )
 
                 if (pagerState.currentPage == page)

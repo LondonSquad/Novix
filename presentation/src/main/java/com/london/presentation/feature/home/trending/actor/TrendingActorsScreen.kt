@@ -1,6 +1,7 @@
 package com.london.presentation.feature.home.trending.actor
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -69,7 +70,8 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .background(color = NovixTheme.colors.surface)
+            .background(color = NovixTheme.colors.surface),
+        contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         stickyHeader {
             TopBar(

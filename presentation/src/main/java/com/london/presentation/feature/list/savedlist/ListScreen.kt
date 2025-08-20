@@ -310,17 +310,18 @@ private fun NoListFoundAsGuest(
 private fun BlurredImage(@DrawableRes imageId: Int) {
     Box(
         modifier = Modifier
-            .size(128.dp),
+            .size(138.dp),
         contentAlignment = Alignment.Center
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Icon(
                 painter = R.drawable.ellipse_blur_filled.painter,
                 contentDescription = null,
-                tint = NovixTheme.colors.primary,
+                tint = NovixTheme.colors.redAccent,
                 modifier = Modifier
                     .size(23.dp)
                     .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                    .background(NovixTheme.colors.redAccent)
                     .align(Alignment.BottomCenter)
             )
         } else {

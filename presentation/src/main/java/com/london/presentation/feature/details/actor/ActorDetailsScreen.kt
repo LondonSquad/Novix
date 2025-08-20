@@ -133,10 +133,10 @@ private fun Content(
         ) {
             item {
                 if (hasOtherContent(uiState)) {
-                    uiState.actorImageDetails?.let { image ->
+                    uiState.actorImageDetails?.let { images ->
                         CustomBackDropImagePager(
-                            images = image,
-                            isVisibleDots = false
+                            images = images,
+                            isVisibleDots = (images.size) > 1
                         )
                     }
                 }
