@@ -190,7 +190,7 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
-    override fun onManageBookmarkClicked(movieId: Int) {
+    override fun onManageBookmarkClick(movieId: Int) {
         updateState {
             copy(
                 isBookmarkSheetVisible = true,

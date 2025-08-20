@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -26,42 +27,35 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 
 @Composable
 fun TrendingMoviesScreen(
-    onNavigateBackClick: () -> Unit,
-    onNavigateToMovieDetailsClick: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.MovieDetailsNavigation -> onNavigateToMovieDetailsClick(
+            is TrendingMoviesEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(
                 currentEffect.movieId
             )
 
-            is TrendingMoviesEffect.BackNavigation -> onNavigateBackClick()
+            is TrendingMoviesEffect.BackNavigation -> onNavigateBack()
         }
     }
-    BuildScreen(
-        isLoading = state.isLoading,
-        isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBackClick,
-        onRetry = viewModel::onRetryClick,
-        emptyLayoutMessage = R.string.no_trending_movies_in_genre,
-        emptyLayoutImage = R.drawable.img_no_result,
-    ) {
-        Content(
-            state = state,
-            contract = viewModel
-        )
-    }
+    Content(
+        state = state,
+        contract = viewModel
+    )
+
 }
 
 @Composable
@@ -71,54 +65,60 @@ private fun Content(
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
+    BuildScreen(
+        isLoading = state.isLoading,
+        isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
+        onBack = contract::onBackClick,
+        onRetry = contract::onRetryClick,
+        emptyLayoutMessage = R.string.no_trending_movies_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
     ) {
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(NovixTheme.colors.surface)
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
+            BackgroundGradient(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                title = stringResource(R.string.trending_movies),
-                onBackClick = contract::onBackClick
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
-            GenresSection(
-                genres = state.movieGenres,
-                selectedGenre = state.selectedGenre,
-                screenWidth = screenWidth,
-                onGenreClick = contract::onGenreClick,
-                modifier = Modifier.padding(bottom = 12.dp),
-                getGenreName = { stringResource(it.stringResId) }
-            )
-
-            MediaLazyPagingGrid(
-                pagingFlow = state.moviesFlow.collectAsLazyPagingItems(),
-                onItemClick = { contract.onMovieClick(it.id) },
-                getImageUrl = { it.posterPath },
-                getTitle = { it.title },
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onSaveClick = { contract.onManageBookmarkClicked(it.id) },
-                hasSaveIcon = true,
-                contentPadding = PaddingValues(bottom = 24.dp)
-            )
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+            ) {
 
-            BookmarkBottomSheet(
-                onSheetDismiss = contract::onBookmarkSheetDismiss,
-                isSheetVisible = state.isBookmarkSheetVisible,
-                bookmarkedMovieId = state.bookmarkedMovieId
-            )
+                TopBar(
+                    modifier = Modifier.detailsTopBar(1f),
+                    title = stringResource(R.string.trending_movies),
+                    onBackClick = contract::onBackClick
+                )
+                GenresSection(
+                    genres = state.movieGenres,
+                    selectedGenre = state.selectedGenre,
+                    screenWidth = screenWidth,
+                    onGenreClick = contract::onGenreClick,
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    getGenreName = { stringResource(it.stringResId) }
+                )
+
+                MediaLazyVerticalGrid(
+                    pagingItems = state.moviesFlow.collectAsLazyPagingItems(),
+                    imageUrl = { it.posterPath },
+                    name = { it.title },
+                    hasSaveIcon = true,
+                    onSaveClick = { contract.onManageBookmarkClicked(it.id) },
+                    onItemClick = { item -> contract.onMovieClick(item.id) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                )
+
+                BookmarkBottomSheet(
+                    onSheetDismiss = contract::onBookmarkSheetDismiss,
+                    isSheetVisible = state.isBookmarkSheetVisible,
+                    bookmarkedMovieId = state.bookmarkedMovieId
+                )
+            }
         }
     }
 }

@@ -161,7 +161,10 @@ private fun Content(
     ) {
 
         BackgroundGradient(
-            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(2f)
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(2f)
         )
 
         TopBar(
@@ -313,14 +316,14 @@ private fun HomeLazyVerticalGrid(
         if (uiState.actors.isNotEmpty()) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Text(
-                    text = stringResource(com.london.presentation.R.string.cast),
+                    text = stringResource(R.string.cast),
                     style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
+                    color = NovixTheme.colors.title
                 )
 
                 LazyHorizontalGrid(
                     modifier = Modifier
-                        .padding(top = 16.dp)
+                        .padding(top = 25.dp)
                         .requiredWidth(screenWidthDp)
                         .height(100.dp),
                     rows = GridCells.Fixed(1),

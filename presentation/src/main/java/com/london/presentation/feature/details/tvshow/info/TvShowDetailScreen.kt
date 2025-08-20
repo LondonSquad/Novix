@@ -171,7 +171,10 @@ private fun Content(
         )
 
         BackgroundGradient(
-            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         LazyColumn(
@@ -215,79 +218,85 @@ private fun Content(
                 )
             }
 
-            // Overview title
-            item {
-                Text(
-                    text = stringResource(R.string.overview),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                )
-            }
-
-            // Overview content
-            item {
-                var isExpanded by remember { mutableStateOf(false) }
-                ConditionalText(
-                    text = uiState.overview,
-                    expandedState = isExpanded,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                ) {
-                    isExpanded = !isExpanded
-                }
-            }
-            item {
-                CastSection(
-                    modifier = Modifier.padding(top = 16.dp),
-                    castMembers = uiState.cast?.cast ?: emptyList(),
-                    onNavigateToCast = tvShowDetailsContract::onCastClicked
-                )
-            }
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
+            if (uiState.overview.isNotBlank()) {
+                item {
                     Text(
-                        text = stringResource(R.string.season),
+                        text = stringResource(R.string.overview),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     )
+                }
 
-                    SeasonEpisodesDetails(
-                        modifier = Modifier.fillMaxWidth(),
-                        uiState = uiState
-                    )
-
-                    Text(
-                        text = "${
-                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString()
-                                .toLocalizedNumbers()
-                        } ${stringResource(R.string.episodes)}",
-                        style = NovixTheme.typography.label.small,
-                        color = NovixTheme.colors.hint,
-                        modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+                item {
+                    var isExpanded by remember { mutableStateOf(false) }
+                    ConditionalText(
+                        text = uiState.overview,
+                        expandedState = isExpanded,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        isExpanded = !isExpanded
+                    }
+                }
+            }
+            if (uiState.cast?.cast?.isNotEmpty() == true) {
+                item {
+                    CastSection(
+                        modifier = Modifier.padding(top = 16.dp),
+                        castMembers = uiState.cast.cast,
+                        onNavigateToCast = tvShowDetailsContract::onCastClicked
                     )
                 }
             }
 
-            items(
-                items = uiState.tvShowEpisodes,
-                key = { episode -> "${episode.showId}_${episode.seasonNumber}_${episode.episodeNumber}" }
-            ) { episode ->
-                EpisodeItem(
-                    episodes = episode,
-                    onEpisodeClick = {
-                        tvShowDetailsContract.onEpisodeClicked(
-                            episode.showId,
-                            episode.episodeNumber,
-                            episode.seasonNumber,
+            if (uiState.tvShowEpisodes.isNotEmpty() && uiState.numberOfSeasons > 0) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.season),
+                            style = NovixTheme.typography.title.medium,
+                            color = NovixTheme.colors.title,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
                         )
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                )
+
+                        SeasonEpisodesDetails(
+                            modifier = Modifier.fillMaxWidth(),
+                            uiState = uiState
+                        )
+
+                        uiState.tvShowEpisodeCountBySeason?.episodes?.size?.let { episodeCount ->
+                            if (episodeCount > 0) {
+                                Text(
+                                    text = "${episodeCount.toLocalizedNumbers()} ${stringResource(R.string.episodes)}",
+                                    style = NovixTheme.typography.label.small,
+                                    color = NovixTheme.colors.hint,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                items(
+                    items = uiState.tvShowEpisodes,
+                    key = { episode -> "${episode.showId}_${episode.seasonNumber}_${episode.episodeNumber}" }
+                ) { episode ->
+                    EpisodeItem(
+                        episodes = episode,
+                        onEpisodeClick = {
+                            tvShowDetailsContract.onEpisodeClicked(
+                                episode.showId,
+                                episode.episodeNumber,
+                                episode.seasonNumber,
+                            )
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                }
             }
         }
 
@@ -433,8 +442,9 @@ private fun TvShowBasicDetails(
         }
 
         TvShowDate(date)
-
-        Seasons(numberOfSeasons)
+        if (numberOfSeasons != 0) {
+            Seasons(numberOfSeasons)
+        }
     }
 }
 

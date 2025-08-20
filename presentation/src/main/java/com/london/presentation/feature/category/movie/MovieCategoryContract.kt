@@ -1,8 +1,8 @@
 package com.london.presentation.feature.category.movie
 
 interface MovieCategoryContract {
-    fun onBack()
+    fun onBackClick()
     fun onMovieClick(movieId: Int)
     fun onBookmarkSheetDismiss()
-    fun onManageBookmarkClicked(movieId: Int)
+    fun onManageBookmarkClick(movieId: Int)
 }

@@ -45,51 +45,53 @@ fun ActorsGalleryScreen(
 
     effect.Listen<ActorsGalleryEffect> { onNavigateBack() }
 
-    BuildScreen(
-        onBack = viewModel::onBackClick,
-        isLoading = uiState.isLoading,
-        isError = uiState.error != null,
-        onRetry = viewModel::onRetryClick
-    ) {
-        Content(
-            uiState = uiState,
-            actorsGalleryContract = viewModel
-        )
-    }
+    Content(
+        uiState = uiState,
+        contract = viewModel
+    )
 }
 
 @Composable
 private fun Content(
     uiState: ActorsGalleryUiState,
-    actorsGalleryContract: ActorsGalleryContract
+    contract: ActorsGalleryContract
 ) {
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ){
-
-        BackgroundGradient(
-            modifier = Modifier.fillMaxSize().align(Alignment.TopStart).zIndex(1f)
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(NovixTheme.colors.surface)
-                .navigationBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+    BuildScreen(
+        onBack = contract::onBackClick,
+        isLoading = uiState.isLoading,
+        isError = uiState.error != null,
+        onRetry = contract::onRetryClick
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            TopBar(
-                modifier = Modifier.padding(bottom = 16.dp),
-                title = stringResource(R.string.gallery),
-                onBackClick = actorsGalleryContract::onBackClick
+
+            BackgroundGradient(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
 
-            Box(modifier = Modifier.weight(1f)) {
-                if (uiState.isLoading) {
-                    CircularLoading(modifier = Modifier.align(Alignment.Center))
-                } else {
-                    GalleryContent(uiState = uiState)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+            ) {
+                TopBar(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    title = stringResource(R.string.gallery),
+                    onBackClick = contract::onBackClick
+                )
+
+                Box(modifier = Modifier.weight(1f)) {
+                    if (uiState.isLoading) {
+                        CircularLoading(modifier = Modifier.align(Alignment.Center))
+                    } else {
+                        GalleryContent(uiState = uiState)
+                    }
                 }
             }
         }

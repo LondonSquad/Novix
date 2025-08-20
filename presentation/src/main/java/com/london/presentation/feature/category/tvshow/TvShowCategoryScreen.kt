@@ -1,7 +1,6 @@
 package com.london.presentation.feature.category.tvshow
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,9 +20,10 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -58,47 +58,39 @@ private fun Content(
 
     val tvShowLazyList = state.tvShowFlow.collectAsLazyPagingItems()
     BuildScreen(
-        onBack = contract::onBack,
+        onBack = contract::onBackClick,
         isLoading = tvShowLazyList.isLoading(),
         isError = tvShowLazyList.loadState.refresh is LoadState.Error,
         onRetry = tvShowLazyList::refresh,
         emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
         emptyLayoutImage = R.drawable.empty
     ) {
-
         Box(
             modifier = Modifier.fillMaxSize()
-        ){
+        ) {
             BackgroundGradient(
-                modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 12.dp)
-            ) {
-                TopBar(
-                    title = stringResource(
-                        state.genre.stringResId
-                    ),
-                    onBackClick = contract::onBack,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                )
-
-                MediaLazyPagingGrid(
-                    pagingFlow = tvShowLazyList,
-                    onItemClick = { contract.onTvShowClick(it.id) },
-                    getImageUrl = { it.posterPicture },
-                    getTitle = { "${it.name} tv show img" },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    onSaveClick = { /* TODO: Implement save functionality */ },
-                    isItemSaved = { false },
-                )
-            }
+            MediaLazyVerticalGrid(
+                pagingItems = tvShowLazyList,
+                imageUrl = { it.posterPicture },
+                name = { it.name },
+                hasSaveIcon = false,
+                onNavigateToTvShow = { id -> contract.onTvShowClick(id) },
+                topBar = {
+                    TopBar(
+                        modifier = Modifier
+                            .detailsTopBar(1f)
+                            .padding(bottom = 12.dp),
+                        title = stringResource(state.genre.stringResId),
+                        onBackClick = contract::onBackClick
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -112,7 +104,7 @@ private fun Preview() {
         contract = object : TvShowCategoryContract {
             override fun onSavedClick(tvShowId: Int) {}
             override fun onTvShowClick(tvShowId: Int) {}
-            override fun onBack() {}
+            override fun onBackClick() {}
         }
     )
 }

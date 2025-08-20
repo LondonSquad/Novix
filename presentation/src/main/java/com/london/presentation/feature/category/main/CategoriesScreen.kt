@@ -71,9 +71,11 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         Column(Modifier.navBarBottomPadding()) {
