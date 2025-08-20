@@ -18,6 +18,7 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
     items: List<T>,
+    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     name: (T) -> String = { it.getName() },
     topBar: @Composable (() -> Unit)? = null,
@@ -25,7 +26,6 @@ fun <T : Any> MediaLazyGridWithFilter(
     onMovieGenreClick: (MovieGenreUi) -> Unit = {},
     imageUrl: (T) -> String? = { it.getImageUrl() },
     onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
 
     Column(

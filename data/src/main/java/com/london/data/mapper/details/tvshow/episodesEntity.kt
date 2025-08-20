@@ -53,4 +53,3 @@ fun EpisodeGuestStar.toActorEntity(): Actor =
         profilePictureUrl = profilePath.asImageUrlOrEmpty(),
         characterName = character.orEmpty()
     )
-

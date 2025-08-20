@@ -18,7 +18,6 @@ fun PopularTvShowResponse.toTvShowEntity(): PopularMedia =
         mediaType = MediaType.TvShow
     )
 
-
 fun ApiResponse<PopularTvShowResponse>.toPopularTvShows(): List<PopularMedia> =
     items.map { it.toTvShowEntity() }
 

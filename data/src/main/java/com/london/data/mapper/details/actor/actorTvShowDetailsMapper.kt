@@ -12,7 +12,6 @@ fun ActorTvShowDetailsResponse.toEntity(): ActorMediaDetails =
         mediaItems = cast?.map { it.toEntity() }.orEmpty()
     )
 
-
 fun ActorTvShowCastMember.toEntity(): ActorMediaItems =
     ActorMediaItems(
         id = id.orZero(),
