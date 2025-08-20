@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -59,8 +60,8 @@ import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -148,7 +149,13 @@ private fun SearchMainContent(
             .navBarBottomPadding()
             .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
     ) {
-        TriangleBlurredShape()
+
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

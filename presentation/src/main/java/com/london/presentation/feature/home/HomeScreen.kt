@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,13 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
@@ -56,6 +53,7 @@ import com.london.presentation.feature.home.trending.TrendingSection
 import com.london.presentation.feature.home.upcoming.UpcomingMovieItem
 import com.london.presentation.feature.home.upcoming.UpcomingSectionTitle
 import com.london.presentation.feature.home.upcoming.UpcomingStickyHeader
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
@@ -186,8 +184,7 @@ private fun HomeScreenLayout(
         modifier = Modifier.fillMaxSize().navBarBottomPadding()
     ) {
         BackgroundGradient(
-            screenWidth = screenWidth,
-            modifier = Modifier.align(Alignment.TopStart)
+            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -222,26 +219,6 @@ private fun HomeScreenLayout(
     )
 }
 
-@Composable
-private fun BackgroundGradient(
-    screenWidth: Dp,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .size(400.dp)
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        NovixTheme.colors.primary.copy(alpha = 0.09f),
-                        Color.Transparent
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(screenWidth.value, 400f)
-                )
-            )
-    )
-}
 
 @Composable
 private fun HomeTopBar(modifier: Modifier = Modifier) {
