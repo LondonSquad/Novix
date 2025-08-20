@@ -97,14 +97,15 @@ private fun Content(
 
             Box(
                 modifier = modifier
-                    .background(color = NovixTheme.colors.iconBackgroundLow)
                     .clip(RoundedCornerShape(8.dp))
                     .border(
                         width = 1.dp,
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable(onClick = hideSheet),
+                    .background(color = NovixTheme.colors.iconBackgroundLow)
+                    .clickable(onClick = hideSheet)
+                ,
                 contentAlignment = Alignment.Center
             ) {
                 Icon(

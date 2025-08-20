@@ -1,5 +1,6 @@
 package com.london.presentation.feature.list.bottomsheets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +31,8 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.painter
+import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.list.savedlist.AddSheetState
 import com.london.presentation.feature.list.savedlist.ListContract
@@ -119,13 +122,14 @@ private fun Content(
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
+                    .background(color = NovixTheme.colors.iconBackgroundLow)
                     .clickable(
                         enabled = !addSheetState.isSheetLoading,
                         onClick = onCloseClicked
                     )
-                    .padding(6.dp),
-                painter = painterResource(com.london.designsystem.R.drawable.cancel),
-                contentDescription = "Close",
+                    .padding(8.dp),
+                painter = com.london.designsystem.R.drawable.cancel.painter,
+                contentDescription = R.string.cancel_addition_to_list.string,
                 tint = NovixTheme.colors.title
             )
         }
