@@ -86,7 +86,7 @@ private fun Content(
                     .background(color = NovixTheme.colors.surface)
             ) {
                 TopBar(
-                    title = stringResource(com.london.designsystem.R.string.tv_shows),
+                    title = stringResource(R.string.trending_people),
                     onBackClick = contract::onBackClick,
                     modifier = Modifier.detailsTopBar(1f),
                     )
