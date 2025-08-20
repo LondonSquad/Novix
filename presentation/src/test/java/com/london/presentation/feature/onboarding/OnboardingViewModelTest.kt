@@ -247,7 +247,7 @@ class OnboardingViewModelTest {
         viewModel?.onboardingFinished()
 
         // Wait for IO operations to complete
-        advanceTimeBy(1000) // Advance virtual time
+        advanceTimeBy(1000)
         advanceUntilIdle()
 
         // Then
@@ -268,7 +268,6 @@ class OnboardingViewModelTest {
         advanceTimeBy(1000)
         advanceUntilIdle()
 
-        // Then - Should not crash and service should still be called
         coVerify(exactly = 1) {
             appPreferencesService.setOnBoardingShown()
         }
@@ -289,7 +288,6 @@ class OnboardingViewModelTest {
         }
     }
 
-    // Alternative approach using coVerify with timeout
     @Test
     fun `when onboardingFinished is called, preferences service should be invoked - with timeout`() =
         runTest {
@@ -345,7 +343,7 @@ class OnboardingViewModelTest {
     @Test
     fun `when scrollToPage is called with last page, animation should work correctly`() = runTest {
         // Given
-        val lastPage = 2 // pageCount - 1
+        val lastPage = 2
         val scope = this
 
         // When
