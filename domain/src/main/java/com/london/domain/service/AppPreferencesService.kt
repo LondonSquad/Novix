@@ -6,6 +6,7 @@ import com.london.domain.entity.theme.AppTheme
 import kotlinx.coroutines.flow.StateFlow
 
 interface AppPreferencesService {
+
     val hasOnboardingBeenShown: Boolean
     fun setOnBoardingShown()
 

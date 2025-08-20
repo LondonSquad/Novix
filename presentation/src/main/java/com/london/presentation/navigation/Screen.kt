@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Screen {
+
     @Serializable
     data object Splash : Screen
 
@@ -97,4 +98,5 @@ sealed interface Screen {
 
     @Serializable
     data object MyRating : Screen
+
 }

@@ -86,10 +86,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, MediaType) -> Unit,
+    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

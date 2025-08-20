@@ -18,8 +18,4 @@ class LocalizationManager @Inject constructor(
 
     val localeFlow: Flow<Locale> = appPreferencesService.appLanguage
         .map { Locale.forLanguageTag(it.code) }
-
-    fun setLocale(locale: Locale) {
-        appPreferencesService.setAppLanguageCode(locale.toLanguageTag())
-    }
 }

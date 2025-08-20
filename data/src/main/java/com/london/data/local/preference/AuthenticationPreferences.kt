@@ -52,4 +52,5 @@ class AuthenticationPreferences @Inject constructor(
         private const val IS_GUEST = "is_guest"
         private const val GUEST_SESSION_ID = "guest_session_id"
     }
+
 }

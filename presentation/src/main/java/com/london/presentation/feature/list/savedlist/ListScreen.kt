@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,13 +41,15 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.FloatingActionButton
 import com.london.designsystem.component.button.OutlineButton
+import com.london.designsystem.snackbar.LocalSnackbarController
+import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
+import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -54,11 +58,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun ListScreen(
-    onNavigateToListDetails: (Int) -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToListDetails: (Int) -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
@@ -117,16 +120,23 @@ private fun Content(
             )
         }
 
-        if (state.isSnackBarSuccessVisible) {
-            SnackBarAnimation(
-                message = stringResource(R.string.list_added_success),
-                icon = com.london.designsystem.R.drawable.ic_success
+        val snackBarController = LocalSnackbarController.current
+
+        if (state.error != null) {
+            snackBarController.showMessage(
+                message = R.string.list_added_fail.string,
+                snackBarType = SnackBarType.Error,
+                onComplete = contract::resetSnackBarErrorState,
+                icon = null,
             )
         }
 
-        if (state.error != null) {
-            SnackBarAnimation(
-                message = stringResource(R.string.list_added_fail)
+        if (state.isSnackBarSuccessVisible) {
+            snackBarController.showMessage(
+                message = R.string.list_added_success.string,
+                snackBarType = SnackBarType.Success,
+                onComplete = contract::resetSnackBarSuccessState,
+                icon = com.london.designsystem.R.drawable.ic_success,
             )
         }
     }
@@ -238,7 +248,9 @@ private fun EmptyList(
         showFab = true,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             EmptyLayout(
                 modifier = Modifier

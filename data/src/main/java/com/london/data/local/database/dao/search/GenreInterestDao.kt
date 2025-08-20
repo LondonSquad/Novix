@@ -21,4 +21,5 @@ interface GenreInterestDao {
 
     @Update
     suspend fun updateGenreInterest(genreInterest: GenreInterestEntity)
+
 }

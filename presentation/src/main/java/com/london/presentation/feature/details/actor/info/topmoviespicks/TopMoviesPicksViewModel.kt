@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopMoviesPicksViewModel @Inject constructor(
-    private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorUseCase: GetActorUseCase
 ) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
 
@@ -63,4 +63,5 @@ class TopMoviesPicksViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
+
 }

@@ -29,4 +29,3 @@ interface SearchContract {
     fun onBookmarkSheetDismiss()
     fun onManageBookmarkClicked(movieId: Int)
 }
-

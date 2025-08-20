@@ -71,7 +71,7 @@ fun <T : Tabbable> TabLayout(
 }
 
 @Composable
-fun NovixTab(
+private fun NovixTab(
     @StringRes text: Int,
     isSelected: Boolean,
     onClick: () -> Unit,

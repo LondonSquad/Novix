@@ -12,7 +12,7 @@ fun LoadingScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CircularLoading()
     }
 }

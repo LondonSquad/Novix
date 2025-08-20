@@ -67,8 +67,8 @@ fun EpisodeDetailsScreen(
     onNavigateToActorDetails: (Int) -> Unit,
     viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -103,7 +103,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemScrollOffset > 40f ||
-                    lazyListState.firstVisibleItemIndex > 0
+                lazyListState.firstVisibleItemIndex > 0
         }
     }
 
@@ -207,7 +207,6 @@ private fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
-
     Column(
         modifier = modifier.headerDetailsCard(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -267,7 +266,6 @@ private fun TvShowDate(
         )
     }
 }
-
 
 @Composable
 private fun GenreNames(
@@ -330,4 +328,3 @@ private fun OverviewSection(
         }
     }
 }
-

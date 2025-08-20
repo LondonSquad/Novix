@@ -1,15 +1,22 @@
 package com.london.imageharamblur.models
 
 import android.content.Context
+import androidx.core.content.edit
 import com.google.firebase.ml.modeldownloader.CustomModel
 import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
 import com.google.firebase.ml.modeldownloader.DownloadType
 import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
-import androidx.core.content.edit
 
 class ModelDownloadManager(context: Context) {
 
@@ -96,7 +103,8 @@ class ModelDownloadManager(context: Context) {
 
             if (genderModel?.file != null && nsfwModel?.file != null) {
                 if (genderModel.file!!.exists() && genderModel.file!!.length() > 0 &&
-                    nsfwModel.file!!.exists() && nsfwModel.file!!.length() > 0) {
+                    nsfwModel.file!!.exists() && nsfwModel.file!!.length() > 0
+                ) {
 
                     saveModelVersions(genderModel, nsfwModel)
                     prefs.edit { putBoolean(PREF_FIREBASE_MODELS_READY, true) }
@@ -121,7 +129,8 @@ class ModelDownloadManager(context: Context) {
 
             if (genderModel?.file != null && nsfwModel?.file != null &&
                 genderModel.file!!.exists() && nsfwModel.file!!.exists() &&
-                genderModel.file!!.length() > 0 && nsfwModel.file!!.length() > 0) {
+                genderModel.file!!.length() > 0 && nsfwModel.file!!.length() > 0
+            ) {
 
                 return@withContext ModelFiles(
                     genderModelFile = genderModel.file!!,

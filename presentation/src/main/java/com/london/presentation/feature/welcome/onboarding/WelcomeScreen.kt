@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -130,7 +129,7 @@ private fun Content(
 }
 
 @Composable
-fun WelcomePoster(modifier: Modifier = Modifier) {
+private fun WelcomePoster(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomCenter
@@ -168,10 +167,9 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
     }
 }
 
-
 @ThemePreviews
 @Composable
-fun PreviewWelcomeScreen() {
+private fun PreviewWelcomeScreen() {
     WelcomeScreen(
         onNavigateContinue = {},
         onNavigateLogin = {}

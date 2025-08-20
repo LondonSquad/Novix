@@ -11,7 +11,6 @@ import com.london.presentation.utils.isEmpty
 import com.london.presentation.utils.isNotNull
 import com.london.presentation.utils.shouldShowLoading
 
-
 @Composable
 fun BuildScreen(
     isLoading: Boolean = false,
@@ -24,13 +23,14 @@ fun BuildScreen(
     handlePagingLoadingAutomatically: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-
     when {
         shouldShowLoading(
             isLoading = isLoading,
             handlePagingLoadingAutomatically = handlePagingLoadingAutomatically,
             pagingFlow = pagingFlow
-        ) -> { LoadingScreen() }
+        ) -> {
+            LoadingScreen()
+        }
 
         isError || (pagingFlow?.loadState?.refresh is LoadState.Error) -> {
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
@@ -43,7 +43,9 @@ fun BuildScreen(
             )
         }
 
-        else -> { content() }
+        else -> {
+            content()
+        }
     }
 }
 
@@ -64,13 +66,17 @@ fun BuildScreen(
 ) {
     when {
 
-        isGuest && guestContent != null  -> { guestContent.invoke() }
+        isGuest && guestContent != null -> {
+            guestContent.invoke()
+        }
 
         shouldShowLoading(
             isLoading = isLoading,
             handlePagingLoadingAutomatically = handlePagingLoadingAutomatically,
             pagingFlow = pagingFlow
-        ) -> { LoadingScreen() }
+        ) -> {
+            LoadingScreen()
+        }
 
         isError || (pagingFlow?.loadState?.refresh is LoadState.Error) -> {
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
@@ -78,17 +84,19 @@ fun BuildScreen(
 
 
 
-        (pagingFlow!=null)  &&
-                pagingFlow.isEmpty() &&
-                emptyLayoutMessage.isNotNull() -> {
+        (pagingFlow != null) &&
+            pagingFlow.isEmpty() &&
+            emptyLayoutMessage.isNotNull() -> {
             EmptyLayout(
                 text = stringResource(emptyLayoutMessage!!),
                 image = emptyLayoutImage ?: 0
             )
         }
+
         pagingFlow != null &&
-                pagingFlow.isEmpty() &&
-                emptyContent != null -> emptyContent()
+            pagingFlow.isEmpty() &&
+            emptyContent != null -> emptyContent()
+
         else -> {
             content()
         }

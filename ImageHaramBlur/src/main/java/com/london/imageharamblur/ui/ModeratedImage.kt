@@ -31,6 +31,7 @@ fun ModeratedImage(
             contentScale = contentScale,
             blurStrength = blurStrength
         )
+
         else -> NormalImage(
             bitmap = state.originalBitmap,
             contentDescription = contentDescription,
@@ -56,6 +57,7 @@ private fun BlurredImage(
             contentScale = contentScale,
             blurStrength = blurStrength
         )
+
         else -> PreProcessedBlurImage(
             bitmap = state.blurredBitmap ?: state.originalBitmap!!,
             contentDescription = contentDescription,

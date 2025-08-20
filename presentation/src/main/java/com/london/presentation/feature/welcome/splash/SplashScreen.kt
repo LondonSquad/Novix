@@ -20,16 +20,16 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun SplashScreen(
-    onNavigateToOnboarding: () -> Unit = {},
-    onNavigateToWelcome: () -> Unit = {},
     onNavigateToHome: () -> Unit = {},
+    onNavigateToWelcome: () -> Unit = {},
+    onNavigateToOnboarding: () -> Unit = {},
     viewModel: SplashViewModel = hiltViewModel()
 ) {
 
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
-        when(currentEffect){
+        when (currentEffect) {
             SplashEffect.Home -> onNavigateToHome()
             SplashEffect.Onboarding -> onNavigateToOnboarding()
             SplashEffect.Welcome -> onNavigateToWelcome()
@@ -52,6 +52,6 @@ fun SplashScreen(
 
 @ThemePreviews
 @Composable
-fun PreviewSplashScreen() {
+private fun PreviewSplashScreen() {
     SplashScreen()
 }

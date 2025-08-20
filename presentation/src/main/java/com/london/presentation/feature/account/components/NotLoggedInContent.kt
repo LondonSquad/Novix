@@ -70,7 +70,7 @@ fun NotLoggedInContent(
 
 @ThemePreviews
 @Composable
-fun Preview() {
+private fun Preview() {
     NovixTheme {
         NotLoggedInContent(
             onLoginClick = {}

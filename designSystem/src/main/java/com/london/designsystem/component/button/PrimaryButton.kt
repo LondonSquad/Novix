@@ -29,7 +29,6 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
-
 @Composable
 fun PrimaryButton(
     text: String?,
@@ -129,7 +128,7 @@ private fun Modifier.insetShadow(
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryNormal() {
+private fun PreviewPrimaryNormal() {
     NovixTheme {
         PrimaryButton(
             text = "Watch",
@@ -145,7 +144,7 @@ fun PreviewPrimaryNormal() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryLoading() {
+private fun PreviewPrimaryLoading() {
     NovixTheme {
         PrimaryButton(
             text = "Watch",
@@ -161,7 +160,7 @@ fun PreviewPrimaryLoading() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryDisable() {
+private fun PreviewPrimaryDisable() {
     NovixTheme {
         PrimaryButton(
             text = "Watch",
@@ -177,7 +176,7 @@ fun PreviewPrimaryDisable() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryWithTextAndIcon() {
+private fun PreviewPrimaryWithTextAndIcon() {
     NovixTheme {
         PrimaryButton(
             text = "Watch",
@@ -193,7 +192,7 @@ fun PreviewPrimaryWithTextAndIcon() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryWithIcon() {
+private fun PreviewPrimaryWithIcon() {
     NovixTheme {
         PrimaryButton(
             text = "",

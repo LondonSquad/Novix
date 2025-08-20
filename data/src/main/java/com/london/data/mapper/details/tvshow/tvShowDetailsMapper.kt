@@ -18,4 +18,3 @@ fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetails(
     tvShowSeasons = tvShowSeasons.orEmpty().map { it.seasonNumber.orZero() },
     voteAverage = voteAverage.orZero().roundToDecimal(),
 )
-

@@ -49,7 +49,7 @@ fun DeleteIcon(
 
 @ThemePreviews
 @Composable
-fun DeleteIconPreview() {
+private fun DeleteIconPreview() {
     NovixTheme {
         DeleteIcon(
             onDeleteClick = {}

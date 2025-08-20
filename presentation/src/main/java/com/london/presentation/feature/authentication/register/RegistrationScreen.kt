@@ -20,8 +20,8 @@ fun RegistrationScreen(
     onRegisterComplete: () -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -96,4 +96,3 @@ private fun WebView.configureWebViewSettings() {
         displayZoomControls = false
     }
 }
-

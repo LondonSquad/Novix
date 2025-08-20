@@ -5,7 +5,7 @@ import com.london.domain.entity.shared.MediaType
 
 @Entity(
     tableName = "popular_section_table",
-    primaryKeys = ["id","mediaType"]
+    primaryKeys = ["id", "mediaType"]
 )
 data class PopularSectionLocal(
     val id: Int,

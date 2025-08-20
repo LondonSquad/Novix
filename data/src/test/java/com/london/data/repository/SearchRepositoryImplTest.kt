@@ -4,19 +4,12 @@ import com.google.common.truth.Truth.assertThat
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.remote.exception.ResponseException
-import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.SearchMovieRemote
-import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.movie.Movie
-import com.london.domain.entity.shared.PagedFetchResponse
-import com.london.domain.entity.tvshow.TvShow
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -318,85 +311,6 @@ class SearchRepositoryImplTest {
 
     private companion object {
         private const val NAME = "Tom"
-        private const val LANG = "en-US"
         private const val PAGE_NUMBER = 1
-
-        private val MovieList = PagedFetchResponse(
-            PAGE_NUMBER,
-            listOf(
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "https://image.tmdb.org/t/p/w500",
-                    releaseYear = 2020,
-                    rating = 8,
-                    genres = listOf(),
-                )
-            ),
-            totalItems = 1,
-            totalPages = 1
-        )
-
-        private val TvShowList = PagedFetchResponse(
-            PAGE_NUMBER,
-            listOf(
-                TvShow(
-                    id = 2,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500",
-                    releaseYear = 2020,
-                    rating = 10,
-                    genres = listOf(),
-                )
-            ),
-            totalItems = 1,
-            totalPages = 1
-        )
-
-        private val ActorList = PagedFetchResponse(
-            PAGE_NUMBER,
-            listOf(
-                Actor(
-                    id = 3,
-                    name = "Tom Holland",
-                    profilePictureUrl = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
-                    characterName = ""
-                )
-            ),
-            totalItems = 1,
-            totalPages = 1
-        )
-
-        private val SearchMoviesRemoteMock = ApiResponse(
-            currentPage = PAGE_NUMBER,
-            items = listOf(
-                SearchMovieRemote(
-                    genreIds = emptyList(),
-                    id = 1,
-                    posterPath = "",
-                    releaseDate = "2020-06-15",
-                    voteAverage = 8.0,
-                    name = "",
-                )
-            ),
-            totalPages = 1,
-            totalItems = 1
-        )
-
-        private val SearchTvShowRemoteMock = ApiResponse(
-            currentPage = PAGE_NUMBER,
-            items = listOf(
-                SearchTvShowRemote(
-                    genreIds = emptyList(),
-                    id = 2,
-                    posterPath = "",
-                    firstAirDate = "2020-07-20",
-                    name = "",
-                    voteAverage = 10.0,
-                )
-            ),
-            totalPages = 1,
-            totalItems = 1
-        )
     }
 }

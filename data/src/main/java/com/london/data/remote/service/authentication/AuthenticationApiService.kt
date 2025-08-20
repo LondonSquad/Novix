@@ -19,6 +19,7 @@ import retrofit2.http.HTTP
 import retrofit2.http.POST
 
 interface AuthenticationApiService {
+
     @GET(CREATE_NEW_TOKEN)
     suspend fun createRequestToken(): Response<RequestTokenResponse>
 
@@ -39,4 +40,5 @@ interface AuthenticationApiService {
     suspend fun validateLoginCredentials(
         @Body request: LoginRequest
     ): Response<RequestTokenResponse>
+
 }

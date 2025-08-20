@@ -14,7 +14,7 @@ class GetActorUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
     private val tvShowRepository: TvShowRepository,
 ) {
-    suspend fun getActorDetailsById(id: Int) : ActorDetails = actorRepository.getActorDetailsById(id)
+    suspend fun getActorDetailsById(id: Int): ActorDetails = actorRepository.getActorDetailsById(id)
 
     suspend fun getActorImagesById(id: Int): List<String> =
         actorRepository.getActorImagesById(id).imageUrl
@@ -22,9 +22,9 @@ class GetActorUseCase @Inject constructor(
     suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor> =
         actorRepository.getTrendingActors(page)
 
-    suspend fun getActorTvShowPicksById(id: Int) : ActorMediaDetails =
+    suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
         tvShowRepository.getActorTvShowPicksById(id)
 
-    suspend fun getActorMoviePicksById(id: Int) : ActorMediaDetails =
+    suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
         movieRepository.getActorMoviePicksById(id)
 }

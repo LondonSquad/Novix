@@ -55,7 +55,7 @@ fun DefaultTopBar(
 
 @Composable
 @ThemePreviews
-fun DefaultPreview() {
+private fun DefaultPreview() {
     DefaultTopBar(
         appName = "Novix",
         appDescription = "Born from Nova, Made for Flix.",

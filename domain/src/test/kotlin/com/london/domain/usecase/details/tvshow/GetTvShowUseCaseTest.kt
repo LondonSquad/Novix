@@ -1,7 +1,6 @@
 package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.AuthorDetails
@@ -535,13 +534,6 @@ class GetTvShowUseCaseTest {
         )
 
         val mockTopRatedTvSeries = listOf(mockTv1, mockTv2)
-
-        private val ACTOR = Actor(
-            id = 1,
-            name = "Tom Holland",
-            profilePictureUrl = "",
-            characterName = ""
-        )
 
         private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
             PopularMedia(

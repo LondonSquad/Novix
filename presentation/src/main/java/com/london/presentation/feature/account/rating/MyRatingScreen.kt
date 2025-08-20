@@ -142,7 +142,7 @@ private fun RatingSnackBar(state: MyRatingUiState) {
 }
 
 @Composable
-fun RatingChipsRow(
+private fun RatingChipsRow(
     selected: RatingCategory,
     onSelect: (RatingCategory) -> Unit,
     modifier: Modifier = Modifier

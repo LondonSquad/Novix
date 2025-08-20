@@ -42,10 +42,10 @@ import com.london.presentation.utils.gridColumns
 
 @Composable
 fun TopRatedScreen(
-    viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateToMovieDetails: (Int) -> Unit = {},
-    onNavigateToTvShowDetails: (Int) -> Unit = {}
+    onNavigateToTvShowDetails: (Int) -> Unit = {},
+    viewModel: TopRatedViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

@@ -35,7 +35,6 @@ fun CircularLoading(
         ),
         label = "progress"
     )
-
     val stroke = NovixTheme.colors.stroke
     val primaryColor = NovixTheme.colors.primary
 

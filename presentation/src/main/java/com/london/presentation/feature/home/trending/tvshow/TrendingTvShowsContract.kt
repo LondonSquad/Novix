@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home.trending.tvshow
 
-import com.london.domain.entity.genre.TvShowGenre
 import com.london.presentation.shared.genre.TvShowGenreUi
 
 interface TrendingTvShowsContract {

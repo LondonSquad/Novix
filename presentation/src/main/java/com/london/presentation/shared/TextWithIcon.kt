@@ -45,7 +45,7 @@ fun TextWithIcon(
                     .background(NovixTheme.colors.body)
                     .align(alignment = Alignment.CenterVertically)
             )
-        
+
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.image_dot),

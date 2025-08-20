@@ -6,4 +6,4 @@ data class RatedMedia(
     val posterPath: String,
     val rating: Int,
     val mediaType: MediaType
-) 
+)

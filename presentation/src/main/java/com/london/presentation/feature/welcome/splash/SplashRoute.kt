@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun SplashRoute(
-    onNavigateToOnboarding: () -> Unit,
-    onNavigateToWelcome: () -> Unit,
     onNavigateToHome: () -> Unit,
+    onNavigateToWelcome: () -> Unit,
+    onNavigateToOnboarding: () -> Unit,
 ) {
     SplashScreen(
         onNavigateToOnboarding = onNavigateToOnboarding,

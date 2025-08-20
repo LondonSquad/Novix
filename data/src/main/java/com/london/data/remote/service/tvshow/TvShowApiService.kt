@@ -139,4 +139,5 @@ interface TvShowApiService {
     suspend fun getTopRatedTvShows(
         @Query("page") pageNumber: Int,
     ): Response<ApiResponse<TopRatedTvShowRemote>>
+
 }

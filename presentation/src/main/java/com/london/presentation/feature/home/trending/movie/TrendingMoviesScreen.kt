@@ -28,8 +28,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingMoviesScreen(
-    onNavigateToMovieDetailsClick: (Int) -> Unit,
     onNavigateBackClick: () -> Unit,
+    onNavigateToMovieDetailsClick: (Int) -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()

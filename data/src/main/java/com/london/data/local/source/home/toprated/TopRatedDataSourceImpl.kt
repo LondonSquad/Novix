@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopRatedDataSourceImpl @Inject constructor (
+class TopRatedDataSourceImpl @Inject constructor(
     private val topRatedDao: TopRatedDao
 ) : HomeLocalDataSource<TopRatedLocal> {
 
@@ -32,7 +32,7 @@ class TopRatedDataSourceImpl @Inject constructor (
 
     override suspend fun getByDate(date: Long): TopRatedLocal =
         topRatedDao.getByDate(date)
-    
+
     private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             topRatedDao.getAll().forEach { popularLocal ->
@@ -41,5 +41,5 @@ class TopRatedDataSourceImpl @Inject constructor (
             }
         }
     }
-}
 
+}

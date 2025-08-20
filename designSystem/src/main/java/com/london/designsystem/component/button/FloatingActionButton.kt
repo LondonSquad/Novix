@@ -54,7 +54,7 @@ fun FloatingActionButton(
 
 @ThemePreviews
 @Composable
-fun DefaultFloatingActionButtonPreview() {
+private fun DefaultFloatingActionButtonPreview() {
     NovixTheme {
         FloatingActionButton(
             modifier = Modifier.size(100.dp),
@@ -68,7 +68,7 @@ fun DefaultFloatingActionButtonPreview() {
 
 @ThemePreviews
 @Composable
-fun LoadingFloatingActionButtonPreview() {
+private fun LoadingFloatingActionButtonPreview() {
     NovixTheme {
         FloatingActionButton(
             modifier = Modifier.size(100.dp),
@@ -82,7 +82,7 @@ fun LoadingFloatingActionButtonPreview() {
 
 @ThemePreviews
 @Composable
-fun DisabledFloatingActionButtonPreview() {
+private fun DisabledFloatingActionButtonPreview() {
     NovixTheme {
         FloatingActionButton(
             modifier = Modifier.size(100.dp),

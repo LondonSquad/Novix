@@ -44,4 +44,4 @@ inline fun <reified T : Any> NavGraphBuilder.appComposable(
 
 fun NavBackStackEntry?.hasRoute(vararg routes: Any): Boolean = routes.any {
     this?.destination?.hasRoute(it::class).isTrue
- }
+}

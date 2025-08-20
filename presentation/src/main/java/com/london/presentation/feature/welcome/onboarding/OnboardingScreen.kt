@@ -111,7 +111,6 @@ private fun HandleEffects(
     }
 }
 
-
 @Composable
 private fun Content(
     pagerState: PagerState,
@@ -134,7 +133,7 @@ private fun Content(
                     .verticalScroll(rememberScrollState())
             ) {
                 Spacer(Modifier.weight(1f))
-                OnboardingPageContent(uiState.pages[page])
+                PageContent(uiState.pages[page])
                 Spacer(Modifier.weight(1f))
             }
         }
@@ -178,7 +177,7 @@ private fun BottomNavigation(
             dotsStates = List(pagesCount) { index -> index == currentPage }
         )
 
-        OnboardingNavigationButtons(
+        NavigationButtons(
             isFirstPage = isFirstPage,
             onPrevious = onPrevious,
             onNext = onNext
@@ -205,7 +204,7 @@ private fun SkipButton(
 }
 
 @Composable
-fun OnboardingPageContent(page: OnboardingPage) {
+private fun PageContent(page: OnboardingPage) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -264,7 +263,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
 }
 
 @Composable
-fun OnboardingNavigationButtons(
+private fun NavigationButtons(
     isFirstPage: Boolean,
     modifier: Modifier = Modifier,
     onPrevious: () -> Unit,
@@ -304,10 +303,9 @@ fun OnboardingNavigationButtons(
     }
 }
 
-
 @ThemePreviews
 @Composable
-fun OnboardingPreview() {
+private fun Preview() {
     OnboardingScreen(
         onComplete = {},
     )

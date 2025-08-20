@@ -5,7 +5,6 @@ import androidx.navigation.NavType
 import androidx.navigation.toRoute
 import kotlin.reflect.KType
 
-
 inline fun <reified T : Any> SavedStateHandle.getArgs(
     typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap()
 ): T? = runCatching { toRoute<T>(typeMap = typeMap) }.getOrNull()

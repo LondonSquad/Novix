@@ -84,7 +84,6 @@ class MediaTrendingMapperTest {
         assertEquals(0, result.id)
         assertEquals("", result.title)
         assertEquals("", result.posterPath)
-        assertEquals(emptyList<Int>(), result.genres)
     }
 
     @Test
@@ -142,7 +141,6 @@ class MediaTrendingMapperTest {
         assertEquals(123, result.id)
         assertEquals("", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500", result.posterPath)
-        assertEquals(emptyList<Int>(), result.genres)
     }
 
     @Test

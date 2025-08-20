@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingTvShowsViewModel @Inject constructor(
-    private val getTvShowUseCase: GetTvShowUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase
 ) :
     BaseViewModel<TrendingTvShowsUiState, TrendingTvShowsEffect>(TrendingTvShowsUiState()),
     TrendingTvShowsContract {
@@ -69,4 +69,5 @@ class TrendingTvShowsViewModel @Inject constructor(
             }
         ).cachedIn(viewModelScope)
     }
+
 }

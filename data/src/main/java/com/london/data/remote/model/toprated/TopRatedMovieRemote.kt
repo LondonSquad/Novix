@@ -14,7 +14,7 @@ data class TopRatedMovieRemote(
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("release_date")
-    val releaseDate: String? = null ,
+    val releaseDate: String? = null,
     @SerialName("title")
     val title: String? = null,
 ) : GenreMapper

@@ -11,6 +11,7 @@ class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val authenticationPreferences: AuthenticationPreferences
 ) : AccountRepository {
+
     override suspend fun getAccountInfo(): AccountInfo =
         authenticationPreferences.getSessionId()?.let { sessionId ->
             accountRemoteDataSource.getAccountDetails(sessionId)

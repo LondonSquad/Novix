@@ -28,7 +28,6 @@ fun TvShowByCategoryScreen(
     onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: TvShowCategoryViewModel = hiltViewModel(),
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 

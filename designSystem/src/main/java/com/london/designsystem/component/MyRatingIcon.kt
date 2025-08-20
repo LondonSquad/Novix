@@ -41,7 +41,7 @@ fun MyRatingIcon(
         Icon(
             painter = painterResource(R.drawable.ic_star_filled),
             contentDescription = "star",
-            tint =  NovixTheme.colors.yellowAccent,
+            tint = NovixTheme.colors.yellowAccent,
         )
         Text(
             text = rate,
@@ -53,7 +53,7 @@ fun MyRatingIcon(
 
 @ThemePreviews
 @Composable
-fun MyRatingIconPreview() {
+private fun MyRatingIconPreview() {
     NovixTheme {
         MyRatingIcon(
             rate = "4"

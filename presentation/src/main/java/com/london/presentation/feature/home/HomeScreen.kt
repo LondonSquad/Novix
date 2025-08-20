@@ -501,8 +501,8 @@ private fun rememberScrollState(
             val itemsBeforeStickyHeader = if (recentWatchedMediaFlow.isNotEmpty()) 5 else 4
             val scrollThreshold = 42
             lazyGridState.firstVisibleItemIndex > itemsBeforeStickyHeader ||
-                    (lazyGridState.firstVisibleItemIndex == itemsBeforeStickyHeader &&
-                            lazyGridState.firstVisibleItemScrollOffset > scrollThreshold)
+                (lazyGridState.firstVisibleItemIndex == itemsBeforeStickyHeader &&
+                    lazyGridState.firstVisibleItemScrollOffset > scrollThreshold)
         }
     }
 

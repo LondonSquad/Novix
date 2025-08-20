@@ -31,7 +31,6 @@ fun RatingBottomSheet(
     onDismissClick: () -> Unit,
     onSubmitClick: (Int) -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState()
-
 ) {
     var rating by remember { mutableIntStateOf(0) }
 
@@ -98,7 +97,9 @@ fun RatingBottomSheet(
                             R.string.outline_star
                         ),
                         tint = NovixTheme.colors.yellowAccent,
-                        modifier = Modifier.weight(1f).clickable{ rating = i }
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { rating = i }
                     )
                 }
             }

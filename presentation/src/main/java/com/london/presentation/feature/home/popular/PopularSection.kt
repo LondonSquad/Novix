@@ -83,7 +83,6 @@ private fun Content(
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
     val isRtl = layoutDirection == LayoutDirection.Rtl
-
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
     }

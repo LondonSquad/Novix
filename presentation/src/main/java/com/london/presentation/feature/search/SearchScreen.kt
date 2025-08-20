@@ -74,8 +74,8 @@ import com.london.presentation.utils.toRecentViewed
 @Composable
 fun SearchScreen(
     onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -493,7 +493,7 @@ private fun RecentSection(
 }
 
 @Composable
-fun RecentSectionContent(
+private fun RecentSectionContent(
     state: SearchUiState,
     contract: SearchContract,
     onNavigateToTvShowDetails: (Int) -> Unit,

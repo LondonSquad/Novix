@@ -4,7 +4,6 @@ import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 
-
 data class CategoriesUiState(
 
     val selectedCategory: MediaCategory = MediaCategory.Movies,

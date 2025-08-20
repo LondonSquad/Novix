@@ -11,8 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ActorsGalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getActorUseCase: GetActorUseCase,
-    ) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
+    private val getActorUseCase: GetActorUseCase
+) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
     ActorsGalleryContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
@@ -42,4 +42,5 @@ class ActorsGalleryViewModel @Inject constructor(
     override fun onBackClick() {
         emitEffect(ActorsGalleryEffect.BackNavigation)
     }
+
 }

@@ -37,8 +37,7 @@ class MovieListSyncWorker @AssistedInject constructor(
     }
 
     companion object {
-        const val WORK_NAME = "movie_list_sync"
-        const val IMMEDIATE_SYNC_WORK_NAME = "movie_list_sync_immediate"
+        private const val WORK_NAME = "movie_list_sync"
         private const val MAX_RETRY_ATTEMPTS = 3
 
         fun schedulePeriodicSync(workManager: WorkManager) {

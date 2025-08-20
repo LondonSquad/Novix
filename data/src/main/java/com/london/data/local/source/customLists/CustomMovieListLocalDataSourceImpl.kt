@@ -35,7 +35,7 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         membershipDao.getMovieListIdsFlow(movieId = movieId)
 
     override suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int> =
-        membershipDao.getMovieIdsForList(listId = listId, limit =  limit, offset = offset)
+        membershipDao.getMovieIdsForList(listId = listId, limit = limit, offset = offset)
 
     override fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>> =
         membershipDao.getMovieIdsForListFlow(listId = listId)
@@ -109,4 +109,5 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     private companion object {
         const val CACHE_VALIDITY_MS = 30 * 60 * 1000L // 30 minutes
     }
+
 }

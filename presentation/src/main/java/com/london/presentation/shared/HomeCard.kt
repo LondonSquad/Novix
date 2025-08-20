@@ -26,13 +26,12 @@ fun HomeCard(
     imageUrl: Any,
     modifier: Modifier = Modifier,
     rate: String? = null,
+    onSaveClick: () -> Unit,
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
     onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
-    onSaveClick: () -> Unit,
 ) {
-
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
@@ -86,7 +85,7 @@ fun HomeCard(
 
 @ThemePreviews
 @Composable
-fun HomeCardPreview() {
+private fun HomeCardPreview() {
     NovixTheme {
         HomeCard(
             imageUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",

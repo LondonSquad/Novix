@@ -9,7 +9,7 @@ class AccountRemoteDataSourceImpl @Inject constructor(
     private val accountApiService: AccountApiService
 ) : AccountRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getAccountDetails(sessionId: String): Result<AccountInfoResponse> = callApi(
-            apiCall = { accountApiService.getAccountDetails(sessionId) },
-            mapper = { it }
-        )
+        apiCall = { accountApiService.getAccountDetails(sessionId) },
+        mapper = { it }
+    )
 }

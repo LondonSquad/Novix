@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class ReviewsUiState(
-    val isLoading: Boolean = false,
     val error: ErrorState? = null,
+    val isLoading: Boolean = false,
     val reviews: Flow<PagingData<Review>> = flow {},
 )

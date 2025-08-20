@@ -1,9 +1,19 @@
 package com.london.imageharamblur.faceDetection
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
+import android.graphics.Rect
 import androidx.core.graphics.get
 import androidx.core.graphics.scale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import java.nio.ByteBuffer
@@ -11,10 +21,6 @@ import java.nio.ByteOrder
 import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 
 class FaceDetector(private val context: Context) {
 
@@ -239,12 +245,14 @@ class FaceDetector(private val context: Context) {
             val scale = contrast
             val translate = brightness + 128f * (1 - contrast)
 
-            colorMatrix.set(floatArrayOf(
-                scale, 0f, 0f, 0f, translate,
-                0f, scale, 0f, 0f, translate,
-                0f, 0f, scale, 0f, translate,
-                0f, 0f, 0f, 1f, 0f
-            ))
+            colorMatrix.set(
+                floatArrayOf(
+                    scale, 0f, 0f, 0f, translate,
+                    0f, scale, 0f, 0f, translate,
+                    0f, 0f, scale, 0f, translate,
+                    0f, 0f, 0f, 1f, 0f
+                )
+            )
 
             paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
             canvas.drawBitmap(bitmap, 0f, 0f, paint)
@@ -323,10 +331,14 @@ class FaceDetector(private val context: Context) {
                         val paddedW = w * padding
                         val paddedH = h * padding
 
-                        val left = ((cx - paddedW * 0.5f) * imageWidth).coerceIn(0f, imageWidth.toFloat()).toInt()
-                        val top = ((cy - paddedH * 0.5f) * imageHeight).coerceIn(0f, imageHeight.toFloat()).toInt()
-                        val right = ((cx + paddedW * 0.5f) * imageWidth).coerceIn(0f, imageWidth.toFloat()).toInt()
-                        val bottom = ((cy + paddedH * 0.5f) * imageHeight).coerceIn(0f, imageHeight.toFloat()).toInt()
+                        val left =
+                            ((cx - paddedW * 0.5f) * imageWidth).coerceIn(0f, imageWidth.toFloat()).toInt()
+                        val top =
+                            ((cy - paddedH * 0.5f) * imageHeight).coerceIn(0f, imageHeight.toFloat()).toInt()
+                        val right =
+                            ((cx + paddedW * 0.5f) * imageWidth).coerceIn(0f, imageWidth.toFloat()).toInt()
+                        val bottom =
+                            ((cy + paddedH * 0.5f) * imageHeight).coerceIn(0f, imageHeight.toFloat()).toInt()
 
                         val rect = Rect(left, top, right, bottom)
 
@@ -377,11 +389,12 @@ class FaceDetector(private val context: Context) {
                                 bestOverlap = selectedFace
                             }
 
-                            val adaptiveThreshold = if (face.confidence > 0.8f && selectedFace.confidence > 0.8f) {
-                                IOU_THRESHOLD * 0.8f
-                            } else {
-                                IOU_THRESHOLD
-                            }
+                            val adaptiveThreshold =
+                                if (face.confidence > 0.8f && selectedFace.confidence > 0.8f) {
+                                    IOU_THRESHOLD * 0.8f
+                                } else {
+                                    IOU_THRESHOLD
+                                }
 
                             if (iou > adaptiveThreshold) {
                                 shouldSelect = false
@@ -412,7 +425,7 @@ class FaceDetector(private val context: Context) {
             val intersectionBottom = min(box1.bottom, box2.bottom)
 
             val intersectionArea = max(0, intersectionRight - intersectionLeft) *
-                    max(0, intersectionBottom - intersectionTop)
+                max(0, intersectionBottom - intersectionTop)
 
             val box1Area = box1.width() * box1.height()
             val box2Area = box2.width() * box2.height()

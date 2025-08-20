@@ -74,7 +74,7 @@ private fun NovixCarousalDot(
 
 @ThemePreviews
 @Composable
-fun PreviewCarousalDot() {
+private fun PreviewCarousalDot() {
     NovixTheme {
         NovixCarousalRow(
             dotsStates = listOf(false, true, false, false, false, false, false, false),

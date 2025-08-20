@@ -56,4 +56,5 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
+
 }

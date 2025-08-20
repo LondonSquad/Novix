@@ -14,5 +14,4 @@ interface TopRatedContract {
     fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory)
     fun onBookmarkSheetDismiss()
     fun onManageBookmarkClicked(movieId: Int)
-
 }

@@ -10,13 +10,13 @@ data class EpisodeDetailsUiState(
     val error: ErrorState? = null,
     val videoProvider: String = "",
     val isGuestUser: Boolean = false,
-    val images: List<String>? = listOf(),
     val episode: EpisodeDetails? = null,
+    val images: List<String>? = listOf(),
     val isSuccessfullyRated: Boolean? = null,
     val episodeGenres: List<String> = listOf(),
     val isRateBottomSheetVisible: Boolean = false,
     val isGuestUserBottomSheetVisible: Boolean = false,
-){
+) {
     val episodeHaveTrailer: Boolean
         get() = videoProvider.isNotEmpty()
 }

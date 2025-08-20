@@ -29,7 +29,6 @@ fun MoviesByCategoryScreen(
     onNavigateToMovieDetails: (Int) -> Unit,
     viewModel: MovieCategoryViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 

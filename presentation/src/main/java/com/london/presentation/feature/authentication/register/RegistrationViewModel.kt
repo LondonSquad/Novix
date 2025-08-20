@@ -49,14 +49,13 @@ class RegistrationViewModel @Inject constructor() :
         }
     }
 
-
     private fun isCancelUrl(url: String): Boolean {
         return url.contains(CANCEL_LOWERCASE, ignoreCase = true) ||
-                url.contains(BACK, ignoreCase = true) ||
-                url.contains(CLOSE, ignoreCase = true) ||
-                url.contains(DISMISS, ignoreCase = true) ||
-                url.contains(EXIT, ignoreCase = true) ||
-                url == URL
+            url.contains(BACK, ignoreCase = true) ||
+            url.contains(CLOSE, ignoreCase = true) ||
+            url.contains(DISMISS, ignoreCase = true) ||
+            url.contains(EXIT, ignoreCase = true) ||
+            url == URL
     }
 
     private fun isUrlAllowed(url: String): Boolean {
@@ -87,7 +86,7 @@ class RegistrationViewModel @Inject constructor() :
             )
 
             url.contains(BASE_URL) &&
-                    completionUrls.any { completionUrl -> url.contains(completionUrl) }
+                completionUrls.any { completionUrl -> url.contains(completionUrl) }
 
         } catch (e: Exception) {
             false
@@ -96,10 +95,10 @@ class RegistrationViewModel @Inject constructor() :
 
     private fun isRegistrationCompleteUrl(url: String): Boolean {
         return url.contains(ACCOUNT_VERIFY) ||
-                url.contains(REGISTRATION_SUCCESS) ||
-                url.contains(SIGNUP_COMPLETE) ||
-                url.contains(WELCOME) ||
-                (url.contains(BASE_URL) && url.contains("u/"))
+            url.contains(REGISTRATION_SUCCESS) ||
+            url.contains(SIGNUP_COMPLETE) ||
+            url.contains(WELCOME) ||
+            (url.contains(BASE_URL) && url.contains("u/"))
     }
 
     private fun isAllowedRegistrationUrl(url: String): Boolean {
@@ -117,8 +116,7 @@ class RegistrationViewModel @Inject constructor() :
         return url.contains(LOGIN) && url.contains(SUCCESS)
     }
 
-    private companion object Registration
-    {
+    private companion object Registration {
         const val LOGIN = "login"
         const val SUCCESS = "success"
         const val CANCEL_LOWERCASE = "cancel"
@@ -129,16 +127,16 @@ class RegistrationViewModel @Inject constructor() :
         const val EXIT = "exit"
         const val WELCOME = "welcome"
         const val URL = "https://www.themoviedb.org/"
-        const val WWW_SIGNUP ="https://www.themoviedb.org/signup"
+        const val WWW_SIGNUP = "https://www.themoviedb.org/signup"
         const val SIGNUP = "https://themoviedb.org/signup"
         const val WWW_ACCOUNT_SIGNUP = "https://www.themoviedb.org/account/signup"
-        const val ACCOUNT_SIGNUP ="https://themoviedb.org/account/signup"
+        const val ACCOUNT_SIGNUP = "https://themoviedb.org/account/signup"
         const val SITE = "https://themoviedb.org/"
-        const val WWW_LOGIN_WITH_SITE ="https://www.themoviedb.org/login"
+        const val WWW_LOGIN_WITH_SITE = "https://www.themoviedb.org/login"
         const val LOGIN_WITH_SITE = "https://themoviedb.org/login"
         const val ACCOUNT_VERIFY = "account/verify"
-        const val REGISTRATION_SUCCESS ="registration/success"
-        const val SIGNUP_COMPLETE ="signup/complete"
+        const val REGISTRATION_SUCCESS = "registration/success"
+        const val SIGNUP_COMPLETE = "signup/complete"
         const val BASE_URL = "themoviedb.org"
     }
 }
