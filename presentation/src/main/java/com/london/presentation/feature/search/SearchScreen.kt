@@ -59,7 +59,7 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
-import com.london.presentation.shared.ActorsLayout
+import com.london.presentation.shared.container.ActorLazyVerticalColumn
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
@@ -308,7 +308,7 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
                 }
             },
             content = {
-                ActorsLayout(
+                ActorLazyVerticalColumn(
                     items = actorsLazyList, onActorClick = {
                         contract.onActorClick(it.id)
                     }

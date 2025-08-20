@@ -118,7 +118,7 @@ private fun ButtonTopBar(
 
 @Composable
 @ThemePreviews
-private fun TopBarPreview() {
+private fun Preview() {
     TopBar(
         onClickOption1 = {},
         onClickOption2 = {}

@@ -87,13 +87,12 @@ private fun Content(
                 onNavigateToMovie = contract::onNavigateToMovieClick,
                 onNavigateToTvShow = contract::onNavigateToTvShowClick,
                 onSaveClick = { if (it is Movie) contract.onManageBookmarkClicked(it.id) },
-                isItemSaved = { false },
-                rate = null
+                isItemSaved = { false }
             ),
             topBar = {
                 DefaultAppTopBar(
                     title = screenTitle,
-                    onBack = contract::onBackClick
+                    onBackClick = contract::onBackClick
                 )
             },
             isLoading = state.isLoading
