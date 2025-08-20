@@ -13,7 +13,9 @@ interface CustomMovieListsRemoteDataSource {
         sessionId: String?,
         languageCode: String
     ): Result<CreateCustomListResponse>
+
     suspend fun delete(listId: Int, sessionId: String?): Result<CustomListResponse>
+
     suspend fun getDetails(
         listId: Int,
         page: Int
@@ -35,4 +37,5 @@ interface CustomMovieListsRemoteDataSource {
         movieId: Int,
         sessionId: String?
     ): Result<CustomListResponse>
+
 }

@@ -73,7 +73,7 @@ interface MovieApiService {
 
     @GET(ApiConstants.MOVIE_DISCOVER_PATH)
     suspend fun getUpComingMoviesByCategory(
-        @Query("with_genres") genreId: Int?=null,
+        @Query("with_genres") genreId: Int? = null,
         @Query("primary_release_date.gte") releaseDate: String,
         @Query("sort_by") sortBy: String = "primary_release_date.asc",
         @Query("page") page: Int,
@@ -110,4 +110,5 @@ interface MovieApiService {
     suspend fun getTopRatedMovies(
         @Query("page") pageNumber: Int,
     ): Response<ApiResponse<TopRatedMovieRemote>>
+
 }

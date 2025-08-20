@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val ratingUseCase: ManageRatingUseCase,
     private val getTvShowUseCase: GetTvShowUseCase,
     private val getTvEpisodesUseCase: GetTvEpisodesUseCase,
-    private val ratingUseCase: ManageRatingUseCase,
-    private val authenticationUseCase: AuthenticationUseCase,
-    savedStateHandle: SavedStateHandle,
+    private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
     EpisodeDetailsContract {
 
@@ -29,6 +29,10 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val episodeNumber = args?.episodeNumber ?: 0
 
     init {
+        getEpisodeDetails()
+    }
+
+    private fun getEpisodeDetails() {
         loadEpisodeDetails()
         loadEpisodeRating()
         loadVideoProvider()
@@ -66,6 +70,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     }
 
     private suspend fun loadEpisodeData(): EpisodeDetailsData {
+
         val episode = getTvEpisodesUseCase.getEpisodeByTvShowId(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber,
@@ -202,4 +207,5 @@ class EpisodeDetailsViewModel @Inject constructor(
     private companion object {
         const val DEFAULT_RATING = 0
     }
+
 }

@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorDetailsViewModel @Inject constructor(
-    private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorUseCase: GetActorUseCase
 ) : BaseViewModel<ActorDetailsUiState, ActorEffect>(ActorDetailsUiState()),
     ActorDetailsContract {
 
@@ -46,6 +46,7 @@ class ActorDetailsViewModel @Inject constructor(
     override fun onTopTvShowPicksClick(actorId: Int) {
         emitEffect(ActorEffect.TopTvShowPicksNavigation(actorId))
     }
+
     override fun onTvShowScreenClick(tvShowId: Int) {
         emitEffect(ActorEffect.TvShowScreenNavigation(tvShowId))
     }
@@ -68,7 +69,7 @@ class ActorDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getActorInformation(){
+    private fun getActorInformation() {
         getActorImage()
         getActorDetails()
         getActorMovieDetails()
@@ -117,7 +118,7 @@ class ActorDetailsViewModel @Inject constructor(
                 getActorUseCase.getActorTvShowPicksById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { tvShows -> updateState { copy( actorTvShowDetails = tvShows ) } },
+            onSuccess = { tvShows -> updateState { copy(actorTvShowDetails = tvShows) } },
             onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )

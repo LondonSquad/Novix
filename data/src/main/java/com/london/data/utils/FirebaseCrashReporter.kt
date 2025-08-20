@@ -6,6 +6,7 @@ import javax.inject.Inject
 interface CrashReporter {
     fun logException(exception: Throwable)
 }
+
 class FirebaseCrashReporter @Inject constructor() : CrashReporter {
     override fun logException(exception: Throwable) {
         FirebaseCrashlytics.getInstance().apply {

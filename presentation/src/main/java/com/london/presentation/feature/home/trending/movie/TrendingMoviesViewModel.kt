@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingMoviesViewModel @Inject constructor(
-    private val getMovieUseCase: GetMovieUseCase,
+    private val getMovieUseCase: GetMovieUseCase
 ) : BaseViewModel<TrendingMoviesUiState, TrendingMoviesEffect>(TrendingMoviesUiState()),
     TrendingMoviesContract {
 
@@ -32,13 +32,13 @@ class TrendingMoviesViewModel @Inject constructor(
         getTrendingMovies()
     }
 
+    override fun onRetryClick() = getTrendingMovies()
+
     override fun onBackClick() =
         emitEffect(TrendingMoviesEffect.BackNavigation)
 
     override fun onMovieClick(id: Int) =
         emitEffect(TrendingMoviesEffect.MovieDetailsNavigation(id))
-
-    override fun onRetryClick() = getTrendingMovies()
 
     override fun onManageBookmarkClicked(movieId: Int) {
         updateState {
@@ -88,4 +88,5 @@ class TrendingMoviesViewModel @Inject constructor(
             )
         }
     ).cachedIn(viewModelScope)
+
 }

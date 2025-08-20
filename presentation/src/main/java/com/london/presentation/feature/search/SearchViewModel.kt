@@ -27,6 +27,10 @@ class SearchViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
 
     init {
+        getSearchInfo()
+    }
+
+    private fun getSearchInfo() {
         updateRecentData()
         setupSearchDebouncing()
     }
@@ -354,4 +358,5 @@ class SearchViewModel @Inject constructor(
             category = state.value.selectedCategory
         )
     }
+
 }

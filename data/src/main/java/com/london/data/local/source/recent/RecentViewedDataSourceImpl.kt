@@ -35,4 +35,5 @@ class RecentViewedDataSourceImpl @Inject constructor(
     override suspend fun delete(item: RecentViewedLocal) = runCatching {
         recentViewedDao.delete(item)
     }.getOrDefault(Unit)
+
 }

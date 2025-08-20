@@ -31,12 +31,12 @@ class ManageSearchUseCaseTest {
             //given
             coEvery {
                 repository.searchForActors(
-                    TvSHOW_NAME,
+                    TV_SHOW_NAME,
                     PAGE_NUMBER
                 )
             } returns actorsPagedResponse
             //when
-            val result = manageSearchUseCase.searchForActors(TvSHOW_NAME, PAGE_NUMBER)
+            val result = manageSearchUseCase.searchForActors(TV_SHOW_NAME, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(actorsPagedResponse)
         }
@@ -86,19 +86,19 @@ class ManageSearchUseCaseTest {
             //given
             coEvery {
                 repository.searchForTvShows(
-                    TvSHOW_NAME,
+                    TV_SHOW_NAME,
                     PAGE_NUMBER
                 )
             } returns tvShowsPagedResponse()
             //when
-            val result = manageSearchUseCase.searchForTvShows(TvSHOW_NAME, PAGE_NUMBER)
+            val result = manageSearchUseCase.searchForTvShows(TV_SHOW_NAME, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(tvShowsPagedResponse())
         }
 
     private companion object {
         private const val MOVIE_NAME = "Movie"
-        private const val TvSHOW_NAME = "Tom"
+        private const val TV_SHOW_NAME = "Tom"
         private const val PAGE_NUMBER = 1
 
         private fun tvShowsPagedResponse(): PagedFetchResponse<TvShow> = PagedFetchResponse(
@@ -110,7 +110,7 @@ class ManageSearchUseCaseTest {
 
         private val tvShow = TvShow(
             id = 1,
-            name = TvSHOW_NAME,
+            name = TV_SHOW_NAME,
             releaseYear = 2024,
             rating = 8,
             genres = listOf(TvShowGenre.ALL),

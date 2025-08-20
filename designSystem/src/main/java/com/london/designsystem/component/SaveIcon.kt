@@ -81,7 +81,7 @@ fun SaveIcon(
 
 @ThemePreviews
 @Composable
-fun SaveIconPreview() {
+private fun SaveIconPreview() {
     NovixTheme {
         var isSaved by remember { mutableStateOf(true) }
         SaveIcon(

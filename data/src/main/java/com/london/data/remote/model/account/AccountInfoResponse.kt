@@ -14,5 +14,3 @@ data class AccountInfoResponse(
     @SerialName("avatar")
     val avatar: AvatarInfo? = null
 )
-
-

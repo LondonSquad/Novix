@@ -16,10 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val manageGetMovieUseCase: ManageGetMovieUseCase,
-    private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
-    savedStateHandle: SavedStateHandle
+    private val getMovieListNameUseCase: GetMovieListNameUseCase
 ) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
     ViewListItemsContract {
 
@@ -27,49 +27,51 @@ class ViewItemsViewModel @Inject constructor(
     private val listId = args?.listId ?: 0
 
     init {
+        getMovieItemsInfo()
+    }
+
+    private fun getMovieItemsInfo() {
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
 
     override fun onBack() {
-
         emitEffect(ViewItemsEffect.NavigateBack)
     }
 
     override fun onRetry() {
-
         updateState { copy(error = null) }
         fetchMovieListDetails(listId)
     }
 
     override fun onDeleteClick() {
-
         updateState { copy(isDeleteBottomSheetVisible = true) }
     }
 
     override fun onConfirmDelete() {
-
         tryToExecute(
-            onStart = { onClearStateOnStart() },
+            onStart = { resetSnackBarsState() },
             block = { manageMovieListUseCase.deleteMovieList(listId) },
             onCompleted = { updateState { copy(isDeleteBottomSheetVisible = false) } },
             onError = { updateState { copy(isSnackBarErrorVisible = true, error = it) } },
-            onSuccess = { emitEffect(ViewItemsEffect.NavigateBack) }
+            onSuccess = {
+                emitEffect(ViewItemsEffect.NavigateBack)
+                updateState { copy(isListSnackBarSuccess = true) }
+            }
         )
     }
 
     override fun onMovieClick(id: Int) {
-        onClearStateOnStart()
+        resetSnackBarsState()
         emitEffect(ViewItemsEffect.NavigationMovieDetails(id))
     }
 
     override fun onRemoveMovieClick(id: Int) {
-
         tryToExecute(
             block = { manageMovieListUseCase.removeMovieFromList(listId = listId, movieId = id) },
-            onStart = { onClearStateOnStart() },
+            onStart = { resetSnackBarsState() },
             onError = { updateState { copy(isSnackBarErrorVisible = true, error = it) } },
-            onSuccess = { updateState { copy(isSnackBarSuccessVisible = true) } }
+            onSuccess = { updateState { copy(isMovieSnackBarSuccessVisible = true) } }
         )
     }
 
@@ -77,16 +79,25 @@ class ViewItemsViewModel @Inject constructor(
         updateState { copy(isDeleteBottomSheetVisible = false) }
     }
 
-    private fun onClearStateOnStart() {
+    private fun resetSnackBarsState() {
         updateState {
             copy(
-                error = null, isSnackBarSuccessVisible = false, isSnackBarErrorVisible = false
+                error = null,
+                isMovieSnackBarSuccessVisible = false,
+                isSnackBarErrorVisible = false,
+                isListSnackBarSuccess = false
             )
         }
     }
 
-    private fun fetchMovieListDetails(listId: Int) {
+    override fun resetMovieSnackBarSuccessState() =
+        updateState { copy(isMovieSnackBarSuccessVisible = false) }
 
+    override fun resetSnackBarErrorState() = updateState { copy(isSnackBarErrorVisible = false) }
+
+    override fun resetListSnackBarSuccessState() = updateState { copy(isListSnackBarSuccess = false) }
+
+    private fun fetchMovieListDetails(listId: Int) {
         tryToExecute(
             block = { createMoviesPagingSource(listId = listId) },
             onStart = { updateState { copy(isLoading = true) } },
@@ -106,7 +117,6 @@ class ViewItemsViewModel @Inject constructor(
     }
 
     private fun getMovieListName(listId: Int) {
-
         tryToExecute(
             block = { getMovieListNameUseCase.invoke(listId) },
             onStart = { updateState { copy(isLoading = true) } },

@@ -3,6 +3,7 @@ package com.london.presentation.feature.home.toprated
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,12 +17,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -31,6 +34,7 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
@@ -42,10 +46,10 @@ import com.london.presentation.utils.gridColumns
 
 @Composable
 fun TopRatedScreen(
-    viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateToMovieDetails: (Int) -> Unit = {},
-    onNavigateToTvShowDetails: (Int) -> Unit = {}
+    onNavigateToTvShowDetails: (Int) -> Unit = {},
+    viewModel: TopRatedViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -82,92 +86,104 @@ private fun Content(
 ) {
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = NovixTheme.colors.surface)
 
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        TopBar(
+
+        BackgroundGradient(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 12.dp),
-            title = com.london.presentation.R.string.top_rated.string,
-            onBackClick = contract::onBackClicked
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
-        TabLayout(
-            tabs = listOf(
-                MediaCategory.Movies,
-                MediaCategory.TvShows
-            ),
-            selectedTab = state.selectedMediaCategory,
-            onTabSelected = contract::onMediaCategoryTabSelected,
-            modifier = Modifier.background(NovixTheme.colors.surface)
-        )
-        if (state.isMovieSelected)
-            MovieGenreRow(
-                onGenreClick = contract::movieGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
-        else
-            TvShowRow(
-                onGenreClick = contract::tvShowGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = NovixTheme.colors.surface)
 
-        val moviesPagingItems = state.movies.collectAsLazyPagingItems()
-        val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColumns()),
-            contentPadding = PaddingValues(
-                top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
-            ),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.background(NovixTheme.colors.surface)
         ) {
+            TopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 12.dp),
+                title = com.london.presentation.R.string.top_rated.string,
+                onBackClick = contract::onBackClicked
+            )
 
-            if (state.isMovieSelected) {
-                items(moviesPagingItems.itemCount) { index ->
-                    val movie = moviesPagingItems[index]
-                    movie?.let { movieItem ->
+            TabLayout(
+                tabs = listOf(
+                    MediaCategory.Movies,
+                    MediaCategory.TvShows
+                ),
+                selectedTab = state.selectedMediaCategory,
+                onTabSelected = contract::onMediaCategoryTabSelected,
+                modifier = Modifier.background(NovixTheme.colors.surface)
+            )
+            if (state.isMovieSelected)
+                MovieGenreRow(
+                    onGenreClick = contract::movieGenre,
+                    state = state,
+                    screenWidth = screenWidth
+                )
+            else
+                TvShowRow(
+                    onGenreClick = contract::tvShowGenre,
+                    state = state,
+                    screenWidth = screenWidth
+                )
+
+            val moviesPagingItems = state.movies.collectAsLazyPagingItems()
+            val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(gridColumns()),
+                contentPadding = PaddingValues(
+                    top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.background(NovixTheme.colors.surface)
+            ) {
+
+                if (state.isMovieSelected) {
+                    items(moviesPagingItems.itemCount) { index ->
+                        val movie = moviesPagingItems[index]
+                        movie?.let { movieItem ->
+                            HomeCard(
+                                imageUrl = movieItem.posterUrl,
+                                isSaved = false,
+                                hasSaveIcon = true,
+                                onSaveClick = { contract.onManageBookmarkClicked(movieItem.id) },
+                                modifier = Modifier.clickable {
+                                    contract.onMovieClick(movieItem.id)
+                                }
+                            )
+                        }
+                    }
+                }
+                items(tvSeriesPagingItems.itemCount) { index ->
+                    val tvSeries = tvSeriesPagingItems[index]
+                    tvSeries?.let { seriesItem ->
                         HomeCard(
-                            imageUrl = movieItem.posterUrl,
+                            imageUrl = seriesItem.posterUrl,
+                            hasSaveIcon = false,
                             isSaved = false,
-                            hasSaveIcon = true,
-                            onSaveClick = { contract.onManageBookmarkClicked(movieItem.id) },
-                            modifier = Modifier.clickable {
-                                contract.onMovieClick(movieItem.id)
-                            }
+                            onSaveClick = {},
+                            modifier = Modifier.clickable { contract.onTvShowClick(seriesItem.id) }
                         )
                     }
                 }
             }
-            items(tvSeriesPagingItems.itemCount) { index ->
-                val tvSeries = tvSeriesPagingItems[index]
-                tvSeries?.let { seriesItem ->
-                    HomeCard(
-                        imageUrl = seriesItem.posterUrl,
-                        hasSaveIcon = false,
-                        isSaved = false,
-                        onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onTvShowClick(seriesItem.id) }
-                    )
-                }
-            }
+
+            BookmarkBottomSheet(
+                onSheetDismiss = contract::onBookmarkSheetDismiss,
+                isSheetVisible = state.isBookmarkSheetVisible,
+                bookmarkedMovieId = state.bookmarkedMovieId
+            )
+
         }
-
-        BookmarkBottomSheet(
-            onSheetDismiss = contract::onBookmarkSheetDismiss,
-            isSheetVisible = state.isBookmarkSheetVisible,
-            bookmarkedMovieId = state.bookmarkedMovieId
-        )
-
     }
 }
 

@@ -74,7 +74,6 @@ import com.london.presentation.navigation.Screen.TvShowsByCategory
 import com.london.presentation.navigation.Screen.ViewListItems
 import com.london.presentation.navigation.Screen.WatchingHistory
 
-
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController
 ) = navigation<AppNavGraph.Main>(startDestination = Home) {
@@ -173,7 +172,7 @@ private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         appComposable<Lists> {
             ListScreen(
                 onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLoginWithPopUp,
+                onNavigateToLogin = ::navigateToLogin,
             )
         }
         appComposable<ViewListItems> {
@@ -204,7 +203,6 @@ private fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostControlle
             )
         }
     }
-
 
 private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
     with(navController) {
@@ -249,6 +247,7 @@ private fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostControlle
                 onNavigateBack = ::navigateUp,
             )
         }
+
         composable<ActorDetails> {
             ActorDetailsScreen(
                 onNavigateToTopMoviePicks = ::navigateToTopMoviesPicks,
@@ -264,22 +263,26 @@ private fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostControlle
 
 private fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
     with(navController) {
+
         composable<TrendingMovies> {
             TrendingMoviesScreen(
                 onNavigateToMovieDetailsClick = ::navigateToMovieDetails,
                 onNavigateBackClick = ::navigateUp
             )
         }
+
         composable<TrendingTvShows> {
             TrendingTvShowsScreen(
                 onNavigateToTvShowDetailsClick = ::navigateToTvShowDetails,
                 onNavigateBack = ::navigateUp
             )
         }
+
         composable<TrendingActors> {
             TrendingActorsScreen(
                 onNavigateToActorDetailsClick = ::navigateToActorDetails,
                 onNavigateBackClick = ::navigateUp
             )
         }
+
     }

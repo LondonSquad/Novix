@@ -27,33 +27,33 @@ import com.london.presentation.utils.gridColumns
     message = "Use MediaLazyVerticalGrid or MediaLazyGridWithFilter instead. This composable will be removed in a future version. Note: Both have two overloads - one for List<T> and one for LazyPagingItems<T>.",
     replaceWith = ReplaceWith(
         expression = "MediaLazyGridWithFilter(" +
-                "items = items, " +
-                "modifier = modifier, " +
-                "imageUrl = getImageUrl, " +
-                "name = { it.getName() }, " +
-                "onSaveClick = onSavedClick, " +
-                "isItemSaved = isItemSaved, " +
-                "onDeleteClick = onDeleteClick, " +
-                "onMovieGenreClick = {}, " +
-                "onTvShowGenreClick = {}, " +
-                "config = MediaGridConfig(" +
-                "    showSaveIcon = hasSaveIcon, " +
-                "    isDarkMode = isDarkMode, " +
-                "    myRatingList = myRatingList, " +
-                "    rate = rate, " +
-                "    isMovieSelected = true, " +
-                "    isTvShowSelected = false, " +
-                "    selectedMovieGenre = MovieGenre.All, " +
-                "    selectedTvShowGenre = TvShowGenre.All, " +
-                "    onNavigateToMovie = onItemClick, " +
-                "), " +
-                "topBar = {" +
-                "    DefaultAppTopBar(" +
-                "        title = title," +
-                "        onBack = onBack" +
-                "    )" +
-                "}" +
-                ")",
+            "items = items, " +
+            "modifier = modifier, " +
+            "imageUrl = getImageUrl, " +
+            "name = { it.getName() }, " +
+            "onSaveClick = onSavedClick, " +
+            "isItemSaved = isItemSaved, " +
+            "onDeleteClick = onDeleteClick, " +
+            "onMovieGenreClick = {}, " +
+            "onTvShowGenreClick = {}, " +
+            "config = MediaGridConfig(" +
+            "    showSaveIcon = hasSaveIcon, " +
+            "    isDarkMode = isDarkMode, " +
+            "    myRatingList = myRatingList, " +
+            "    rate = rate, " +
+            "    isMovieSelected = true, " +
+            "    isTvShowSelected = false, " +
+            "    selectedMovieGenre = MovieGenre.All, " +
+            "    selectedTvShowGenre = TvShowGenre.All, " +
+            "    onNavigateToMovie = onItemClick, " +
+            "), " +
+            "topBar = {" +
+            "    DefaultAppTopBar(" +
+            "        title = title," +
+            "        onBack = onBack" +
+            "    )" +
+            "}" +
+            ")",
         imports = ["com.london.presentation.shared.container.MediaLazyGridWithFilter", "com.london.presentation.shared.container.MediaGridConfig", "com.london.presentation.utils.MovieGenre", "com.london.presentation.utils.TvShowGenre"]
     ),
     level = DeprecationLevel.WARNING
@@ -135,4 +135,3 @@ fun <T> MediaLazyGrid(
         }
     }
 }
-

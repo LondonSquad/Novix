@@ -49,7 +49,7 @@ fun ActorItem(
         TextSection(
             actorName = actorName,
             characterName = characterName,
-            onClick= onClick,
+            onClick = onClick,
             modifier = Modifier.weight(1f)
         )
     }

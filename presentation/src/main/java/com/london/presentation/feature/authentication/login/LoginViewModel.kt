@@ -104,7 +104,8 @@ class LoginViewModel @Inject constructor(
                     handleLoginError()
             },
             onError = { handleLoginError() },
-            onCompleted = { updateState { copy(isLoading = false) }
+            onCompleted = {
+                updateState { copy(isLoading = false) }
             }
         )
     }

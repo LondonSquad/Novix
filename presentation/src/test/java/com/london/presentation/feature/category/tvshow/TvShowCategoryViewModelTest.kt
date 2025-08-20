@@ -40,7 +40,7 @@ class TvShowCategoryViewModelTest {
         every { savedStateHandle.getArgs<Screen.TvShowsByCategory>() } returns Screen.TvShowsByCategory(
             category = CATEGORY,
         )
-        viewModel = TvShowCategoryViewModel(getTvShowUseCase, savedStateHandle)
+        viewModel = TvShowCategoryViewModel(savedStateHandle, getTvShowUseCase)
         coEvery {
             getTvShowUseCase.getTvShowsByGenre(
                 CATEGORY.toDomain(),

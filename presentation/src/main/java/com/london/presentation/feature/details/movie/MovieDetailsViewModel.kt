@@ -21,12 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val movieDetails: GetMovieUseCase,
-    private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
-    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
-    savedStateHandle: SavedStateHandle
+    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
+    private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
 
@@ -62,9 +62,9 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private suspend fun fetchMainMovieData(): MainMovieData {
-        val details = movieDetails.getMovieDetails(movieId)
-        val images = movieDetails.getMovieImages(movieId)
         val cast = movieDetails.getMovieCast(movieId)
+        val images = movieDetails.getMovieImages(movieId)
+        val details = movieDetails.getMovieDetails(movieId)
         return MainMovieData(details, images, cast)
     }
 
@@ -263,4 +263,5 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
+
 }

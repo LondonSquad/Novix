@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
 
 @Dao
-interface UpcomingSectionDao{
+interface UpcomingSectionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: UpComingSectionLocal)
@@ -26,4 +26,5 @@ interface UpcomingSectionDao{
 
     @Query("SELECT * FROM upcoming_section_table WHERE categoryId = :categoryId AND page = :page")
     suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal
+
 }

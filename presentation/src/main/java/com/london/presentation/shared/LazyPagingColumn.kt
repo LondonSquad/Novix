@@ -15,10 +15,10 @@ fun <T : Any> LazyPagingColumn(
     itemContent: @Composable (T) -> Unit,
 ) {
     Content(
-            modifier = modifier,
-            items = pagingItems,
-            itemContent = itemContent
-        )
+        modifier = modifier,
+        items = pagingItems,
+        itemContent = itemContent
+    )
 }
 
 @Composable

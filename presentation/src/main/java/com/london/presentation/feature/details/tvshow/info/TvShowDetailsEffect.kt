@@ -6,8 +6,8 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 sealed interface TvShowDetailsEffect {
     data class OnNavigateToEpisodeDetails(
         val tvShowId: Int,
-        val episodeNumber: Int,
-        val seasonNumber: Int
+        val seasonNumber: Int,
+        val episodeNumber: Int
     ) : TvShowDetailsEffect
 
     data object NavigateBack : TvShowDetailsEffect

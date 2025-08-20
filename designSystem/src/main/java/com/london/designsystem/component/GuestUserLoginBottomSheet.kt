@@ -27,8 +27,6 @@ fun GuestUserLoginBottomSheet(
     onLoginClick: () -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState()
 ) {
-
-
     ModalBottomSheet(
         onDismissRequest = onDismissClick,
         state = sheetState,

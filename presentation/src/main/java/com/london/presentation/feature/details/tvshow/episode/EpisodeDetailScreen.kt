@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.GuestUserLoginBottomSheet
@@ -44,6 +45,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -67,8 +69,8 @@ fun EpisodeDetailsScreen(
     onNavigateToActorDetails: (Int) -> Unit,
     viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -103,7 +105,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemScrollOffset > 40f ||
-                    lazyListState.firstVisibleItemIndex > 0
+                lazyListState.firstVisibleItemIndex > 0
         }
     }
 
@@ -120,6 +122,13 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
+
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(2f)
+        )
+
         TopBar(
             onBackClick = contract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
@@ -207,7 +216,6 @@ private fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
-
     Column(
         modifier = modifier.headerDetailsCard(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -267,7 +275,6 @@ private fun TvShowDate(
         )
     }
 }
-
 
 @Composable
 private fun GenreNames(
@@ -330,4 +337,3 @@ private fun OverviewSection(
         }
     }
 }
-

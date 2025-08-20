@@ -44,4 +44,3 @@ interface MovieListDao {
     @Query("DELETE FROM cached_movie_lists")
     suspend fun clearAll()
 }
-

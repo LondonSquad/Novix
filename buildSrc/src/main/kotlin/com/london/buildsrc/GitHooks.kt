@@ -27,4 +27,3 @@ fun Project.installHook(sourceFile: String, targetFile: String) {
         println("✅ $targetFile hook up to date")
     }
 }
-

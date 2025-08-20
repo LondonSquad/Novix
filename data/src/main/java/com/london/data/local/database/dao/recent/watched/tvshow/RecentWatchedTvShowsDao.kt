@@ -16,4 +16,5 @@ interface RecentWatchedTvShowsDao : RecentWatchedDao<RecentWatchedTvShowLocal> {
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     override suspend fun insert(item: RecentWatchedTvShowLocal)
+
 }

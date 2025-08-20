@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 data class TrendingTvShowsUiState(
-    val selectedGenreId: Int? = null,
     val isLoading: Boolean = false,
+    val selectedGenreId: Int? = null,
     val errorState: ErrorState? = null,
     val tvShowsFlow: Flow<PagingData<Trending>> = emptyFlow(),
     val tvShowsGenres: List<TvShowGenreUi> = TvShowGenreUi.getList(),

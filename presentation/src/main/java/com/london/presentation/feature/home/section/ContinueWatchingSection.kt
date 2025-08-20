@@ -9,8 +9,8 @@ import com.london.presentation.feature.home.HomeUiMedia
 
 @Composable
 fun ContinueWatchingSection(
-    recentWatchedMediaList: List<HomeUiMedia>,
     homeScreenContract: HomeScreenContract,
+    recentWatchedMediaList: List<HomeUiMedia>,
     modifier: Modifier = Modifier
 ) {
     HomeCarouselSection(

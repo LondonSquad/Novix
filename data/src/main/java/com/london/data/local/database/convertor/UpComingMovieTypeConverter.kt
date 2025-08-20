@@ -17,4 +17,5 @@ class UpComingMovieTypeConverter {
         val listType = object : TypeToken<List<UpComingMovieLocal>>() {}.type
         return Gson().fromJson(moviesString, listType)
     }
+
 }

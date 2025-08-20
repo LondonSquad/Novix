@@ -40,4 +40,5 @@ class ActorRepositoryImpl @Inject constructor(
 
     override suspend fun getTvShowActors(id: Int): TvShowCast =
         dataSource.getTvShowActors(id).getOrThrow().toCastEntity()
+
 }

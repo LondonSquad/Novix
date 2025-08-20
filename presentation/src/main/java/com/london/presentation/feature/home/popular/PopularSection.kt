@@ -83,7 +83,6 @@ private fun Content(
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
     val isRtl = layoutDirection == LayoutDirection.Rtl
-
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
     }
@@ -174,7 +173,8 @@ private fun Content(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    }
+                    },
+                    hasOverlay = true
                 )
 
                 if (pagerState.currentPage == page)

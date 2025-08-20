@@ -24,5 +24,7 @@ interface SearchRepository {
     ): PagedFetchResponse<Actor>
 
     suspend fun incrementGenreInterest(genre: Genre, mediaType: String)
+
     suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>>
+
 }

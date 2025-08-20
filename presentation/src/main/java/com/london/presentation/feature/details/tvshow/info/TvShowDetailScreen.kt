@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
@@ -62,12 +63,14 @@ import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.episode.Episodes
 import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
@@ -89,8 +92,8 @@ fun TvShowsDetailsScreen(
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -120,7 +123,7 @@ fun TvShowsDetailsScreen(
     BuildScreen(
         onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = uiState.error != null,
+        isError = uiState.error is ErrorState.NoInternet,
         onRetry = viewModel::onRetry
     ) {
         Content(
@@ -144,7 +147,7 @@ private fun Content(
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemScrollOffset > 40f ||
-                    lazyListState.firstVisibleItemIndex > 0
+                lazyListState.firstVisibleItemIndex > 0
         }
     }
 
@@ -165,6 +168,13 @@ private fun Content(
             onBackClick = tvShowDetailsContract::onBackClicked,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
             option1Icon = R.drawable.icon_remove,
+        )
+
+        BackgroundGradient(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         LazyColumn(
@@ -322,7 +332,7 @@ private fun Content(
 }
 
 @Composable
-fun HeaderDetailsCard(
+private fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
@@ -332,7 +342,6 @@ fun HeaderDetailsCard(
     date: String,
     numberOfSeasons: Int
 ) {
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
@@ -370,7 +379,7 @@ fun HeaderDetailsCard(
 }
 
 @Composable
-fun GenreNames(
+private fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onGenreClick: (genreUi: TvShowGenreUi) -> Unit
@@ -409,7 +418,7 @@ fun GenreNames(
 
 
 @Composable
-fun TvShowBasicDetails(
+private fun TvShowBasicDetails(
     modifier: Modifier = Modifier,
     rating: String,
     date: String,
@@ -433,7 +442,7 @@ fun TvShowBasicDetails(
 }
 
 @Composable
-fun ViewReviewText(
+private fun ViewReviewText(
     onReviewClick: (tvShowId: Int) -> Unit,
     tvShowId: Int,
 ) {
@@ -446,10 +455,9 @@ fun ViewReviewText(
 }
 
 @Composable
-fun Seasons(
+private fun Seasons(
     numberOfSeasons: Int
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -479,10 +487,9 @@ fun Seasons(
 }
 
 @Composable
-fun TvShowDate(
+private fun TvShowDate(
     date: String
 ) {
-
     if (date.isEmpty() || date.isBlank()) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -513,12 +520,11 @@ fun TvShowDate(
 }
 
 @Composable
-fun CastSection(
+private fun CastSection(
     modifier: Modifier = Modifier,
     castMembers: List<TvShowCastMember>,
     onNavigateToCast: (Int) -> Unit
 ) {
-
     Column(modifier = modifier) {
         Text(
             text = stringResource(R.string.cast),
@@ -546,7 +552,7 @@ fun CastSection(
 }
 
 @Composable
-fun SeasonEpisodesDetails(
+private fun SeasonEpisodesDetails(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     viewModel: TvShowDetailsViewModel = hiltViewModel()
@@ -655,7 +661,7 @@ private fun EpisodeItem(
 }
 
 @Composable
-fun EpisodeDuration(
+private fun EpisodeDuration(
     durationTime: String?
 ) {
     Row(

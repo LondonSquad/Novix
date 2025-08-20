@@ -55,6 +55,7 @@ fun Text(
         style = style
     )
 }
+
 @Composable
 fun AnnotatedStringText(
     text: AnnotatedString,

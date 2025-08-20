@@ -6,7 +6,6 @@ import com.london.data.mapper.genre.getId
 import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.tvshow.TvShow
 
-
 fun RecentWatchedMovieLocal.toEntity() = Movie(
     id = id,
     name = name,

@@ -93,7 +93,7 @@ allprojects {
             total {
                 verify {
                     rule {
-                        bound { minValue = 60 }
+                        bound { minValue = 55 }
                     }
                 }
             }

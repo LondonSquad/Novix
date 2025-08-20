@@ -6,7 +6,6 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.Properties
 
-
 fun getLocalProperty(key: String, file: String? = null, root: String = "."): String {
     val properties = Properties()
     val defaultFiles = listOf("$root/local.properties", "$root/constants.properties")
@@ -23,7 +22,6 @@ fun getLocalProperty(key: String, file: String? = null, root: String = "."): Str
             }
         }
     }
-
     return properties.getProperty(key).toString()
 }
 

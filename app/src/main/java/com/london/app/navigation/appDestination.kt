@@ -31,6 +31,7 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 
 fun NavController.navigateToEpisodeDetails(tvShowId: Int, seasonNumber: Int, episodeNumber: Int) =
     navigate(EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
+
 fun NavController.navigateToMovieDetails(movieId: Int) =
     navigate(MovieDetails(movieId))
 
@@ -39,7 +40,6 @@ fun NavController.navigateToTvShowDetails(tvShowId: Int) =
 
 fun NavController.navigateToActorDetails(actorId: Int) =
     navigate(ActorDetails(actorId))
-
 
 fun NavController.navigateToActorGallery(actorId: Int) =
     navigate(ActorGallery(actorId))
@@ -62,26 +62,34 @@ fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
 fun NavController.navigateToLoginWithPopUp() = navigateTo(Login)
 
 fun NavController.navigateToLogin() = navigate(Login)
+
 fun NavController.navigateToWatchingHistory() = navigate(WatchingHistory)
+
 fun NavController.navigateToMyRating() = navigate(MyRating)
 
 fun NavController.navigateToContinueWatching() = navigate(ContinueWatching)
+
 fun NavController.navigateToTopRated() = navigate(TopRated)
+
 fun NavController.navigateToTrendingMovies() = navigate(TrendingMovies)
+
 fun NavController.navigateToTrendingTvShows() = navigate(TrendingTvShows)
+
 fun NavController.navigateToTrendingActors() = navigate(TrendingActors)
 
 fun NavController.navigateToRegister() = navigate(Register)
 
 fun NavController.navigateToAuthGraph() = navigateTo(AppNavGraph.Auth)
+
 fun NavController.navigateToMainGraph() = navigateTo(AppNavGraph.Main)
+
 fun NavController.navigateToOnboardingGraph() = navigateTo(AppNavGraph.OnBoarding)
 
 fun NavController.navigateToWelcome() = navigateTo(OnBoarding.Welcome)
 
 fun NavController.navigateToListDetails(listId: Int) = navigate(Screen.ViewListItems(listId))
 
- fun navigateToBottomBarDestination(
+fun navigateToBottomBarDestination(
     navController: NavHostController,
     destination: Any
 ) {

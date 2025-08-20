@@ -76,12 +76,12 @@ class MovieDetailsViewModelTest {
     }
 
     private fun createViewModel() = MovieDetailsViewModel(
+        savedStateHandle,
         getMovieUseCase,
-        manageRecentMovieWatchedUseCase,
-        manageRecentViewedUseCase,
         ratingUseCase,
         authenticationUseCase,
-        savedStateHandle
+        manageRecentViewedUseCase,
+        manageRecentMovieWatchedUseCase,
     )
 
     @After

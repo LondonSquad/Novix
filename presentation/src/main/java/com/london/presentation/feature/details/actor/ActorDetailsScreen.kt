@@ -52,6 +52,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.actor.ActorMediaItems
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
@@ -68,10 +69,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun ActorDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToGallery: (Int) -> Unit,
-    onNavigateToTopMoviePicks: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
-    onNavigateToTopTvShowPicks: (Int) -> Unit,
+    onNavigateToTopMoviePicks: (Int) -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToTopTvShowPicks: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val effect by viewModel.effect.collectAsState(null)
@@ -101,7 +102,6 @@ fun ActorDetailsScreen(
     }
 }
 
-
 @Composable
 private fun Content(
     uiState: ActorDetailsUiState,
@@ -125,19 +125,26 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
+
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
+        )
+
         EmptyScreen(uiState)
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp),
+            contentPadding = PaddingValues(bottom = 24.dp),
             state = lazyState
         ) {
             item {
                 if (hasOtherContent(uiState)) {
-                    uiState.actorImageDetails?.let { image ->
+                    uiState.actorImageDetails?.let { images ->
                         CustomBackDropImagePager(
-                            images = image,
-                            isVisibleDots = false
+                            images = images,
+                            isVisibleDots = (images.size) > 1
                         )
                     }
                 }
@@ -291,7 +298,7 @@ private fun TvShowsSection(
 }
 
 @Composable
-fun TopMoviesPicksList(
+private fun TopMoviesPicksList(
     movies: List<ActorMediaItems>,
     onNavigateToMoviePicks: (Int) -> Unit,
     onManageBookmarkClicked: (Int) -> Unit
@@ -316,7 +323,7 @@ fun TopMoviesPicksList(
 }
 
 @Composable
-fun TopTvShowsPicksList(
+private fun TopTvShowsPicksList(
     tvShow: List<ActorMediaItems>,
     onNavigateToTvShowPicks: (Int) -> Unit
 ) {
@@ -341,7 +348,7 @@ fun TopTvShowsPicksList(
 }
 
 @Composable
-fun ActorGallery(images: List<String>) {
+private fun ActorGallery(images: List<String>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -452,7 +459,7 @@ private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
 
 @Preview
 @Composable
-fun Preview() {
+private fun Preview() {
     NovixTheme {
         ActorDetailsScreen(
             onNavigateBack = {},

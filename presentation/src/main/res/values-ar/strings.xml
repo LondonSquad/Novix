@@ -149,6 +149,7 @@
     <string name="movie_removed_successfully">تم حذف الفيلم بنجاح</string>
     <string name="movie_not_found">الفيلم غير موجود</string>
     <string name="list_added_successfully">تم اضافه القائمه بنجاح</string>
+    <string name="list_removed_successfully">تم حذف القائمة بنجاح</string>
     <string name="can_not_delete_list">حدث خطا ما لا يمكن اضافه القائمه</string>
     <string name="delete_list_successfully">تم حذف القائمة بنجاح</string>
     <string name="there_is_no_items">لا توجد عناصر هنا!</string>

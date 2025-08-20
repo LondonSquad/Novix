@@ -23,11 +23,15 @@ class AccountViewModel @Inject constructor(
     AccountContract {
 
     init {
-        checkUserLoginStatus()
-        fetchAndSetUsername()
-        observeContentRestrictionLevel()
-        initializeAppLanguage()
+        getAccountInfo()
+    }
+
+    private fun getAccountInfo() {
         initializeAppTheme()
+        fetchAndSetUsername()
+        checkUserLoginStatus()
+        initializeAppLanguage()
+        observeContentRestrictionLevel()
     }
 
 
@@ -201,4 +205,5 @@ class AccountViewModel @Inject constructor(
             }
         )
     }
+
 }

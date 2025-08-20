@@ -14,4 +14,3 @@ data class TextStyleGroup(
     val medium: TextStyle,
     val large: TextStyle,
 )
-

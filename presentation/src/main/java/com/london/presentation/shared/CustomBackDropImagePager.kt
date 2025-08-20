@@ -30,8 +30,8 @@ import kotlinx.coroutines.isActive
 
 @Composable
 fun CustomBackDropImagePager(
-    modifier: Modifier = Modifier,
     images: List<String>,
+    modifier: Modifier = Modifier,
     isVisibleDots: Boolean = true
 ) {
     val validImages = images.filter { it.isNotBlank() }

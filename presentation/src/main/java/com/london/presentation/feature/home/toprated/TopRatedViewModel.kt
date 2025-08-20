@@ -93,7 +93,6 @@ class TopRatedViewModel @Inject constructor(
                     genre = state.value.selectedMovieGenre.toDomain()
                 )
             }
-
             moviesFlow
         }, onStart = {
             updateState { copy(isLoading = true) }

@@ -2,6 +2,10 @@ package com.london.imageharamblur.models
 
 import android.content.Context
 import android.graphics.Bitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
@@ -14,10 +18,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 
 internal class ContentDetectionModel {
 
@@ -148,7 +148,8 @@ internal class ContentDetectionModel {
     suspend fun detectContent(bitmap: Bitmap): ContentResult = withContext(Dispatchers.IO) {
         interpreterLock.withLock {
             try {
-                val interpreter = getOrCreateInterpreter() ?: return@withContext ContentResult(isInappropriate = false)
+                val interpreter =
+                    getOrCreateInterpreter() ?: return@withContext ContentResult(isInappropriate = false)
 
                 // Validate interpreter state
                 if (interpreter.outputTensorCount == 0) {
@@ -176,18 +177,21 @@ internal class ContentDetectionModel {
                         outputBuffer.buffer.asFloatBuffer().get(floatArray)
                         floatArray
                     }
+
                     DataType.UINT8 -> {
                         val byteArray = ByteArray(outputSize)
                         outputBuffer.buffer.rewind()
                         outputBuffer.buffer.get(byteArray)
                         byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
                     }
+
                     DataType.INT8 -> {
                         val byteArray = ByteArray(outputSize)
                         outputBuffer.buffer.rewind()
                         outputBuffer.buffer.get(byteArray)
                         byteArray.map { (it.toFloat() + 128f) / 255f }.toFloatArray()
                     }
+
                     else -> FloatArray(outputSize)
                 }
 
@@ -210,10 +214,12 @@ internal class ContentDetectionModel {
     }
 
     fun close() {
-        try {0
+        try {
+            0
             interpreterThreadLocal.get()?.close()
             interpreterThreadLocal.remove()
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+        }
     }
 
     companion object {

@@ -48,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
@@ -63,6 +64,7 @@ import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
@@ -86,10 +88,10 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, MediaType) -> Unit,
+    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -157,6 +159,13 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
+
+        BackgroundGradient(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+                .zIndex(2f)
+        )
 
         TopBar(
             onBackClick = contract::onBackClick,

@@ -34,25 +34,28 @@ fun CarousalShimmerEffect(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Box(modifier = Modifier
-                .height(210.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .weight(1f)
-                .shimmerEffect()
+            Box(
+                modifier = Modifier
+                    .height(210.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .weight(1f)
+                    .shimmerEffect()
             )
 
-            Box(modifier = Modifier
-                .height(210.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .weight(0.5f)
-                .shimmerEffect()
+            Box(
+                modifier = Modifier
+                    .height(210.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .weight(0.5f)
+                    .shimmerEffect()
             )
 
-            Box(modifier = Modifier
-                .height(210.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .weight(0.5f)
-                .shimmerEffect()
+            Box(
+                modifier = Modifier
+                    .height(210.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .weight(0.5f)
+                    .shimmerEffect()
             )
         }
     }

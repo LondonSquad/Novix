@@ -54,10 +54,10 @@ class SearchRepositoryImpl @Inject constructor(
         name: String,
         pageNumber: Int
     ): ApiResponse<SearchTvShowRemote> = remoteDataSource.searchForTvShows(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).getOrThrow()
+        query = name,
+        includeAdult = false,
+        pageNumber = pageNumber,
+    ).getOrThrow()
 
     override suspend fun searchForActors(
         name: String,
@@ -97,19 +97,19 @@ class SearchRepositoryImpl @Inject constructor(
         name: String,
         pageNumber: Int
     ): ApiResponse<SearchMovieRemote> = remoteDataSource.searchForMovies(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).getOrThrow()
+        query = name,
+        includeAdult = false,
+        pageNumber = pageNumber,
+    ).getOrThrow()
 
     private suspend fun getActorsSearchResult(
         name: String,
         pageNumber: Int
     ): ApiResponse<SearchActorRemote> = remoteDataSource.searchForActors(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).getOrThrow()
+        query = name,
+        includeAdult = false,
+        pageNumber = pageNumber,
+    ).getOrThrow()
 
     private suspend fun updateGenreInterest(current: GenreInterestEntity) {
         genreInterestDao.updateGenreInterest(
@@ -124,4 +124,5 @@ class SearchRepositoryImpl @Inject constructor(
             )
         )
     }
+
 }

@@ -11,6 +11,7 @@ import javax.inject.Inject
 class RecentSearchRepositoryImpl @Inject constructor(
     private val recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
 ) : RecentRepository<RecentSearch> {
+
     override suspend fun insert(item: RecentSearch) =
         recentSearchLocalDataSource.insertAndKeepLastTen(item.toRecentSearch())
 
@@ -22,4 +23,5 @@ class RecentSearchRepositoryImpl @Inject constructor(
     override suspend fun delete(item: RecentSearch) {
         recentSearchLocalDataSource.delete(item.toRecentSearch())
     }
+
 }

@@ -28,9 +28,9 @@ import com.london.presentation.shared.HomeCard
 fun HomeCarouselSection(
     onAllClick: () -> Unit,
     onSaveClick: (Int) -> Unit,
-    onCardClick: (Int, MediaType) -> Unit,
     @StringRes sectionName: Int,
     uiMediaList: List<HomeUiMedia>,
+    onCardClick: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
@@ -77,7 +77,7 @@ fun HomeCarouselSection(
                     },
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
-                hasSaveIcon = isHero
+                hasSaveIcon = isHero && (mediaItem.mediaType == MediaType.Movie)
             )
         }
     }

@@ -21,11 +21,11 @@ fun <T : Any> MediaLazyGridWithFilter(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     name: (T) -> String = { it.getName() },
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
+    topBar: @Composable (() -> Unit)? = null,
     config: MediaGridConfig = MediaGridConfig(),
-    topBar: @Composable (() -> Unit)? = null
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
 ) {
 
     Column(

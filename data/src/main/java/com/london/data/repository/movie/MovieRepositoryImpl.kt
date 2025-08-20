@@ -62,7 +62,6 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getSimilarMoviesById(id: Int) =
         movieRemoteDataSource.getSimilarMovies(id).getOrThrow().items.map { it.toEntity() }
 
-
     override suspend fun getMovieVideos(movieId: Int): List<String> {
         return movieRemoteDataSource.getMovieVideos(movieId)
             .getOrThrow().videos.orEmpty().map { movieVideoRemote ->
@@ -248,4 +247,5 @@ class MovieRepositoryImpl @Inject constructor(
     companion object {
         const val PAGE_NUMBER = 1
     }
+
 }

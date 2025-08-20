@@ -17,7 +17,7 @@ interface RecentViewedDao : RecentDao<RecentViewedLocal> {
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     override suspend fun insert(item: RecentViewedLocal)
-    
+
     @Query("SELECT * FROM recent_viewed_table ORDER BY viewDate DESC LIMIT 10")
     override suspend fun getRecentTen(): List<RecentViewedLocal>
 
@@ -35,4 +35,5 @@ interface RecentViewedDao : RecentDao<RecentViewedLocal> {
 
     @Delete
     suspend fun delete(item: RecentViewedLocal)
+
 }

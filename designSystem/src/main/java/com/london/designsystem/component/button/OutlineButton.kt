@@ -76,7 +76,7 @@ fun OutlineButton(
 
 @ThemePreviews
 @Composable
-fun PreviewNormalOutlineButton() {
+private fun PreviewNormalOutlineButton() {
     NovixTheme {
         OutlineButton(
             text = "Watch",
@@ -91,7 +91,7 @@ fun PreviewNormalOutlineButton() {
 
 @ThemePreviews
 @Composable
-fun PreviewLoadingOutlineButton() {
+private fun PreviewLoadingOutlineButton() {
     NovixTheme {
         OutlineButton(
             text = "Watch",
@@ -106,7 +106,7 @@ fun PreviewLoadingOutlineButton() {
 
 @ThemePreviews
 @Composable
-fun PreviewDisabledPrimaryDisable() {
+private fun PreviewDisabledPrimaryDisable() {
     NovixTheme {
         OutlineButton(
             text = "Watch",
@@ -122,7 +122,7 @@ fun PreviewDisabledPrimaryDisable() {
 
 @ThemePreviews
 @Composable
-fun PreviewOutlinePrimaryWithIcon() {
+private fun PreviewOutlinePrimaryWithIcon() {
     NovixTheme {
         OutlineButton(
             text = "Watch",
@@ -137,7 +137,7 @@ fun PreviewOutlinePrimaryWithIcon() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryWithIconOnly() {
+private fun PreviewPrimaryWithIconOnly() {
     NovixTheme {
         PrimaryButton(
             text = "",

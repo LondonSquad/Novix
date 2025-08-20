@@ -37,6 +37,10 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     init {
+        getHomeInfo()
+    }
+
+    private fun getHomeInfo() {
         initializePopularMedia()
         initializeTopRatedMedia()
         handleRecentWatchedMedia()
@@ -55,7 +59,7 @@ class HomeViewModel @Inject constructor(
     private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
         val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
             state.value.selectedCategoryFlow
-                .flatMapLatest { category -> createUpcomingPagingFlow(category?: MovieGenreUi.All) }
+                .flatMapLatest { category -> createUpcomingPagingFlow(category ?: MovieGenreUi.All) }
                 .cachedIn(viewModelScope)
 
         return upcomingMoviesFlow
@@ -197,4 +201,5 @@ class HomeViewModel @Inject constructor(
 
     override fun onTrendingActorsCardClick() =
         emitEffect(HomeScreenEffect.TrendingActorNavigation)
+
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -42,6 +43,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.review.Review
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
@@ -85,19 +87,30 @@ private fun Content(
     reviewsList: LazyPagingItems<Review>,
     reviewContract: ReviewContract
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        ReviewsTopBar(
-            onBackClick = reviewContract::onBackClicked
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
-        ReviewsContent(
-            reviewsList = reviewsList,
-            modifier = Modifier.weight(1f)
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface)
+        ) {
+            ReviewsTopBar(
+                onBackClick = reviewContract::onBackClicked
+            )
+
+            ReviewsContent(
+                reviewsList = reviewsList,
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }
 

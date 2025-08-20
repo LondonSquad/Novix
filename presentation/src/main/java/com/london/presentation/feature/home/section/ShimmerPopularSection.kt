@@ -104,10 +104,12 @@ fun ShimmerPopularSection(
                     .shimmerEffect(),
             ) {
 
-                repeat(3){
-                    Box(modifier = Modifier
-                        .height(280.dp)
-                        .width(190.dp))
+                repeat(3) {
+                    Box(
+                        modifier = Modifier
+                            .height(280.dp)
+                            .width(190.dp)
+                    )
                 }
 
                 if (pagerState.currentPage == page)

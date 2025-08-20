@@ -34,7 +34,6 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 
-
 @Composable
 fun BaseBottomSheet(
     title: String,
@@ -104,6 +103,7 @@ fun BaseBottomSheet(
                                 icon = null
                             )
                         }
+
                         BottomSheetButtonType.OUTLINE -> {
                             OutlineButton(
                                 text = it.text,
@@ -115,6 +115,7 @@ fun BaseBottomSheet(
                                 icon = null
                             )
                         }
+
                         BottomSheetButtonType.NONE -> {}
                     }
                 }
@@ -157,7 +158,6 @@ private fun BottomSheetHeader(
         )
     }
 }
-
 
 enum class BottomSheetButtonType {
     PRIMARY,

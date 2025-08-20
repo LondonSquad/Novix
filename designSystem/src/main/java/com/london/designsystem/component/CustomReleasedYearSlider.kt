@@ -33,7 +33,6 @@ fun CustomReleasedYearSlider(
     minYear: Int = 1995,
     maxYear: Int = 2025
 ) {
-
     Column(modifier = modifier) {
         Row(
             modifier = Modifier

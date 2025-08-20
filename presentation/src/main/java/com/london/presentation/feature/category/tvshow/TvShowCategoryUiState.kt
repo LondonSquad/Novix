@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class TvShowCategoryUiState(
-    val genre: TvShowGenreUi = TvShowGenreUi.All,
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
+    val genre: TvShowGenreUi = TvShowGenreUi.All,
     val tvShowFlow: Flow<PagingData<TvShow>> = flow {}
 )

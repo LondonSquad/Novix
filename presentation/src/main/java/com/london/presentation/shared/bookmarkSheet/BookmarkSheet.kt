@@ -2,6 +2,7 @@ package com.london.presentation.shared.bookmarkSheet
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -161,21 +162,21 @@ private fun BookmarkBottomSheetContent(
 
     val snackBarController = LocalSnackbarController.current
 
-    if (state.isSuccessSnackbarVisible) {
+    if (state.isSuccessSnackBarVisible) {
         snackBarController.showMessage(
             message = R.string.item_added_success.string,
             icon = com.london.designsystem.R.drawable.ic_success,
             snackBarType = SnackBarType.Success,
-            onComplete = contract::onSnackbarShown
+            onComplete = contract::onSnackBarShown
         )
     }
 
-    if (state.isErrorSnackbarVisible) {
+    if (state.isErrorSnackBarVisible) {
         snackBarController.showMessage(
             message = R.string.item_added_fail.string,
             icon = com.london.designsystem.R.drawable.ic_failed,
             snackBarType = SnackBarType.Error,
-            onComplete = contract::onSnackbarShown
+            onComplete = contract::onSnackBarShown
         )
     }
 }
@@ -205,6 +206,7 @@ private fun SheetHeader(
                     color = NovixTheme.colors.stroke,
                     shape = RoundedCornerShape(8.dp)
                 )
+                .background(color = NovixTheme.colors.iconBackgroundLow)
                 .clickable(onClick = hideSheet)
                 .padding(8.dp),
             painter = com.london.designsystem.R.drawable.cancel.painter,
@@ -274,7 +276,7 @@ private fun UserListsView(
 }
 
 @Composable
-fun UserActions(
+private fun UserActions(
     contract: BookmarkSheetContract,
     uiState: BookmarkSheetUiState,
     bookmarkedMovieId: Int

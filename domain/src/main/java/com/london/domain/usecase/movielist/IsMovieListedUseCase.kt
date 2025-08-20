@@ -12,5 +12,5 @@ class IsMovieListedUseCase @Inject constructor(
         forceRefresh: Boolean = false
     ): Boolean = repository.isMovieListed(movieId = movieId, forceRefresh = forceRefresh)
 
-    fun flow(movieId: Int): Flow<Boolean> = repository.isMovieListedFlow(movieId = movieId)
+    fun asFlow(movieId: Int): Flow<Boolean> = repository.isMovieListedFlow(movieId = movieId)
 }

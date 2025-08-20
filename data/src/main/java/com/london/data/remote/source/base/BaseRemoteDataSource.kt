@@ -8,7 +8,6 @@ import kotlinx.coroutines.delay
 import retrofit2.Response
 import java.net.HttpURLConnection
 
-
 interface BaseRemoteDatasource {
 
     suspend fun <T, R> callApi(
@@ -69,15 +68,14 @@ interface BaseRemoteDatasource {
     }
 
     private fun Response<*>.isServerError(): Boolean = code() in 500..599
+
     private fun Response<*>.isUnauthorizedError() = code() == HttpURLConnection.HTTP_UNAUTHORIZED
 
     private fun Response<*>.isValidationError(): Boolean = code() == 422
 
     private fun Response<*>.isTimeoutError(): Boolean = when (code()) {
-
         HttpURLConnection.HTTP_CLIENT_TIMEOUT,
         HttpURLConnection.HTTP_GATEWAY_TIMEOUT -> true
-
         else -> false
     }
 
@@ -96,4 +94,5 @@ interface BaseRemoteDatasource {
         message = errorBody()?.string(),
         code = code()
     )
+
 }

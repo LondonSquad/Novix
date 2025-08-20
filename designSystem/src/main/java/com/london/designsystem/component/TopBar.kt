@@ -87,7 +87,7 @@ fun TopBar(
 }
 
 @Composable
-fun ButtonTopBar(
+private fun ButtonTopBar(
     icon: Int?,
     onClick: () -> Unit,
     iconTint: Color? = null
@@ -118,7 +118,7 @@ fun ButtonTopBar(
 
 @Composable
 @ThemePreviews
-fun TopBarPreview() {
+private fun TopBarPreview() {
     TopBar(
         onClickOption1 = {},
         onClickOption2 = {}

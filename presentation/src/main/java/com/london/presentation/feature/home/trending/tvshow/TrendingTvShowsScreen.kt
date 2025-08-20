@@ -1,19 +1,23 @@
 package com.london.presentation.feature.home.trending.tvshow
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -21,6 +25,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -28,8 +33,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -59,7 +64,6 @@ fun TrendingTvShowsScreen(
     }
 }
 
-
 @Composable
 private fun Content(
     state: TrendingTvShowsUiState,
@@ -68,38 +72,48 @@ private fun Content(
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        TopBar(
+        BackgroundGradient(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            title = stringResource(R.string.trending_tv_shows),
-            onBackClick = contract::onBackClick
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
-        GenresSection(
-            genres = state.tvShowsGenres,
-            selectedGenre = state.selectedGenre,
-            screenWidth = screenWidth,
-            onGenreClick = contract::onGenreClick,
-            modifier = Modifier.padding(bottom = 12.dp),
-            getGenreName = { stringResource(it.stringResId) }
-        )
-        MediaLazyPagingGrid(
-            pagingFlow = tvShowsLazyItems,
-            onItemClick = { contract.onTvShowClick(it.id) },
-            getImageUrl = { it.posterPath },
-            getTitle = { it.title },
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false },
-        )
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface)
+        ) {
+            TopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                title = stringResource(R.string.trending_tv_shows),
+                onBackClick = contract::onBackClick
+            )
+            GenresSection(
+                genres = state.tvShowsGenres,
+                selectedGenre = state.selectedGenre,
+                screenWidth = screenWidth,
+                onGenreClick = contract::onGenreClick,
+                modifier = Modifier.padding(bottom = 12.dp),
+                getGenreName = { stringResource(it.stringResId) }
+            )
+            MediaLazyPagingGrid(
+                pagingFlow = tvShowsLazyItems,
+                onItemClick = { contract.onTvShowClick(it.id) },
+                getImageUrl = { it.posterPath },
+                getTitle = { it.title },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onSaveClick = { },
+                isItemSaved = { false },
+                contentPadding = PaddingValues(bottom = 24.dp)
+            )
+        }
     }
 }
 

@@ -55,4 +55,5 @@ interface CustomMovieListsApiService {
         @Query("session_id") sessionId: String?,
         @Query("page") page: Int
     ): Response<ApiResponse<CustomMovieListResponse>>
+
 }

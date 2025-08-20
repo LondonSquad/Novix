@@ -30,12 +30,11 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 
-
 @Composable
 fun CategoriesItem(
-    categoryName: String,
     categoryImage: Any?,
     onClick: () -> Unit,
+    categoryName: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -86,7 +85,7 @@ fun CategoriesItem(
 }
 
 @Composable
-fun CategoryGrid(
+private fun CategoryGrid(
     categories: List<CategoryItem>,
     onCategoryItemClick: (CategoryItem) -> Unit,
     modifier: Modifier = Modifier
@@ -109,7 +108,7 @@ fun CategoryGrid(
 
 @ThemePreviews
 @Composable
-fun CategoryGridPreview() {
+private fun CategoryGridPreview() {
 
     val categories = listOf(
         CategoryItem(
@@ -120,8 +119,8 @@ fun CategoryGridPreview() {
             categoryName = "Drama",
             categoryImage = ""
         ),
+    )
 
-        )
     NovixTheme {
         Column(
             modifier = Modifier

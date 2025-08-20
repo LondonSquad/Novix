@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkSheetViewModel @Inject constructor(
+    private val authenticationUseCase: AuthenticationUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
-    private val getAvailableListsForMovie: GetAvailableListsForMovie,
-    private val authenticationUseCase: AuthenticationUseCase
+    private val getAvailableListsForMovie: GetAvailableListsForMovie
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
 
@@ -25,8 +25,8 @@ class BookmarkSheetViewModel @Inject constructor(
         updateState {
             copy(
                 selectedLists = emptyList(),
-                isErrorSnackbarVisible = false,
-                isSuccessSnackbarVisible = false,
+                isErrorSnackBarVisible = false,
+                isSuccessSnackBarVisible = false,
                 shouldDismiss = false,
                 error = null,
                 lists = emptyList()
@@ -54,7 +54,7 @@ class BookmarkSheetViewModel @Inject constructor(
             onSuccess = {
                 updateState {
                     copy(
-                        isSuccessSnackbarVisible = true,
+                        isSuccessSnackBarVisible = true,
                         shouldDismiss = true
                     )
                 }
@@ -63,7 +63,7 @@ class BookmarkSheetViewModel @Inject constructor(
                 updateState {
                     copy(
                         error = error,
-                        isErrorSnackbarVisible = true
+                        isErrorSnackBarVisible = true
                     )
                 }
             },
@@ -75,8 +75,8 @@ class BookmarkSheetViewModel @Inject constructor(
         updateState {
             copy(
                 selectedLists = emptyList(),
-                isErrorSnackbarVisible = false,
-                isSuccessSnackbarVisible = false,
+                isErrorSnackBarVisible = false,
+                isSuccessSnackBarVisible = false,
                 shouldDismiss = false,
                 error = null,
             )
@@ -95,11 +95,11 @@ class BookmarkSheetViewModel @Inject constructor(
 
     override fun onCreateNewList() = emitEffect(BookmarkSheetEffect.NewListCreation)
 
-    override fun onSnackbarShown() {
+    override fun onSnackBarShown() {
         updateState {
             copy(
-                isSuccessSnackbarVisible = false,
-                isErrorSnackbarVisible = false,
+                isSuccessSnackBarVisible = false,
+                isErrorSnackBarVisible = false,
                 error = null
             )
         }

@@ -59,7 +59,6 @@ data class NavigationTab<out T>(
     val destination: T,
 )
 
-
 data class NavBarColors(
     val backgroundColor: Color,
     val selectedIconColor: Color,
@@ -81,7 +80,6 @@ fun NavBar(
         topBorderColor = NovixTheme.colors.stroke
     )
 ) {
-
     Box(
         modifier = modifier
             .fillMaxWidth()
