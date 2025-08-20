@@ -3,7 +3,6 @@ package com.london.presentation.feature.category.movie
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -69,10 +68,7 @@ private fun Content(
         emptyLayoutImage = R.drawable.empty
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             BackgroundGradient(
                 modifier = Modifier

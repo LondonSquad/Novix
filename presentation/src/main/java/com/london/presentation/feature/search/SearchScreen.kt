@@ -113,6 +113,23 @@ private fun Content(
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
 
+    SearchMainContent(
+        state = state,
+        contract = contract,
+        interactionSource = interactionSource,
+        keyboardController = keyboardController,
+        onClearFocus = { focusManager.clearFocus() }
+    )
+}
+
+@Composable
+private fun SearchMainContent(
+    state: SearchUiState,
+    contract: SearchContract,
+    interactionSource: MutableInteractionSource,
+    keyboardController: SoftwareKeyboardController?,
+    onClearFocus: () -> Unit
+) {
     val currentPagingFlow = when (state.selectedCategory) {
         SearchCategory.Movies -> state.moviesFlow.collectAsLazyPagingItems()
         SearchCategory.TvShows -> state.tvShowsFlow.collectAsLazyPagingItems()
@@ -126,65 +143,48 @@ private fun Content(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        SearchMainContent(
-            state = state,
-            contract = contract,
-            interactionSource = interactionSource,
-            keyboardController = keyboardController,
-            onClearFocus = { focusManager.clearFocus() }
-        )
-    }
-}
-
-@Composable
-private fun SearchMainContent(
-    state: SearchUiState,
-    contract: SearchContract,
-    interactionSource: MutableInteractionSource,
-    keyboardController: SoftwareKeyboardController?,
-    onClearFocus: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navBarBottomPadding()
-            .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
-    ) {
-
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
+                .navBarBottomPadding()
+                .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
         ) {
-            TopBar(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                title = stringResource(R.string.search),
-            )
 
-            SearchBar(
-                uiState = state,
-                contract = contract,
-                interactionSource = interactionSource,
-                keyboardController = keyboardController,
+            BackgroundGradient(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    .fillMaxWidth()
+                    .align(Alignment.TopStart)
+                    .zIndex(1f)
             )
 
-            SearchBody(state = state, contract = contract)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface),
+                verticalArrangement = Arrangement.Top
+            ) {
+                TopBar(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    title = stringResource(R.string.search),
+                )
 
-            BookmarkBottomSheet(
-                onSheetDismiss = contract::onBookmarkSheetDismiss,
-                isSheetVisible = state.isBookmarkSheetVisible,
-                bookmarkedMovieId = state.bookmarkedMovieId
-            )
+                SearchBar(
+                    uiState = state,
+                    contract = contract,
+                    interactionSource = interactionSource,
+                    keyboardController = keyboardController,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
+
+                SearchBody(state = state, contract = contract)
+
+                BookmarkBottomSheet(
+                    onSheetDismiss = contract::onBookmarkSheetDismiss,
+                    isSheetVisible = state.isBookmarkSheetVisible,
+                    bookmarkedMovieId = state.bookmarkedMovieId
+                )
+            }
         }
     }
 }

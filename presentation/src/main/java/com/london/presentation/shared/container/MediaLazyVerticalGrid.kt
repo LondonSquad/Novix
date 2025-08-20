@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -133,7 +132,6 @@ private fun MediaGridContainer(
         modifier = modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
-            .navigationBarsPadding()
     ) {
         topBar?.invoke()
 
@@ -143,7 +141,7 @@ private fun MediaGridContainer(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
             content = content
         )
     }

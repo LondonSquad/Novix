@@ -87,8 +87,6 @@ private fun Content(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp)
                 .background(color = NovixTheme.colors.surface)
         ) {
             MediaLazyGridWithTabs(
