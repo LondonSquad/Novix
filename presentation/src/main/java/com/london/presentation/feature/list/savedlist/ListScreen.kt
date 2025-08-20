@@ -8,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +54,6 @@ import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.navBarBottomPadding
 import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
@@ -91,12 +89,6 @@ private fun Content(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        BackgroundGradient(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(1f)
-        )
-
         BuildScreen(
             onRetry = contract::onRetry,
             isLoading = state.isLoading,
@@ -108,31 +100,38 @@ private fun Content(
             handlePagingLoadingAutomatically = true
         ) {
 
-            ScreenScaffold(
-                titleRes = R.string.saved_list_title,
-                onFabClick = contract::onFabClick
+            BackgroundGradient(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    items(pagingItems.itemCount) { index ->
-                        val item = pagingItems[index]
-                        item?.let {
-                            SavedListItemRow(
-                                itemUi = item,
-                                onCountClick = contract::onListClick
-                            )
-                        }
+
+                stickyHeader {
+                    TopBar(
+                        title = stringResource(R.string.saved_list_title),
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                }
+                items(pagingItems.itemCount) { index ->
+                    val item = pagingItems[index]
+                    item?.let {
+                        SavedListItemRow(
+                            itemUi = item,
+                            onCountClick = contract::onListClick
+                        )
                     }
                 }
-
-                AddListBottomSheet(
-                    addListInteractions = contract,
-                    addListSheetState = state.addListSheetState
-                )
             }
+
+            AddListBottomSheet(
+                addListInteractions = contract,
+                addListSheetState = state.addListSheetState
+            )
 
             val snackBarController = LocalSnackbarController.current
 
@@ -164,35 +163,25 @@ private fun ScreenScaffold(
     onFabClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .navBarBottomPadding()
-            .background(NovixTheme.colors.surface)
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        TopBar(
-            title = stringResource(titleRes),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-        )
+        content()
 
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            content()
-
-            if (showFab && onFabClick != null) {
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 16.dp, end = 16.dp),
-                    onClick = onFabClick,
-                    isLoadingIcon = false,
-                    isDisabledIcon = false,
-                    isDefaultIcon = true
-                )
-            }
+        if (showFab && onFabClick != null) {
+            FloatingActionButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 16.dp, end = 16.dp),
+                onClick = onFabClick,
+                isLoadingIcon = false,
+                isDisabledIcon = false,
+                isDefaultIcon = true
+            )
         }
     }
+
 }
 
 @Composable
@@ -205,7 +194,7 @@ private fun SavedListItemRow(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .clickable { onCountClick(itemUi.id) }
-            .background(NovixTheme.colors.surfaceHigh)
+            .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
