@@ -34,8 +34,8 @@ class PopularLocalDataSourceImpl @Inject constructor(
 
     private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
-            popularSectionDao.getAll().forEach { popularLocal ->
-                if (popularLocal.date.isDayExpired())
+            popularSectionDao.getAll().forEach { _ ->
+                if (isDayExpired())
                     popularSectionDao.deleteAll()
             }
         }

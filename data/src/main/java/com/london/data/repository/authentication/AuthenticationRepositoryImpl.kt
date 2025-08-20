@@ -92,7 +92,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getUserAccount(session: SessionResponse) {
-        val accountResult = accountRemoteDataSource.getAccountDetails(session.sessionId.orEmpty())
+        val accountResult = accountRemoteDataSource.getAccountInfo(session.sessionId.orEmpty())
         val accountInfo = accountResult.getOrThrow().toEntity()
         val accountId = accountInfo.id
         saveUserAccount(id = accountId)
