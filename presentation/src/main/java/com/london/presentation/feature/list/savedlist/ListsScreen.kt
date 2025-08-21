@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +44,6 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.snackbar.LocalSnackbarController
 import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.MovieList
@@ -83,7 +82,7 @@ private fun Content(
     state: ListUiState,
     contract: ListContract,
 ) {
-    val pagingItems = state.items.collectAsLazyPagingItems()
+    val listsFlow = state.items.collectAsLazyPagingItems()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -93,17 +92,14 @@ private fun Content(
             onRetry = contract::onRetry,
             isLoading = state.isLoading,
             isError = state.error is ErrorState.NoInternet,
-            pagingFlow = pagingItems,
+            pagingFlow = listsFlow,
             isGuest = state.isGuest,
-            guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
+            guestContent = { LoginPromptForList(onLoginClick = contract::onLoginClick) },
             emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
             handlePagingLoadingAutomatically = true
         ) {
 
-            BackgroundGradient(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-            )
+            BackgroundGradient(modifier = Modifier.align(Alignment.TopStart))
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -117,14 +113,12 @@ private fun Content(
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
                 }
-                items(pagingItems.itemCount) { index ->
-                    val item = pagingItems[index]
-                    item?.let {
-                        SavedListItemRow(
-                            itemUi = item,
-                            onCountClick = contract::onListClick
-                        )
-                    }
+
+                items(listsFlow.itemSnapshotList.items) { list ->
+                    SavedListComponent(
+                        movieList = list,
+                        onListClick = contract::onListClick
+                    )
                 }
             }
 
@@ -158,22 +152,19 @@ private fun Content(
 
 @Composable
 private fun ScreenScaffold(
-    titleRes: Int,
-    showFab: Boolean = true,
     onFabClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         content()
 
-        if (showFab && onFabClick != null) {
+        onFabClick?.let {
             FloatingActionButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 16.dp, end = 16.dp),
+                    .padding(bottom = 116.dp, end = 16.dp),
                 onClick = onFabClick,
                 isLoadingIcon = false,
                 isDisabledIcon = false,
@@ -181,19 +172,18 @@ private fun ScreenScaffold(
             )
         }
     }
-
 }
 
 @Composable
-private fun SavedListItemRow(
-    itemUi: MovieList,
-    onCountClick: (Int) -> Unit
+private fun SavedListComponent(
+    movieList: MovieList,
+    onListClick: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCountClick(itemUi.id) }
+            .clickable { onListClick(movieList.id) }
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -204,23 +194,21 @@ private fun SavedListItemRow(
             .zIndex(2f)
     ) {
         Text(
-            text = itemUi.name,
+            text = movieList.name,
+            modifier = Modifier.weight(1f),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             maxLines = 1,
-            modifier = Modifier
-                .weight(1f)
         )
+
         ItemCount(
-            itemUi = itemUi,
+            count = movieList.moviesCount,
         )
     }
 }
 
 @Composable
-private fun ItemCount(
-    itemUi: MovieList,
-) {
+private fun ItemCount(count: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -230,7 +218,7 @@ private fun ItemCount(
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = itemUi.moviesCount.toLocalizedNumbers(),
+            text = count.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.primary,
         )
@@ -247,11 +235,7 @@ private fun EmptyList(
     contract: ListContract,
     addListSheetState: AddSheetState
 ) {
-    ScreenScaffold(
-        titleRes = R.string.saved_list_title,
-        onFabClick = contract::onFabClick,
-        showFab = true,
-    ) {
+    ScreenScaffold(onFabClick = contract::onFabClick) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -276,38 +260,33 @@ private fun EmptyList(
 }
 
 @Composable
-private fun NoListFoundAsGuest(
+private fun LoginPromptForList(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ScreenScaffold(
-        titleRes = R.string.saved_list_title,
-        showFab = false
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            EmptyLayout(
-                modifier = modifier
-                    .padding(horizontal = 16.dp)
-                    .align(Alignment.Center),
-                text = stringResource(R.string.login_to_create_list),
-                imageContent = {
-                    BlurredImage(imageId = R.drawable.ic_no_saved_list_as_guest)
-                },
-                additionalContent = {
-                    OutlineButton(
-                        text = stringResource(R.string.login),
-                        hasLabel = true,
-                        icon = null,
-                        hasIcon = false,
-                        isLoading = false,
-                        onClick = onLoginClick,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                }
-            )
-        }
+        EmptyLayout(
+            modifier = modifier
+                .padding(horizontal = 16.dp)
+                .align(Alignment.Center),
+            text = stringResource(R.string.login_to_create_list),
+            imageContent = {
+                BlurredImage(imageId = R.drawable.ic_no_saved_list_as_guest)
+            },
+            additionalContent = {
+                OutlineButton(
+                    text = stringResource(R.string.login),
+                    hasLabel = true,
+                    icon = null,
+                    hasIcon = false,
+                    isLoading = false,
+                    onClick = onLoginClick,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+        )
     }
 }
 
@@ -339,24 +318,12 @@ private fun BlurredImage(@DrawableRes imageId: Int) {
                 contentDescription = null
             )
         }
+        
         Image(
-            painter = painterResource(id = imageId),
+            painter = imageId.painter,
             contentDescription = "List Image",
             modifier = Modifier
                 .size(128.dp),
-        )
-    }
-}
-
-@Composable
-@Preview
-@ThemePreviews
-private fun Preview() {
-    NovixTheme {
-        val state = ListUiState()
-        Content(
-            state = state,
-            contract = defaultContractList()
         )
     }
 }
