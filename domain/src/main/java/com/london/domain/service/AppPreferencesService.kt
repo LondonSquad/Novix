@@ -19,4 +19,6 @@ interface AppPreferencesService {
 
     val contentRestrictionLevel: StateFlow<ContentRestrictionLevel>
     fun setContentRestrictionLevel(level: ContentRestrictionLevel)
+
+    fun clearAllPreferences()
 }

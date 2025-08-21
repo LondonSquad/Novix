@@ -78,7 +78,10 @@ class AppPreferencesServiceImpl @Inject constructor(
         preferences.edit { putString(PreferencesKeys.CONTENT_RESTRICTION_KEY, level.name) }
         _contentRestrictionLevel.value = level
     }
+
     //endregion
+
+    override fun clearAllPreferences() = preferences.edit { clear() }
 
     private object PreferencesKeys {
         const val HAS_ONBOARDING_BEEN_SHOWN = "has_onboarding_been_shown"
