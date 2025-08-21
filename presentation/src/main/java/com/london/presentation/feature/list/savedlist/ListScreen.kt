@@ -172,19 +172,10 @@ private fun ScreenScaffold(
     onFabClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navBarBottomPadding()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         content()
-
-        onFabClick?.let {
-            ListFAB(onFabClick)
-        }
+        onFabClick?.let { ListFAB(onFabClick) }
     }
-
 }
 
 @Composable
