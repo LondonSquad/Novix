@@ -57,12 +57,10 @@ class AccountViewModel @Inject constructor(
 
     override fun onWatchingHistoryClick() = emitEffect(AccountEffect.WatchingHistoryNavigation)
 
-
     override fun onMyRatingClick() = emitEffect(AccountEffect.MyRatingNavigation)
 
     override fun onContentRestrictionClick() =
         updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
-
 
     override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
         appPreferencesService.setContentRestrictionLevel(level)
@@ -91,15 +89,11 @@ class AccountViewModel @Inject constructor(
     override fun onLanguageClick() = setActiveBottomSheet(ActiveBottomSheet.Language)
 
 
-    override fun onEnglishSelected() =
-        updateState {
-            copy(appLanguage = AppLanguage.ENGLISH)
-        }
+    override fun onEnglishSelected() = updateState {
+        copy(appLanguage = AppLanguage.ENGLISH)
+    }
 
-    override fun onArabicSelected() =
-        updateState {
-            copy(appLanguage = AppLanguage.ARABIC)
-        }
+    override fun onArabicSelected() = updateState { copy(appLanguage = AppLanguage.ARABIC) }
 
     override fun onLanguageSettingsSave() {
         appPreferencesService.setAppLanguage(state.value.appLanguage)
@@ -129,15 +123,12 @@ class AccountViewModel @Inject constructor(
         setAppTheme(if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
     }
 
-    private fun initializeAppLanguage() {
-        updateState {
-            copy(appLanguage = appPreferencesService.appLanguage.value)
-        }
-    }
+    private fun initializeAppLanguage() =
+        updateState { copy(appLanguage = appPreferencesService.appLanguage.value) }
 
     private fun observeContentRestrictionLevel() {
         appPreferencesService.contentRestrictionLevel
-            .onEach { level -> ::setCurrentContentRestrictionLevel }
+            .onEach { level -> setCurrentContentRestrictionLevel(level) }
             .launchIn(viewModelScope)
     }
 
