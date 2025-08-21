@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.layout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

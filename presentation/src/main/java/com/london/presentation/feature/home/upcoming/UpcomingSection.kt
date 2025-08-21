@@ -25,9 +25,9 @@ import com.london.domain.entity.movie.UpComingMovie
 import com.london.presentation.R
 import com.london.presentation.feature.home.HomeScreenContract
 import com.london.presentation.feature.home.HomeScreenUiState
-import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.ShimmerMovieCard
+import com.london.presentation.shared.genre.GenresSection
+import com.london.presentation.shared.shimmer.ShimmerMovieCard
 
 @Composable
 fun UpcomingSectionTitle(isLoading: Boolean) {

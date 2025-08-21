@@ -33,10 +33,10 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.CategoriesItem
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.item.CategoriesItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.navBarBottomPadding

@@ -16,9 +16,8 @@ class OnboardingViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
 
-    fun onPageChanged(page: Int) {
-        updateState { copy(currentPage = page) }
-    }
+    fun onPageChanged(page: Int) = updateState { copy(currentPage = page) }
+
 
     fun scrollToPage(pagerState: PagerState, targetPage: Int, scope: CoroutineScope) {
         scope.launch {
@@ -40,11 +39,9 @@ class OnboardingViewModel @Inject constructor(
 
     fun scrollNext(pagerState: PagerState, scope: CoroutineScope) {
         val nextPage = pagerState.currentPage + 1
-        if (nextPage <= pagerState.pageCount - 1) {
+        if (nextPage <= pagerState.pageCount - 1)
             scrollToPage(pagerState = pagerState, targetPage = nextPage, scope = scope)
-        } else {
-            navigateToWelcome()
-        }
+        else navigateToWelcome()
     }
 
     fun navigateToWelcome() {

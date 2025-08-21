@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.shimmer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

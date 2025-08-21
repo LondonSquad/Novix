@@ -38,21 +38,12 @@ class AccountViewModel @Inject constructor(
     override fun onLogoutConfirmed() {
         tryToExecute(
             block = { authenticationUseCase.logout() },
-            onStart = {
-                updateState { copy(isLogoutLoading = true) }
-            },
+            onStart = { updateState { copy(isLogoutLoading = true) } },
             onSuccess = { isSuccess: Boolean ->
-                if (isSuccess) {
-                    updateState { copy(isLogoutLoading = false) }
-                } else {
-                    updateState {
-                        copy(error = ErrorState.RequestFailed("Logout failed"))
-                    }
-                }
+                if (isSuccess) updateState { copy(isLogoutLoading = false) }
+                else updateState { copy(error = ErrorState.RequestFailed("Logout failed")) }
             },
-            onCompleted = {
-                emitEffect(AccountEffect.LoginNavigation)
-            }
+            onCompleted = { emitEffect(AccountEffect.LoginNavigation) }
         )
     }
 
@@ -64,17 +55,12 @@ class AccountViewModel @Inject constructor(
             )
         }
 
-    override fun onWatchingHistoryClick() =
-        emitEffect(AccountEffect.WatchingHistoryNavigation)
+    override fun onWatchingHistoryClick() = emitEffect(AccountEffect.WatchingHistoryNavigation)
 
-
-    override fun onMyRatingClick() =
-        emitEffect(AccountEffect.MyRatingNavigation)
-
+    override fun onMyRatingClick() = emitEffect(AccountEffect.MyRatingNavigation)
 
     override fun onContentRestrictionClick() =
         updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
-
 
     override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
         appPreferencesService.setContentRestrictionLevel(level)
@@ -86,48 +72,28 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    override fun onChangePasswordClick() =
-        emitEffect(AccountEffect.ChangePasswordNavigation())
+    override fun onChangePasswordClick() = emitEffect(AccountEffect.ChangePasswordNavigation())
 
-    override fun onAppearanceClick() =
-        updateState {
-            copy(activeBottomSheet = ActiveBottomSheet.Appearance)
-        }
+    override fun onAppearanceClick() = setActiveBottomSheet(ActiveBottomSheet.Appearance)
+    override fun onDarkModeSelected() = setAppTheme(AppTheme.DARK)
 
-    override fun onDarkModeSelected() =
-        updateState {
-            copy(appTheme = AppTheme.DARK)
-        }
-
-    override fun onLightModeSelected() =
-        updateState {
-            copy(appTheme = AppTheme.LIGHT)
-        }
+    override fun onLightModeSelected() = setAppTheme(AppTheme.LIGHT)
 
     override fun onAppearanceModeSave() {
         appPreferencesService.setAppTheme(state.value.appTheme)
         onBottomSheetDismiss()
     }
 
-    override fun showAppearanceBottomSheet() =
-        updateState {
-            copy(activeBottomSheet = ActiveBottomSheet.Appearance)
-        }
+    override fun showAppearanceBottomSheet() = setActiveBottomSheet(ActiveBottomSheet.Appearance)
 
-    override fun onLanguageClick() =
-        updateState {
-            copy(activeBottomSheet = ActiveBottomSheet.Language)
-        }
+    override fun onLanguageClick() = setActiveBottomSheet(ActiveBottomSheet.Language)
 
-    override fun onEnglishSelected() =
-        updateState {
-            copy(appLanguage = AppLanguage.ENGLISH)
-        }
 
-    override fun onArabicSelected() =
-        updateState {
-            copy(appLanguage = AppLanguage.ARABIC)
-        }
+    override fun onEnglishSelected() = updateState {
+        copy(appLanguage = AppLanguage.ENGLISH)
+    }
+
+    override fun onArabicSelected() = updateState { copy(appLanguage = AppLanguage.ARABIC) }
 
     override fun onLanguageSettingsSave() {
         appPreferencesService.setAppLanguage(state.value.appLanguage)
@@ -150,45 +116,32 @@ class AccountViewModel @Inject constructor(
             )
         }
 
-    override fun onLoginClick() =
-        emitEffect(AccountEffect.LoginNavigation)
+    override fun onLoginClick() = emitEffect(AccountEffect.LoginNavigation)
 
     private fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value
-        updateState {
-            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
-        }
+        setAppTheme(if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
     }
 
-    private fun initializeAppLanguage() {
-        updateState {
-            copy(appLanguage = appPreferencesService.appLanguage.value)
-        }
-    }
+    private fun initializeAppLanguage() =
+        updateState { copy(appLanguage = appPreferencesService.appLanguage.value) }
 
     private fun observeContentRestrictionLevel() {
         appPreferencesService.contentRestrictionLevel
-            .onEach { level ->
-                updateState { copy(currentContentRestriction = level) }
-            }
+            .onEach { level -> setCurrentContentRestrictionLevel(level) }
             .launchIn(viewModelScope)
     }
+
+    private fun setCurrentContentRestrictionLevel(level: ContentRestrictionLevel) =
+        updateState { copy(currentContentRestriction = level) }
 
     private fun checkUserLoginStatus() {
         tryToExecute(
             block = { authenticationUseCase.isLoggedIn() },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { isLoggedIn: Boolean ->
-                updateState { copy(isUserLoggedIn = isLoggedIn) }
-            },
-            onError = {
-                updateState { copy(isUserLoggedIn = false) }
-            },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            }
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { isLoggedIn: Boolean -> updateState { copy(isUserLoggedIn = isLoggedIn) } },
+            onError = { updateState { copy(isUserLoggedIn = false) } },
+            onCompleted = { updateState { copy(isLoading = false) } }
         )
     }
 
@@ -206,4 +159,8 @@ class AccountViewModel @Inject constructor(
         )
     }
 
+    private fun setActiveBottomSheet(activeBottomSheet: ActiveBottomSheet) =
+        updateState { copy(activeBottomSheet = activeBottomSheet) }
+
+    private fun setAppTheme(appTheme: AppTheme) = updateState { copy(appTheme = appTheme) }
 }

@@ -10,8 +10,6 @@ data class AccountUiState(
     val error: ErrorState? = null,
     val userAvatar: String? = null,
     val isLoading: Boolean = false,
-    val isDarkMode: Boolean = false,
-    val isLightMode: Boolean = false,
     val currentLanguage: String = "",
     val showUserMenu: Boolean = false,
     val currentAppearance: String = "",

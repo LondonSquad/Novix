@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.section
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState

@@ -16,15 +16,13 @@ class RegistrationViewModel @Inject constructor() :
     override fun onPageLoaded(url: String?) {
         url?.let { currentUrl ->
             updateState { copy(currentUrl = currentUrl, isLoading = false) }
-            if (isRegistrationCompleteUrl(currentUrl)) {
+            if (isRegistrationCompleteUrl(currentUrl))
                 emitEffect(RegistrationEffect.RegistrationComplete)
-            }
         }
     }
 
-    override fun onUrlChanged(url: String) {
-        updateState { copy(currentUrl = url) }
-    }
+    override fun onUrlChanged(url: String) = updateState { copy(currentUrl = url) }
+
 
     override fun shouldInterceptUrl(url: String): Boolean {
         if (!isUrlAllowed(url)) {

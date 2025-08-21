@@ -44,16 +44,16 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.FooterSection
-import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
-import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.item.ActorItem
+import com.london.presentation.shared.item.RatingItem
+import com.london.presentation.shared.section.FooterSection
+import com.london.presentation.shared.text.ConditionalText
+import com.london.presentation.shared.text.TextWithIcon
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.headerDetailsCard
@@ -84,7 +84,7 @@ fun EpisodeDetailsScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error == ErrorState.NoInternet,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,
