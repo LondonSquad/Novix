@@ -93,7 +93,7 @@ fun BookmarkBottomSheet(
 
             BookmarkSheetEffect.LoginNavigation -> {
                 hideSheet()
-                navController.navigate(Screen.Login)
+                navController.navigate(Screen.Login())
             }
         }
     }

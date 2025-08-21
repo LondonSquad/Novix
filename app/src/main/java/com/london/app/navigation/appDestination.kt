@@ -59,9 +59,9 @@ fun NavController.navigateToMovieCategory(genre: MovieGenreUi) =
 fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
     navigate(Reviews(movieId, mediaType))
 
-fun NavController.navigateToLoginWithPopUp() = navigateTo(Login)
+fun NavController.navigateToLoginWithPopUp() = navigateTo(Login())
 
-fun NavController.navigateToLogin() = navigate(Login)
+fun NavController.navigateToLogin(source: Screen? = null) = navigate(Login(source = source))
 
 fun NavController.navigateToWatchingHistory() = navigate(WatchingHistory)
 

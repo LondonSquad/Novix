@@ -235,8 +235,8 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
-    override fun onLoginClick() {
-        emitEffect(MovieDetailsEffect.LoginNavigation)
+    override fun onLoginClick(movieId: Int) {
+        emitEffect(MovieDetailsEffect.LoginNavigation(movieId))
     }
 
     override fun onReviewsClick(movieId: Int, mediaType: MediaType) {

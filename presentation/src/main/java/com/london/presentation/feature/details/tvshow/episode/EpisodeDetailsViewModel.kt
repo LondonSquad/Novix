@@ -32,7 +32,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         getEpisodeDetails()
     }
 
-    private fun getEpisodeDetails(){
+    private fun getEpisodeDetails() {
         loadEpisodeDetails()
         loadEpisodeRating()
         loadVideoProvider()
@@ -40,7 +40,13 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     override fun onBackClick() = emitEffect(EpisodeDetailsEffect.BackNavigation)
 
-    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.LoginNavigation)
+    override fun onLoginClick(tvShowId: Int, seasonNumber: Int, episodeNumber: Int) = emitEffect(
+        EpisodeDetailsEffect.LoginNavigation(
+            tvShowId = tvShowId,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber
+        )
+    )
 
     override fun onRateEpisodeClick() {
         tryToExecute(

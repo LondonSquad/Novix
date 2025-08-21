@@ -18,7 +18,7 @@ sealed interface Screen {
     }
 
     @Serializable
-    data object Login : Screen
+    data class Login(val source: Screen? = null) : Screen
 
     @Serializable
     data object Home : Screen

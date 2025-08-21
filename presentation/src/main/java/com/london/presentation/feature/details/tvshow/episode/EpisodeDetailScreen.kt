@@ -65,7 +65,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: (tvShowId: Int, seasonNumber: Int, episodeNumber: Int) -> Unit,
     onNavigateToActorDetails: (Int) -> Unit,
     viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
@@ -76,7 +76,11 @@ fun EpisodeDetailsScreen(
         when (currentEffect) {
             EpisodeDetailsEffect.BackNavigation -> onNavigateBack()
             is EpisodeDetailsEffect.CastNavigation -> onNavigateToActorDetails(currentEffect.episodeId)
-            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin()
+            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin(
+                currentEffect.tvShowId,
+                currentEffect.seasonNumber,
+                currentEffect.episodeNumber
+            )
         }
     }
 
@@ -124,7 +128,9 @@ private fun Content(
     ) {
 
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(2f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(2f)
         )
 
         TopBar(
@@ -190,7 +196,15 @@ private fun Content(
         )
         if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
             onDismissClick = contract::onRateEpisodeClick,
-            onLoginClick = contract::onLoginClick,
+            onLoginClick = {
+                uiState.episode?.let {
+                    contract.onLoginClick(
+                        tvShowId = it.tvShowId,
+                        episodeNumber = it.id,
+                        seasonNumber = it.seasonNumber
+                    )
+                }
+            },
         )
     }
 

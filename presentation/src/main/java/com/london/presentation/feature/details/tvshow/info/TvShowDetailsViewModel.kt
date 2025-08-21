@@ -145,7 +145,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onLoginClick() = emitEffect(TvShowDetailsEffect.OnLoginNavigation)
+    override fun onLoginClick(tvShowId: Int) = emitEffect(TvShowDetailsEffect.OnLoginNavigation(tvShowId))
 
     override fun onBackClicked() {
         emitEffect(TvShowDetailsEffect.NavigateBack)

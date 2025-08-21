@@ -172,7 +172,7 @@ private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         appComposable<Lists> {
             ListScreen(
                 onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLogin,
+                onNavigateToLogin = { navigateToLogin(source = Lists()) },
             )
         }
         appComposable<ViewListItems> {
@@ -192,7 +192,9 @@ private fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostControlle
                 onNavigateToMovie = ::navigateToMovieDetails,
                 onNavigateToActor = ::navigateToActorDetails,
                 onNavigateToReviews = ::navigateToReviews,
-                onNavigateToLogin = ::navigateToLogin,
+                onNavigateToLogin = { movieId ->
+                    navigateToLogin(source = MovieDetails(movieId = movieId))
+                },
             )
         }
 
@@ -213,7 +215,9 @@ private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostControll
                 onNavigateToActorDetails = ::navigateToActorDetails,
                 onNavigateBack = ::navigateUp,
                 onNavigateToTvShowCategory = ::navigateToTvShowsByCategory,
-                onNavigateToLogin = ::navigateToLogin
+                onNavigateToLogin = { tvShowId ->
+                    navigateToLogin(source = TvShowDetails(tvShowId = tvShowId))
+                }
             )
         }
 
@@ -221,7 +225,15 @@ private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostControll
             EpisodeDetailsScreen(
                 onNavigateBack = ::navigateUp,
                 onNavigateToActorDetails = ::navigateToActorDetails,
-                onNavigateToLogin = ::navigateToLogin
+                onNavigateToLogin = { tvShowId, seasonNumber, episodeNumber ->
+                    navigateToLogin(
+                        source = EpisodeDetails(
+                            tvShowId = tvShowId,
+                            seasonNumber = seasonNumber,
+                            episodeNumber = episodeNumber
+                        )
+                    )
+                }
             )
         }
 

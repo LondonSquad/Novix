@@ -5,7 +5,7 @@ import com.london.presentation.shared.genre.MovieGenreUi
 
 interface MovieDetailsContract {
     fun onBackClick()
-    fun onLoginClick()
+    fun onLoginClick(movieId: Int)
     fun onRetryClick()
     fun onExpandClick()
     fun onRateBottomSheetClick()
