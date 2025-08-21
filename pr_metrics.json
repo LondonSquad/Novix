@@ -34522,11 +34522,15 @@
     "time_to_first_approval_minutes": 0.55,
     "required_approvals_met_at": "2025-08-21T17:36:23Z",
     "time_to_required_approvals_minutes": 3.716666666666667,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-21T17:59:15Z",
+    "merged_at": "2025-08-21T17:59:15Z",
+    "merged_by": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
     "week": "2025-W34",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 47,
       "deletions": 43,
