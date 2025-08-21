@@ -94,14 +94,6 @@ private fun Content(
                 .zIndex(1f)
         )
 
-        Image(
-            painter = painterResource(dsR.drawable.polygon1),
-            contentDescription = stringResource(R.string.app_icon),
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .offset(y = (-60).dp, x = (-20).dp)
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
