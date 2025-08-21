@@ -181,10 +181,14 @@ private fun HomeScreenLayout(
     homeScreenContract: HomeScreenContract
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().navBarBottomPadding()
+        modifier = Modifier
+            .fillMaxSize()
+            .navBarBottomPadding()
     ) {
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
