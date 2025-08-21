@@ -20,7 +20,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     env:
-      VERSION_OFFSET: 400
+      VERSION_OFFSET: 448
     outputs:
       pr_title: ${{ steps.set-pr-metadata.outputs.title }}
       pr_number: ${{ steps.set-pr-metadata.outputs.number }}
@@ -75,7 +75,7 @@ jobs:
       - name: Calculate versionName
         id: set-version
         run: |
-          VERSION_NAME="1.1.$(( ${{ github.run_number }} - ${{ env.VERSION_OFFSET }} ))"
+          VERSION_NAME="1.2.$(( ${{ github.run_number }} - ${{ env.VERSION_OFFSET }} ))"
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
 
       - name: Build ABI-split Release APKs
