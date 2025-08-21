@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -143,8 +142,7 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `when scrollPrevious is called from middle page, previous page should be navigated`() =
-        runTest {
+    fun `when scrollPrevious is called from middle page, previous page should be navigated`() = runTest {
             // Given
             every { pagerState.currentPage } returns 2
             val scope = this
@@ -198,8 +196,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when scrollNext is called from last page, welcome navigation effect should be emitted`() =
-        runTest {
+    fun `when scrollNext is called from last page, welcome navigation effect should be emitted`() = runTest {
             // Given
             every { pagerState.currentPage } returns 2 // Last page
             val scope = this
@@ -213,8 +210,7 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `when scrollNext is called from last page, onboarding should be marked as shown`() =
-        runTest {
+    fun `when scrollNext is called from last page, onboarding should be marked as shown`() = runTest {
             // Given
             every { pagerState.currentPage } returns 2 // Last page
             val scope = this
@@ -230,17 +226,13 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `when navigateToWelcome is called, welcome navigation effect should be emitted`() =
-        runTest {
-            // When & Then
-            viewModel?.effect?.test {
-                viewModel?.navigateToWelcome()
-
-                withTimeout(2000) {
-                    assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
-                }
-            }
+    fun `when navigateToWelcome is called, welcome navigation effect should be emitted`() = runTest {
+        viewModel?.effect?.test {
+            viewModel?.navigateToWelcome()
+            advanceUntilIdle()
+            assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
         }
+    }
 
     @Test
     fun `when onboardingFinished is called, preferences service should be invoked`() = runTest {
