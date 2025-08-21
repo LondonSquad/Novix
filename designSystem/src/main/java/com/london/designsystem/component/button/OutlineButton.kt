@@ -84,7 +84,7 @@ private fun PreviewNormalOutlineButton() {
             isLoading = false,
             hasIcon = false,
             hasLabel = true,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
         )
     }
 }
@@ -130,7 +130,7 @@ private fun PreviewOutlinePrimaryWithIcon() {
             isLoading = false,
             hasIcon = true,
             hasLabel = true,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
         )
     }
 }
@@ -145,7 +145,7 @@ private fun PreviewPrimaryWithIconOnly() {
             isLoading = false,
             hasIcon = true,
             hasLabel = false,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
 
         )
     }
