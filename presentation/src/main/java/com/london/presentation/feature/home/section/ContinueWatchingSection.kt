@@ -1,4 +1,4 @@
-package com.london.presentation.shared.section
+package com.london.presentation.feature.home.section
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

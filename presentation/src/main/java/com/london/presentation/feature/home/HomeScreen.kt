@@ -46,6 +46,9 @@ import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection
+import com.london.presentation.feature.home.section.ContinueWatchingSection
+import com.london.presentation.feature.home.section.ShimmerPopularSection
+import com.london.presentation.feature.home.section.TopRatedSection
 import com.london.presentation.feature.home.trending.TrendingSection
 import com.london.presentation.feature.home.upcoming.UpcomingMovieItem
 import com.london.presentation.feature.home.upcoming.UpcomingSectionTitle
@@ -53,9 +56,6 @@ import com.london.presentation.feature.home.upcoming.UpcomingStickyHeader
 import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
-import com.london.presentation.shared.section.ContinueWatchingSection
-import com.london.presentation.shared.section.ShimmerPopularSection
-import com.london.presentation.shared.section.TopRatedSection
 import com.london.presentation.shared.shimmer.CarousalShimmerEffect
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
