@@ -208,10 +208,7 @@ class OnboardingViewModelTest {
             viewModel?.effect?.test {
                 viewModel?.scrollNext(pagerState, scope)
                 advanceUntilIdle()
-
-                withTimeout(2000) {
-                    assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
-                }
+                assertThat(awaitItem()).isEqualTo(OnboardingEffect.OnWelcomeNavigation)
             }
         }
 
