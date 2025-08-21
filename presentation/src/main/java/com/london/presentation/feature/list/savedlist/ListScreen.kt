@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,6 +55,7 @@ import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.navBarBottomPadding
 import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
@@ -86,7 +88,9 @@ private fun Content(
     val pagingItems = state.items.collectAsLazyPagingItems()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .navBarBottomPadding()
     ) {
 
         BuildScreen(
@@ -96,7 +100,12 @@ private fun Content(
             pagingFlow = pagingItems,
             isGuest = state.isGuest,
             guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
-            emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
+            emptyContent = {
+                EmptyList(
+                    contract = contract,
+                    addListSheetState = state.addListSheetState
+                )
+            },
             handlePagingLoadingAutomatically = true
         ) {
 
@@ -128,6 +137,8 @@ private fun Content(
                 }
             }
 
+            ListFAB(contract::onFabClick)
+
             AddListBottomSheet(
                 addListInteractions = contract,
                 addListSheetState = state.addListSheetState
@@ -158,30 +169,37 @@ private fun Content(
 
 @Composable
 private fun ScreenScaffold(
-    titleRes: Int,
-    showFab: Boolean = true,
     onFabClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .navBarBottomPadding()
     ) {
         content()
 
-        if (showFab && onFabClick != null) {
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 16.dp, end = 16.dp),
-                onClick = onFabClick,
-                isLoadingIcon = false,
-                isDisabledIcon = false,
-                isDefaultIcon = true
-            )
+        onFabClick?.let {
+            ListFAB(onFabClick)
         }
     }
 
+}
+
+@Composable
+fun BoxScope.ListFAB(
+    onFabClick: () -> Unit
+) {
+    FloatingActionButton(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(bottom = 16.dp, end = 16.dp),
+        onClick = onFabClick,
+        isLoadingIcon = false,
+        isDisabledIcon = false,
+        isDefaultIcon = true
+    )
 }
 
 @Composable
@@ -248,9 +266,7 @@ private fun EmptyList(
     addListSheetState: AddSheetState
 ) {
     ScreenScaffold(
-        titleRes = R.string.saved_list_title,
-        onFabClick = contract::onFabClick,
-        showFab = true,
+        onFabClick = contract::onFabClick
     ) {
         Box(
             modifier = Modifier
@@ -280,10 +296,7 @@ private fun NoListFoundAsGuest(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ScreenScaffold(
-        titleRes = R.string.saved_list_title,
-        showFab = false
-    ) {
+    ScreenScaffold {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
