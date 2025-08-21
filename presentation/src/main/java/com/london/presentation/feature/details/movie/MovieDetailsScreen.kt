@@ -399,8 +399,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
-                tint = NovixTheme.colors.yellowAccent,
-                hasInitialDot = false
+                tint = NovixTheme.colors.yellowAccent
             )
         }
 
@@ -415,6 +414,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
+                hasInitialDot = false
             )
 
             if (!date.isNullOrBlank()) {

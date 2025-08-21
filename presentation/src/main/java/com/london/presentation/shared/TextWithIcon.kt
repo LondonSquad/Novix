@@ -20,6 +20,7 @@ import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.utils.isNotZeroRate
 
 @Composable
 fun TextWithIcon(
@@ -29,6 +30,8 @@ fun TextWithIcon(
     hasInitialDot: Boolean = true
 ) {
     if (text.isEmpty()) return
+    val shouldShowDot = hasInitialDot && text.isNotZeroRate()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -36,7 +39,7 @@ fun TextWithIcon(
         val scale = LocalDensity.current.fontScale
         val baseIconSize = 12.dp
 
-        if (hasInitialDot)
+        if (shouldShowDot) {
             Box(
                 modifier = Modifier
                     .padding(4.dp)
@@ -46,12 +49,13 @@ fun TextWithIcon(
                     .align(alignment = Alignment.CenterVertically)
             )
 
-        Icon(
-            painter = icon,
-            contentDescription = stringResource(R.string.image_dot),
-            tint = tint,
-            modifier = Modifier.size(baseIconSize * scale)
-        )
+            Icon(
+                painter = icon,
+                contentDescription = stringResource(R.string.image_dot),
+                tint = tint,
+                modifier = Modifier.size(baseIconSize * scale)
+            )
+        }
         Text(
             text = text,
             style = NovixTheme.typography.label.small,
