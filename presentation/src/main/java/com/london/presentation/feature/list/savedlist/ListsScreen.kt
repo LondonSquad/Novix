@@ -57,7 +57,7 @@ import com.london.presentation.utils.Listen
 import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
-fun ListScreen(
+fun ListsScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToListDetails: (Int) -> Unit,
     viewModel: ListViewModel = hiltViewModel()
