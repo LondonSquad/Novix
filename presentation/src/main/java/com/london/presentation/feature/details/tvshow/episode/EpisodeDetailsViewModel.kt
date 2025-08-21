@@ -32,7 +32,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         getEpisodeDetails()
     }
 
-    private fun getEpisodeDetails(){
+    private fun getEpisodeDetails() {
         loadEpisodeDetails()
         loadEpisodeRating()
         loadVideoProvider()

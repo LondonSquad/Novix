@@ -1,16 +1,14 @@
 package com.london.presentation.feature.welcome.onboarding
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
-import androidx.lifecycle.viewModelScope
 import com.london.domain.service.AppPreferencesService
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,19 +46,24 @@ class OnboardingViewModel @Inject constructor(
 
     fun navigateToWelcome() {
         setOnBoardingShown()
-        emitEffect(OnboardingEffect.NavigateToWelcome)
+        emitEffect(OnboardingEffect.WelcomeNavigation)
     }
 
     fun onboardingFinished() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-                .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 
     private fun setOnBoardingShown() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 }
