@@ -10,6 +10,7 @@ import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
+import com.london.domain.service.AppPreferencesService
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -30,6 +31,7 @@ class AuthenticationRepositoryImplTest {
     private val authenticationPreferences: AuthenticationPreferences = mockk(relaxed = true)
     private val customMovieListLocalDataSource: CustomMovieListLocalDataSource = mockk(relaxed = true)
 
+    private val appPreferencesService: AppPreferencesService = mockk(relaxed = true)
 
     @Before
     fun setUp() {
@@ -37,7 +39,8 @@ class AuthenticationRepositoryImplTest {
             authenticationRemoteDataSource = authRemoteDataSource,
             accountRemoteDataSource = accountRemoteDataSource,
             authenticationPreferences = authenticationPreferences,
-            customMovieListLocalDataSource = customMovieListLocalDataSource
+            customMovieListLocalDataSource = customMovieListLocalDataSource,
+            appPreferencesService = appPreferencesService,
         )
     }
 
