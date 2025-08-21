@@ -104,8 +104,7 @@ private fun Content(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .background(color = NovixTheme.colors.iconBackgroundLow)
-                    .clickable(onClick = hideSheet)
-                ,
+                    .clickable(onClick = hideSheet),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(

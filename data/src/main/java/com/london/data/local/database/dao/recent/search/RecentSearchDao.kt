@@ -35,5 +35,5 @@ interface RecentSearchDao : RecentDao<RecentSearchLocal> {
 
     @Delete
     suspend fun delete(item: RecentSearchLocal)
-    
+
 }
