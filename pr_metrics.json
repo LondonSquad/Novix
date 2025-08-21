@@ -34466,17 +34466,36 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "abdo-essam",
+          "id": 92235360,
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-21T17:33:13Z",
+        "commit_id": "e0a11ca3083bb8c0713570be623b16c76e7aa521"
+      },
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-21T17:36:23Z",
+        "commit_id": "e0a11ca3083bb8c0713570be623b16c76e7aa521"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-21T17:33:13Z",
+    "time_to_first_approval_minutes": 0.55,
+    "required_approvals_met_at": "2025-08-21T17:36:23Z",
+    "time_to_required_approvals_minutes": 3.716666666666667,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W34",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 47,
       "deletions": 43,
