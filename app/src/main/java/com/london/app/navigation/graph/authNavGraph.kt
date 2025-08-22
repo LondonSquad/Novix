@@ -18,7 +18,7 @@ import com.london.presentation.navigation.Screen.Register
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController
-) = navigation<AppNavGraph.Auth>(startDestination = Login()) {
+) = navigation<AppNavGraph.Auth>(startDestination = Login) {
     appComposable<Login> {
         val currentRoute = it.toRoute<Login>()
         LoginScreen(

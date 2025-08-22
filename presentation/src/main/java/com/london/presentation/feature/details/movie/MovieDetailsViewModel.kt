@@ -35,6 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     init {
         loadMovieDetails()
+        args?.let { updateState { copy(isBookmarkSheetVisible = it.isBookmarkSheetVisible) } }
     }
 
     private fun loadMovieDetails() {

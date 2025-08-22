@@ -56,10 +56,10 @@ import kotlinx.coroutines.launch
 fun BookmarkBottomSheet(
     isSheetVisible: Boolean,
     bookmarkedMovieId: Int,
-    onSheetDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BookmarkSheetViewModel = hiltViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(),
+    onSheetDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
@@ -93,7 +93,14 @@ fun BookmarkBottomSheet(
 
             BookmarkSheetEffect.LoginNavigation -> {
                 hideSheet()
-                navController.navigate(Screen.Login())
+                navController.navigate(
+                    Screen.Login.withSource(
+                        value = Screen.MovieDetails(
+                            movieId = bookmarkedMovieId,
+                            isBookmarkSheetVisible = true
+                        )
+                    )
+                )
             }
         }
     }

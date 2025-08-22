@@ -33,7 +33,7 @@ fun NavController.navigateToEpisodeDetails(tvShowId: Int, seasonNumber: Int, epi
     navigate(EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
 
 fun NavController.navigateToMovieDetails(movieId: Int) =
-    navigate(MovieDetails(movieId))
+    navigate(MovieDetails(movieId = movieId))
 
 fun NavController.navigateToTvShowDetails(tvShowId: Int) =
     navigate(TvShowDetails(tvShowId))
@@ -59,9 +59,9 @@ fun NavController.navigateToMovieCategory(genre: MovieGenreUi) =
 fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
     navigate(Reviews(movieId, mediaType))
 
-fun NavController.navigateToLoginWithPopUp() = navigateTo(Login())
+fun NavController.navigateToLoginWithPopUp(source: Screen? = null) = navigateTo(Login.withSource(source))
 
-fun NavController.navigateToLogin(source: Screen? = null) = navigate(Login(source = source))
+fun NavController.navigateToLogin(source: Screen? = null) = navigate(Login.withSource(source))
 
 fun NavController.navigateToWatchingHistory() = navigate(WatchingHistory)
 
