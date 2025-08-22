@@ -18,7 +18,13 @@ sealed interface Screen {
     }
 
     @Serializable
-    data object Login : Screen
+    data object Login : Screen {
+        private var _source: Screen? = null
+        val source: Screen?
+            get() = _source?.also { _source = null }
+
+        fun withSource(value: Screen?): Login = this.also { _source = value }
+    }
 
     @Serializable
     data object Home : Screen
@@ -51,7 +57,7 @@ sealed interface Screen {
     data class TvShowDetails(val tvShowId: Int) : Screen
 
     @Serializable
-    data class MovieDetails(val movieId: Int) : Screen
+    data class MovieDetails(val movieId: Int, val isBookmarkSheetVisible: Boolean = false) : Screen
 
     @Serializable
     data class ActorDetails(val actorId: Int) : Screen

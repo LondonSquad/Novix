@@ -35,6 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     init {
         loadMovieDetails()
+        args?.let { updateState { copy(isBookmarkSheetVisible = it.isBookmarkSheetVisible) } }
     }
 
     private fun loadMovieDetails() {
@@ -75,9 +76,6 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
-    override fun onLoginClick() = emitEffect(MovieDetailsEffect.LoginNavigation)
-
-
     override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
         clearRatedState()
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
@@ -93,6 +91,9 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieDetails()
     }
 
+    override fun onLoginClick(movieId: Int) {
+        emitEffect(MovieDetailsEffect.LoginNavigation(movieId))
+    }
     override fun onRateBottomSheetClick() = checkUserAuthenticationForRating()
 
     override fun onSelectRatingClick(rating: Int) = submitMovieRating(rating)

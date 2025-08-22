@@ -249,8 +249,8 @@ class TvShowDetailsViewModelTest {
     fun `onLoginClick should emit OnLoginNavigation effect when clicked`() = runTest {
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onLoginClick()
-            assertThat(awaitItem()).isEqualTo(TvShowDetailsEffect.OnLoginNavigation)
+            viewModel?.onLoginClick(0)
+            assertThat(awaitItem()).isEqualTo(TvShowDetailsEffect.OnLoginNavigation(0))
             cancelAndIgnoreRemainingEvents()
         }
     }

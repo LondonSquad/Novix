@@ -87,11 +87,11 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, MediaType) -> Unit,
-    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
+    onNavigateToLogin: (movieId: Int) -> Unit,
+    onNavigateToMovie: (movieId: Int) -> Unit,
+    onNavigateToActor: (movieId: Int) -> Unit,
+    onNavigateToReviews: (movieId: Int, mediaType: MediaType) -> Unit,
+    onNavigateToMovieCategory: (genre: MovieGenreUi) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -108,7 +108,7 @@ fun MovieDetailsScreen(
                 currentEffect.mediaType
             )
 
-            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin()
+            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin(currentEffect.movieId)
         }
     }
 
@@ -381,7 +381,7 @@ private fun BottomSheetsHandler(
     )
     else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
         onDismissClick = movieDetailsContract::onRateBottomSheetClick,
-        onLoginClick = movieDetailsContract::onLoginClick,
+        onLoginClick = { movieDetailsContract.onLoginClick(uiState.movieId) },
     )
 }
 
@@ -399,8 +399,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
-                tint = NovixTheme.colors.yellowAccent,
-                hasInitialDot = false
+                tint = NovixTheme.colors.yellowAccent
             )
         }
 
@@ -415,6 +414,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
+                hasInitialDot = false
             )
 
             if (!date.isNullOrBlank()) {

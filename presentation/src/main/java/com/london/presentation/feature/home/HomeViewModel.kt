@@ -1,5 +1,6 @@
 package com.london.presentation.feature.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -35,18 +36,8 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     init {
-        getHomeInfo()
+        initializeData()
     }
-
-    private fun getHomeInfo() {
-        initializePopularMedia()
-        initializeTopRatedMedia()
-        handleRecentWatchedMedia()
-        initializeUpcomingMoviesFlow()
-    }
-
-    private fun initializeUpcomingMoviesFlow() =
-        updateState { copy(upcomingMovies = createUpComingFlow()) }
 
     override fun loadUpcomingMoviesClick(genre: MovieGenreUi) {
         updateState {
@@ -54,99 +45,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
-        val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
-            state.value.selectedCategoryFlow
-                .flatMapLatest { category -> createUpcomingPagingFlow(category ?: MovieGenreUi.All) }
-                .cachedIn(viewModelScope)
+    override fun onMovieClick(id: Int) =
+        emitEffect(HomeScreenEffect.MovieDetailsNavigation(id))
 
-        return upcomingMoviesFlow
+    override fun onTvShowClick(id: Int) =
+        emitEffect(HomeScreenEffect.TvShowDetailsNavigation(id))
+
+    override fun onMovieGenreSelect(genre: MovieGenreUi) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
+        loadUpcomingMoviesClick(genre)
     }
 
-    private fun createUpcomingPagingFlow(genre: MovieGenreUi): Flow<PagingData<UpComingMovie>> {
-        return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMovieUseCase.getUpcomingMoviesByGenre(
-                genre = genre.toDomain(),
-                pageNumber = pageNumber
-            )
-        }
-    }
+    override fun onTopRatedClick() = emitEffect(HomeScreenEffect.TopRatedNavigation)
 
-    private fun initializeTopRatedMedia() {
-        tryToExecute(
-            block = { fetchTopRatedMedia() },
-            onStart = { updateLoadingState(true) },
-            onSuccess = { topRatedMedia -> handleTopRatedSuccess(topRatedMedia) },
-            onError = { errorState -> updateErrorState(errorState) },
-            onCompleted = { updateLoadingState(false) },
-        )
-    }
+    override fun onContinueWatchingClick() = emitEffect(HomeScreenEffect.ContinueWatchingNavigation)
 
-    private fun handleTopRatedSuccess(topRatedMediaList: List<TopRatedMedia>) =
-        updateState { copy(topRatedMediaList = topRatedMediaList.toUiMedia().shuffled()) }
+    override fun onTrendingMoviesCardClick() = emitEffect(HomeScreenEffect.TrendingMovieNavigation)
 
-    private suspend fun fetchTopRatedMedia(): List<TopRatedMedia> {
-        val movies = getMovieUseCase.getMostRecentMovies()
-        val tvShows = getTvShowUseCase.getMostRecentTvShows()
+    override fun onTrendingTvShowsCardClick() = emitEffect(HomeScreenEffect.TrendingTvShowsNavigation)
 
-        return movies + tvShows
-    }
-
-    private fun handleRecentWatchedMedia() {
-        tryToCollect(
-            block = { fetchRecentWatchedMedia() },
-            onStart = { updateLoadingState(true) },
-            onNewValue = { recentWatchedMedia ->
-                handleRecentWatchedMediaSuccess(recentWatchedMedia)
-            },
-            onError = { errorState -> updateErrorState(errorState) },
-            onCompleted = { updateLoadingState(false) },
-        )
-    }
-
-    private fun initializePopularMedia() {
-        tryToExecute(
-            block = { fetchPopularMediaList() },
-            onStart = { updateLoadingState(true) },
-            onSuccess = { popularMedia -> handlePopularMediaSuccess(popularMedia) },
-            onError = { errorState -> updateErrorState(errorState) },
-            onCompleted = { updateLoadingState(false) },
-        )
-    }
-
-    private fun handleRecentWatchedMediaSuccess(recentWatchedMedia: List<HomeUiMedia>) =
-        updateState { copy(recentWatchedMediaFlow = flowOf(recentWatchedMedia)) }
-
-    private suspend fun fetchRecentWatchedMedia(): Flow<List<HomeUiMedia>> {
-        val movies = manageRecentMovieWatchedUseCase.getMostRecent()
-        val shows = manageRecentTvShowWatchedUseCase.getMostRecent()
-        return combineRecentMedia(movies, shows)
-    }
-
-    private fun combineRecentMedia(
-        movies: Flow<List<Movie>>,
-        shows: Flow<List<TvShow>>
-    ): Flow<List<HomeUiMedia>> {
-        return combine(movies, shows) { movieList, showList ->
-            movieList.toUiMedia() + showList.toUiMedia()
-        }
-    }
-
-    private fun handlePopularMediaSuccess(popularMedia: List<PopularUiMedia>) =
-        updateState { copy(popularMediaList = popularMedia) }
-
-    private fun updateErrorState(errorState: ErrorState) =
-        updateState { copy(error = errorState) }
-
-    private fun updateLoadingState(isLoading: Boolean) =
-        updateState { copy(isPopularLoading = isLoading) }
-
-    private suspend fun fetchPopularMediaList(): List<PopularUiMedia> {
-        val movies = getMovieUseCase.getPopularMovies()
-        val tvShows = getTvShowUseCase.getPopularTvShows()
-
-        return movies.toPopularUiMedia() + tvShows.toPopularUiMedia()
-    }
+    override fun onTrendingActorsCardClick() = emitEffect(HomeScreenEffect.TrendingActorNavigation)
 
     override fun onRetryClick() {
         updateState { copy(error = null) }
@@ -173,31 +92,94 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onMovieClick(id: Int) =
-        emitEffect(HomeScreenEffect.MovieDetailsNavigation(id))
-
-    override fun onTvShowClick(id: Int) =
-        emitEffect(HomeScreenEffect.TvShowDetailsNavigation(id))
-
-    override fun onMovieGenreSelect(genre: MovieGenreUi) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMoviesClick(genre)
+    private fun initializeData() {
+        initializePopularMedia()
+        initializeTopRatedMedia()
+        handleRecentWatchedMedia()
+        initializeUpcomingMoviesFlow()
     }
 
-    override fun onTopRatedClick() =
-        emitEffect(HomeScreenEffect.TopRatedNavigation)
+    private fun initializeUpcomingMoviesFlow() = updateState { copy(upcomingMovies = createUpComingFlow()) }
 
-    override fun onContinueWatchingClick() =
-        emitEffect(HomeScreenEffect.ContinueWatchingNavigation)
+    private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
+        val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
+            state.value.selectedCategoryFlow
+                .flatMapLatest { category -> createUpcomingPagingFlow(category ?: MovieGenreUi.All) }
+                .cachedIn(viewModelScope)
 
-    override fun onTrendingMoviesCardClick() =
-        emitEffect(HomeScreenEffect.TrendingMovieNavigation)
+        return upcomingMoviesFlow
+    }
 
-    override fun onTrendingTvShowsCardClick() =
-        emitEffect(HomeScreenEffect.TrendingTvShowsNavigation)
+    private fun createUpcomingPagingFlow(genre: MovieGenreUi): Flow<PagingData<UpComingMovie>> {
+        return createPagingSourceFlow(query = "") { _, pageNumber ->
+            getMovieUseCase.getUpcomingMoviesByGenre(
+                genre = genre.toDomain(),
+                pageNumber = pageNumber
+            )
+        }
+    }
 
-    override fun onTrendingActorsCardClick() =
-        emitEffect(HomeScreenEffect.TrendingActorNavigation)
+    private fun initializeTopRatedMedia() = tryToExecute(
+        block = { fetchTopRatedMedia() },
+        onStart = { updateState { copy(isTopRatedLoading = true) } },
+        onSuccess = { topRatedMedia -> handleTopRatedSuccess(topRatedMedia) },
+        onError = { errorState -> updateErrorState(errorState) },
+        onCompleted = { updateState { copy(isTopRatedLoading = false) } },
+    )
 
+    private fun handleTopRatedSuccess(topRatedMediaList: List<TopRatedMedia>) =
+        updateState { copy(topRatedMediaList = topRatedMediaList.toUiMedia().shuffled()) }
+
+    private suspend fun fetchTopRatedMedia(): List<TopRatedMedia> {
+        val movies = getMovieUseCase.getMostRecentMovies()
+        val tvShows = getTvShowUseCase.getMostRecentTvShows()
+
+        return movies + tvShows
+    }
+
+    private fun handleRecentWatchedMedia() {
+        tryToCollect(
+            block = { fetchRecentWatchedMedia() },
+            onNewValue = { recentWatchedMedia ->
+                handleRecentWatchedMediaSuccess(recentWatchedMedia)
+            },
+            onError = { errorState -> updateErrorState(errorState) },
+        )
+    }
+
+    private fun initializePopularMedia() = tryToExecute(
+        block = { fetchPopularMediaList() },
+        onStart = { updateState { copy(isPopularLoading = true) } },
+        onSuccess = { popularMedia -> handlePopularMediaSuccess(popularMedia) },
+        onError = { errorState -> updateErrorState(errorState) },
+        onCompleted = { updateState { copy(isPopularLoading = false) } },
+    )
+
+    private fun handleRecentWatchedMediaSuccess(recentWatchedMedia: List<HomeUiMedia>) =
+        updateState { copy(recentWatchedMediaFlow = flowOf(recentWatchedMedia)) }
+
+    private suspend fun fetchRecentWatchedMedia(): Flow<List<HomeUiMedia>> {
+        val movies = manageRecentMovieWatchedUseCase.getMostRecent()
+        val shows = manageRecentTvShowWatchedUseCase.getMostRecent()
+        return combineRecentMedia(movies, shows)
+    }
+
+    private fun combineRecentMedia(
+        movies: Flow<List<Movie>>,
+        shows: Flow<List<TvShow>>
+    ): Flow<List<HomeUiMedia>> = combine(movies, shows) { movieList, showList ->
+        movieList.toUiMedia() + showList.toUiMedia()
+    }
+
+    private fun handlePopularMediaSuccess(popularMedia: List<PopularUiMedia>) =
+        updateState { copy(popularMediaList = popularMedia) }
+
+    private fun updateErrorState(errorState: ErrorState) = updateState { copy(error = errorState) }
+
+    private suspend fun fetchPopularMediaList(): List<PopularUiMedia> {
+        val movies = getMovieUseCase.getPopularMovies()
+        val tvShows = getTvShowUseCase.getPopularTvShows()
+
+        return movies.toPopularUiMedia() + tvShows.toPopularUiMedia()
+    }
 }

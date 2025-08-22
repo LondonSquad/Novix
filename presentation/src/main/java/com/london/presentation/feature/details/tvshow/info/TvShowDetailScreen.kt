@@ -84,9 +84,9 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun TvShowsDetailsScreen(
-    onNavigateToLogin: () -> Unit,
-    onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateToTvShowCategory: (TvShowGenreUi) -> Unit,
+    onNavigateToLogin: (tvShowId: Int) -> Unit,
+    onNavigateToActorDetails: (tvShowId: Int) -> Unit,
+    onNavigateToTvShowCategory: (genre: TvShowGenreUi) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
@@ -116,7 +116,7 @@ fun TvShowsDetailsScreen(
                 currentEffect.category
             )
 
-            is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
+            is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin(currentEffect.tvShowId)
         }
     }
 
@@ -318,7 +318,7 @@ private fun Content(
         )
         else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
             onDismissClick = tvShowDetailsContract::onRateBottomSheetClick,
-            onLoginClick = tvShowDetailsContract::onLoginClick,
+            onLoginClick = { tvShowDetailsContract.onLoginClick(uiState.id) },
         )
     }
 

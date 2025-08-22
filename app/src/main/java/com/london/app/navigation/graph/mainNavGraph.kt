@@ -104,7 +104,7 @@ fun NavGraphBuilder.mainNavGraph(
             AccountScreen(
                 onNavigateToWatchingHistory = ::navigateToWatchingHistory,
                 onNavigateToMyRating = ::navigateToMyRating,
-                onNavigateToLogin = ::navigateToLoginWithPopUp
+                onNavigateToLogin = { navigateToLoginWithPopUp(source = Account) }
             )
         }
 
@@ -172,7 +172,7 @@ private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         appComposable<Lists> {
             ListScreen(
                 onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLogin,
+                onNavigateToLogin = { navigateToLogin(source = Lists()) },
             )
         }
         appComposable<ViewListItems> {
@@ -183,26 +183,27 @@ private fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
         }
     }
 
-private fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
-    with(navController) {
-        appComposable<MovieDetails> {
-            MovieDetailsScreen(
-                onNavigateBack = ::navigateUp,
-                onNavigateToMovieCategory = ::navigateToMovieCategory,
-                onNavigateToMovie = ::navigateToMovieDetails,
-                onNavigateToActor = ::navigateToActorDetails,
-                onNavigateToReviews = ::navigateToReviews,
-                onNavigateToLogin = ::navigateToLogin,
-            )
-        }
-
-        appComposable<MoviesByCategory> {
-            MoviesByCategoryScreen(
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                onNavigateBack = ::navigateUp,
-            )
-        }
+private fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) = with(navController) {
+    appComposable<MovieDetails> {
+        MovieDetailsScreen(
+            onNavigateBack = ::navigateUp,
+            onNavigateToMovieCategory = ::navigateToMovieCategory,
+            onNavigateToMovie = ::navigateToMovieDetails,
+            onNavigateToActor = ::navigateToActorDetails,
+            onNavigateToReviews = ::navigateToReviews,
+            onNavigateToLogin = { movieId ->
+                navigateToLogin(source = MovieDetails(movieId = movieId))
+            },
+        )
     }
+
+    appComposable<MoviesByCategory> {
+        MoviesByCategoryScreen(
+            onNavigateToMovieDetails = ::navigateToMovieDetails,
+            onNavigateBack = ::navigateUp,
+        )
+    }
+}
 
 private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
     with(navController) {
@@ -213,7 +214,9 @@ private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostControll
                 onNavigateToActorDetails = ::navigateToActorDetails,
                 onNavigateBack = ::navigateUp,
                 onNavigateToTvShowCategory = ::navigateToTvShowsByCategory,
-                onNavigateToLogin = ::navigateToLogin
+                onNavigateToLogin = { tvShowId ->
+                    navigateToLogin(source = TvShowDetails(tvShowId = tvShowId))
+                }
             )
         }
 
@@ -221,7 +224,15 @@ private fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostControll
             EpisodeDetailsScreen(
                 onNavigateBack = ::navigateUp,
                 onNavigateToActorDetails = ::navigateToActorDetails,
-                onNavigateToLogin = ::navigateToLogin
+                onNavigateToLogin = { tvShowId, seasonNumber, episodeNumber ->
+                    navigateToLogin(
+                        source = EpisodeDetails(
+                            tvShowId = tvShowId,
+                            seasonNumber = seasonNumber,
+                            episodeNumber = episodeNumber
+                        )
+                    )
+                }
             )
         }
 
@@ -284,5 +295,4 @@ private fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
                 onNavigateBack = ::navigateUp
             )
         }
-
     }

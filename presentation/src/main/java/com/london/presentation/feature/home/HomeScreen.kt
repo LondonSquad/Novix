@@ -89,14 +89,14 @@ fun HomeScreen(
 
     HomeScreenContent(
         uiState = uiState,
-        homeScreenContract = viewModel
+        contract = viewModel
     )
 }
 
 @Composable
 private fun HomeScreenContent(
     uiState: HomeScreenUiState,
-    homeScreenContract: HomeScreenContract,
+    contract: HomeScreenContract,
 ) {
     val screenDimensions = rememberScreenDimensions()
     val lazyGridState = rememberLazyGridState()
@@ -117,7 +117,7 @@ private fun HomeScreenContent(
         recentWatchedMedia = recentWatchedMedia,
         upcomingMoviesLazyList = upcomingMoviesLazyList,
         scrollState = scrollState,
-        homeScreenContract = homeScreenContract
+        homeScreenContract = contract
     )
 }
 
@@ -217,9 +217,9 @@ private fun HomeScreenLayout(
     }
 
     BookmarkBottomSheet(
-        onSheetDismiss = homeScreenContract::onBookmarkSheetDismiss,
+        bookmarkedMovieId = uiState.bookmarkedMovieId,
         isSheetVisible = uiState.isBookmarkSheetVisible,
-        bookmarkedMovieId = uiState.bookmarkedMovieId
+        onSheetDismiss = homeScreenContract::onBookmarkSheetDismiss,
     )
 }
 
@@ -290,7 +290,7 @@ private fun HomeContentGrid(
             continueWatchingSection(
                 screenWidth = screenWidth,
                 recentWatchedMedia = recentWatchedMedia,
-                isLoading = uiState.isLoading,
+                isLoading = uiState.isRecentWatchLoading,
                 homeScreenContract = homeScreenContract
             )
         }
@@ -313,27 +313,28 @@ private fun LazyGridScope.popularSection(
     homeScreenContract: HomeScreenContract
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
-        if (uiState.popularMediaList.isNotEmpty()) {
-            PopularSection(
-                modifier = Modifier.requiredWidth(screenWidth),
-                pagerState = pagerState,
-                uiMediaList = uiState.popularMediaList,
-                onManageBookmarkClicked = { movieId ->
-                    homeScreenContract.onManageBookmarkClicked(movieId)
-                },
-                onCardClick = { id, mediaType ->
-                    when (mediaType) {
-                        MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
-                        MediaType.Movie -> homeScreenContract.onMovieClick(id)
-                    }
-                }
-            )
-        } else {
+        if (uiState.isPopularLoading || uiState.popularMediaList.isEmpty()) {
             ShimmerPopularSection(
                 modifier = Modifier.requiredWidth(screenWidth),
                 pagerState = pagerState,
             )
+            return@item
         }
+
+        PopularSection(
+            modifier = Modifier.requiredWidth(screenWidth),
+            pagerState = pagerState,
+            uiMediaList = uiState.popularMediaList,
+            onManageBookmarkClicked = { movieId ->
+                homeScreenContract.onManageBookmarkClicked(movieId)
+            },
+            onCardClick = { id, mediaType ->
+                when (mediaType) {
+                    MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                    MediaType.Movie -> homeScreenContract.onMovieClick(id)
+                }
+            }
+        )
     }
 }
 

@@ -177,8 +177,8 @@ class MovieDetailsViewModelTest {
 
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onLoginClick()
-            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.LoginNavigation)
+            viewModel?.onLoginClick(0)
+            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.LoginNavigation(0))
         }
     }
 

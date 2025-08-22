@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.emptyFlow
 
 data class HomeScreenUiState(
     val error: ErrorState? = null,
-    val isLoading: Boolean = false,
     val bookmarkedMovieId: Int = 0,
     val isPopularLoading: Boolean = false,
     val isTopRatedLoading: Boolean = false,
+    val isRecentWatchLoading: Boolean = false,
     val isBookmarkSheetVisible: Boolean = false,
     val topRatedMediaList: List<HomeUiMedia> = emptyList(),
     val selectedMovieGenre: MovieGenreUi = MovieGenreUi.All,
@@ -23,4 +23,7 @@ data class HomeScreenUiState(
     val upcomingMovies: Flow<PagingData<UpComingMovie>> = emptyFlow(),
     val recentWatchedMediaFlow: Flow<List<HomeUiMedia>> = emptyFlow(),
     val selectedCategoryFlow: MutableStateFlow<MovieGenreUi?> = MutableStateFlow(null)
-)
+) {
+    val isLoading: Boolean
+        get() = isPopularLoading || isRecentWatchLoading || isTopRatedLoading
+}
