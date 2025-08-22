@@ -54,9 +54,9 @@ import com.london.presentation.feature.home.upcoming.UpcomingMovieItem
 import com.london.presentation.feature.home.upcoming.UpcomingSectionTitle
 import com.london.presentation.feature.home.upcoming.UpcomingStickyHeader
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.shimmer.CarousalShimmerEffect
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.navBarBottomPadding

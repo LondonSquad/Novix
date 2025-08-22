@@ -44,10 +44,10 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.review.Review
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.ImageView
-import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.item.ImageView
+import com.london.presentation.shared.item.RatingItem
+import com.london.presentation.shared.text.ConditionalText
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.isLoading
 import com.london.presentation.utils.reverseDateFormat
@@ -90,9 +90,11 @@ private fun Content(
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(1f)
         )
 
         Column(

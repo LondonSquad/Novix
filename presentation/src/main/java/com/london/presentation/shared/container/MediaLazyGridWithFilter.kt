@@ -10,10 +10,10 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.movie.Movie
-import com.london.presentation.shared.EmptyGenreLayout
-import com.london.presentation.shared.MediaGenreFilters
+import com.london.presentation.shared.genre.MediaGenreFilters
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.layout.EmptyGenreLayout
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(

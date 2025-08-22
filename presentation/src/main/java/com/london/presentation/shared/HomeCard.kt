@@ -24,6 +24,8 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.shared.item.ImageView
+import com.london.presentation.shared.shimmer.ShimmerMovieCard
 
 @Composable
 fun HomeCard(

@@ -11,7 +11,6 @@ data class TvShowDetailsUiState(
     val name: String = "",
     val overview: String = "",
     val selectedRating: Int = 0,
-    val isSaved: Boolean = false,
     val isError: Boolean = false,
     val isRated: Boolean = false,
     val numberOfSeasons: Int = 0,

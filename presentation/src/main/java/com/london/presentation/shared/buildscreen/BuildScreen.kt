@@ -83,7 +83,6 @@ fun BuildScreen(
         }
 
 
-
         (pagingFlow != null) &&
             pagingFlow.isEmpty() &&
             emptyLayoutMessage.isNotNull() -> {

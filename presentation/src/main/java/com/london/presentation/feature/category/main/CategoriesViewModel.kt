@@ -18,5 +18,4 @@ class CategoriesViewModel : BaseViewModel<CategoriesUiState, CategoriesEffect>(C
         if (category == state.value.selectedCategory) return
         updateState { copy(selectedCategory = category) }
     }
-
 }

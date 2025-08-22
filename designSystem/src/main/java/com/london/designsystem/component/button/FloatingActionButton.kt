@@ -35,7 +35,7 @@ fun FloatingActionButton(
     ) {
         if (isDisabledIcon || isDefaultIcon) {
             Icon(
-                painter = painterResource(id = R.drawable.icon_add),
+                painter = painterResource(id = R.drawable.add_icon),
                 contentDescription = "Add button",
                 modifier = Modifier.size(24.dp)
             )

@@ -71,7 +71,6 @@ import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.navBarBottomPadding
-import com.london.presentation.utils.toRecentViewed
 
 @Composable
 fun SearchScreen(

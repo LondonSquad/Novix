@@ -39,8 +39,5 @@ class ActorsGalleryViewModel @Inject constructor(
         loadImages(actorId)
     }
 
-    override fun onBackClick() {
-        emitEffect(ActorsGalleryEffect.BackNavigation)
-    }
-
+    override fun onBackClick() = emitEffect(ActorsGalleryEffect.BackNavigation)
 }

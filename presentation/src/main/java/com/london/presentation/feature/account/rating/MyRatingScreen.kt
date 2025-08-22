@@ -25,11 +25,11 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
+import com.london.presentation.shared.layout.EmptyGenreLayout
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.toLocalizedNumbers

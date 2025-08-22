@@ -43,6 +43,127 @@ class MovieDetailsViewModel @Inject constructor(
         loadAdditionalMovieData()
     }
 
+    override fun onBackClick() = emitEffect(MovieDetailsEffect.BackNavigation)
+
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
+
+    override fun onExpandClick() = updateState { copy(expanded = !expanded) }
+
+
+    override fun onMovieClick(movieId: Int) {
+        clearRatedState()
+        emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
+    }
+
+    override fun onActorClick(actorId: Int) {
+        clearRatedState()
+        emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
+    }
+
+    override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
+        clearRatedState()
+        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
+    }
+
+    override fun onGenreClick(genre: MovieGenreUi) {
+        clearRatedState()
+        emitEffect(MovieDetailsEffect.GenreNavigation(genre))
+    }
+
+    override fun onRetryClick() {
+        resetErrorState()
+        loadMovieDetails()
+    }
+
+    override fun onLoginClick(movieId: Int) {
+        emitEffect(MovieDetailsEffect.LoginNavigation(movieId))
+    }
+    override fun onRateBottomSheetClick() = checkUserAuthenticationForRating()
+
+    override fun onSelectRatingClick(rating: Int) = submitMovieRating(rating)
+
+    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
+
+    private fun handleRatingAuthenticationResult(isLoggedIn: Boolean) =
+        if (isLoggedIn) showRatingBottomSheet() else showGuestUserBottomSheet()
+
+    private fun showRatingBottomSheet() =
+        updateState { copy(isRateBottomSheetVisible = !isRateBottomSheetVisible) }
+
+    private fun showGuestUserBottomSheet() {
+        updateState {
+            copy(
+                isGuestUserBottomSheetVisible = !isGuestUserBottomSheetVisible,
+                isGuestUser = true
+            )
+        }
+    }
+
+    private fun submitMovieRating(rating: Int) {
+        tryToExecute(
+            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
+            onSuccess = { handleRatingSuccess(rating) },
+            onError = { errorState ->
+                updateState { copy(error = errorState, isSuccessfullyRated = false) }
+            },
+            onCompleted = { setLoadingState(false) }
+        )
+    }
+
+    private fun handleRatingSuccess(rating: Int) {
+        updateState {
+            copy(
+                selectedRating = rating,
+                isRated = true,
+                isRateBottomSheetVisible = false,
+                isSuccessfullyRated = true
+            )
+        }
+    }
+
+    private suspend fun addMovieToRecentHistory(details: MovieDetails) {
+        addMovieToRecentViewed(details)
+        addMovieToRecentWatched(details)
+    }
+
+    private suspend fun addMovieToRecentViewed(details: MovieDetails) {
+        val recentViewed = RecentViewed(
+            id = details.id,
+            imageUrl = details.posterUrl,
+            type = MediaType.Movie,
+            viewDate = System.currentTimeMillis()
+        )
+        manageRecentViewedUseCase.addToRecentViewed(recentViewed)
+    }
+
+    private suspend fun addMovieToRecentWatched(details: MovieDetails) {
+        val movie = Movie(
+            id = details.id,
+            name = details.title,
+            posterUrl = details.posterUrl,
+            releaseYear = 2025,
+            rating = 1,
+            genres = details.genres
+        )
+        manageRecentMovieWatchedUseCase.addMovieToRecentWatched(movie)
+    }
+
     private fun loadMainMovieData() {
         tryToExecute(
             block = { fetchMainMovieData() },
@@ -122,11 +243,9 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun resetErrorState() =
-        updateState { copy(error = null) }
+    private fun resetErrorState() = updateState { copy(error = null) }
 
-    private fun setLoadingState(isLoading: Boolean) =
-        updateState { copy(isLoading = isLoading) }
+    private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 
     private fun checkUserAuthenticationForRating() {
         tryToExecute(
@@ -135,134 +254,4 @@ class MovieDetailsViewModel @Inject constructor(
             onError = { errorState -> updateState { copy(error = errorState) } }
         )
     }
-
-    private fun handleRatingAuthenticationResult(isLoggedIn: Boolean) =
-        if (isLoggedIn) showRatingBottomSheet() else showGuestUserBottomSheet()
-
-    private fun showRatingBottomSheet() =
-        updateState { copy(isRateBottomSheetVisible = !isRateBottomSheetVisible) }
-
-    private fun showGuestUserBottomSheet() {
-        updateState {
-            copy(
-                isGuestUserBottomSheetVisible = !isGuestUserBottomSheetVisible,
-                isGuestUser = true
-            )
-        }
-    }
-
-    private fun submitMovieRating(rating: Int) {
-        tryToExecute(
-            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
-            onSuccess = { handleRatingSuccess(rating) },
-            onError = { errorState ->
-                updateState { copy(error = errorState, isSuccessfullyRated = false) }
-            },
-            onCompleted = { setLoadingState(false) }
-        )
-    }
-
-    private fun handleRatingSuccess(rating: Int) {
-        updateState {
-            copy(
-                selectedRating = rating,
-                isRated = true,
-                isRateBottomSheetVisible = false,
-                isSuccessfullyRated = true
-            )
-        }
-    }
-
-    private suspend fun addMovieToRecentHistory(details: MovieDetails) {
-        addMovieToRecentViewed(details)
-        addMovieToRecentWatched(details)
-    }
-
-    private suspend fun addMovieToRecentViewed(details: MovieDetails) {
-        val recentViewed = RecentViewed(
-            id = details.id,
-            imageUrl = details.posterUrl,
-            type = MediaType.Movie,
-            viewDate = System.currentTimeMillis()
-        )
-        manageRecentViewedUseCase.addToRecentViewed(recentViewed)
-    }
-
-    private suspend fun addMovieToRecentWatched(details: MovieDetails) {
-        val movie = Movie(
-            id = details.id,
-            name = details.title,
-            posterUrl = details.posterUrl,
-            releaseYear = 2025,
-            rating = 1,
-            genres = details.genres
-        )
-        manageRecentMovieWatchedUseCase.addMovieToRecentWatched(movie)
-    }
-
-    override fun onBackClick() {
-        emitEffect(MovieDetailsEffect.BackNavigation)
-    }
-
-    override fun onManageBookmarkClicked(movieId: Int) {
-        updateState {
-            copy(
-                isBookmarkSheetVisible = true,
-                bookmarkedMovieId = movieId
-            )
-        }
-    }
-
-    override fun onBookmarkSheetDismiss() {
-        updateState {
-            copy(
-                isBookmarkSheetVisible = false,
-                bookmarkedMovieId = 0
-            )
-        }
-    }
-
-    override fun onExpandClick() {
-        updateState { copy(expanded = !expanded) }
-    }
-
-    override fun onMovieClick(movieId: Int) {
-        clearRatedState()
-        emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
-    }
-
-    override fun onActorClick(actorId: Int) {
-        clearRatedState()
-        emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
-    }
-
-    override fun onLoginClick(movieId: Int) {
-        emitEffect(MovieDetailsEffect.LoginNavigation(movieId))
-    }
-
-    override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
-        clearRatedState()
-        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
-    }
-
-    override fun onGenreClick(genre: MovieGenreUi) {
-        clearRatedState()
-        emitEffect(MovieDetailsEffect.GenreNavigation(genre))
-    }
-
-    override fun onRetryClick() {
-        resetErrorState()
-        loadMovieDetails()
-    }
-
-    override fun onRateBottomSheetClick() {
-        checkUserAuthenticationForRating()
-    }
-
-    override fun onSelectRatingClick(rating: Int) {
-        submitMovieRating(rating)
-    }
-
-    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
-
 }

@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.contentRestriction
 
 import androidx.compose.runtime.compositionLocalOf
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel

@@ -1,16 +1,14 @@
 package com.london.presentation.feature.welcome.onboarding
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
-import androidx.lifecycle.viewModelScope
 import com.london.domain.service.AppPreferencesService
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,9 +16,8 @@ class OnboardingViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
 
-    fun onPageChanged(page: Int) {
-        updateState { copy(currentPage = page) }
-    }
+    fun onPageChanged(page: Int) = updateState { copy(currentPage = page) }
+
 
     fun scrollToPage(pagerState: PagerState, targetPage: Int, scope: CoroutineScope) {
         scope.launch {
@@ -42,28 +39,31 @@ class OnboardingViewModel @Inject constructor(
 
     fun scrollNext(pagerState: PagerState, scope: CoroutineScope) {
         val nextPage = pagerState.currentPage + 1
-        if (nextPage <= pagerState.pageCount - 1) {
+        if (nextPage <= pagerState.pageCount - 1)
             scrollToPage(pagerState = pagerState, targetPage = nextPage, scope = scope)
-        } else {
-            navigateToWelcome()
-        }
+        else navigateToWelcome()
     }
 
     fun navigateToWelcome() {
         setOnBoardingShown()
-        emitEffect(OnboardingEffect.NavigateToWelcome)
+        emitEffect(OnboardingEffect.WelcomeNavigation)
     }
 
     fun onboardingFinished() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-                .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 
     private fun setOnBoardingShown() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-        }
+        tryToExecute(
+            block = { appPreferencesService.setOnBoardingShown() },
+            onError = { errorState ->
+                Timber.e("Failed to set onboarding shown: $errorState")
+            }
+        )
     }
 }

@@ -18,8 +18,6 @@ import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.toDomain
-import com.london.presentation.utils.toPopularUiMedia
-import com.london.presentation.utils.toUiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

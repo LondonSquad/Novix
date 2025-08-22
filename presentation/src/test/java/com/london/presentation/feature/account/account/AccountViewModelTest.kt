@@ -27,7 +27,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class   AccountViewModelTest {
+class AccountViewModelTest {
 
     private lateinit var appPreferencesService: AppPreferencesService
     private lateinit var authenticationUseCase: AuthenticationUseCase

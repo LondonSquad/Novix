@@ -1,4 +1,4 @@
-package com.london.presentation.localization
+package com.london.presentation.utils
 
 import android.content.Context
 import android.content.res.Configuration

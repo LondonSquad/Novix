@@ -30,7 +30,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
-import com.london.presentation.shared.ImageView
+import com.london.presentation.shared.item.ImageView
 import com.london.designsystem.R as dsR
 
 @Composable

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.domain.entity.actor.Actor
-import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.item.ActorItem
 
 @Composable
 fun ActorLazyVerticalColumn(

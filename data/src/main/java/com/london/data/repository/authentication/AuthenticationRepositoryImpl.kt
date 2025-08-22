@@ -9,13 +9,15 @@ import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.utils.isFailure
 import com.london.domain.repository.AuthenticationRepository
+import com.london.domain.service.AppPreferencesService
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val authenticationRemoteDataSource: AuthenticationRemoteDataSource,
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val authenticationPreferences: AuthenticationPreferences,
-    private val customMovieListLocalDataSource: CustomMovieListLocalDataSource
+    private val customMovieListLocalDataSource: CustomMovieListLocalDataSource,
+    private val appPreferencesService: AppPreferencesService
 ) : AuthenticationRepository {
 
     override suspend fun login(username: String, password: String): Boolean {
@@ -52,6 +54,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
         customMovieListLocalDataSource.clearAllCache()
         authenticationPreferences.clearAuthentication()
+        appPreferencesService.clearAllPreferences()
         return true
     }
 
