@@ -22,6 +22,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.string
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
@@ -145,11 +146,11 @@ private fun RatingSnackBar(state: MyRatingUiState) {
     if (!state.isSnackBarVisible) return
 
     if (state.errorState is ErrorState.RequestFailed) {
-        SnackBarAnimation(state.errorState.message)
+        SnackBarAnimation(message = R.string.rating_delete_fail.string)
     } else {
         SnackBarAnimation(
-            stringResource(R.string.delete_list_successfully),
-            dsR.drawable.ic_success
+            message = R.string.rating_delete_success.string,
+            icon = dsR.drawable.ic_success
         )
     }
 }
