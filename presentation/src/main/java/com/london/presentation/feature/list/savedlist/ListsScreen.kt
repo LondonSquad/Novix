@@ -8,6 +8,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -53,6 +54,7 @@ import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.navBarBottomPadding
 import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
@@ -82,45 +84,62 @@ private fun Content(
     state: ListUiState,
     contract: ListContract,
 ) {
-    val listsFlow = state.items.collectAsLazyPagingItems()
+    val pagingItems = state.items.collectAsLazyPagingItems()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .navBarBottomPadding()
     ) {
 
         BuildScreen(
             onRetry = contract::onRetry,
             isLoading = state.isLoading,
             isError = state.error is ErrorState.NoInternet,
-            pagingFlow = listsFlow,
+            pagingFlow = pagingItems,
             isGuest = state.isGuest,
-            guestContent = { LoginPromptForList(onLoginClick = contract::onLoginClick) },
-            emptyContent = { EmptyList(contract = contract, addListSheetState = state.addListSheetState) },
+            guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
+            emptyContent = {
+                EmptyList(
+                    contract = contract,
+                    addListSheetState = state.addListSheetState
+                )
+            },
             handlePagingLoadingAutomatically = true
         ) {
 
-            BackgroundGradient(modifier = Modifier.align(Alignment.TopStart))
+            BackgroundGradient(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+            )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                TopBar(
+                    title = stringResource(R.string.saved_list_title),
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
 
-                stickyHeader {
-                    TopBar(
-                        title = stringResource(R.string.saved_list_title),
-                        modifier = Modifier.padding(vertical = 12.dp)
-                    )
-                }
-
-                items(listsFlow.itemSnapshotList.items) { list ->
-                    SavedListComponent(
-                        movieList = list,
-                        onListClick = contract::onListClick
-                    )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(pagingItems.itemCount) { index ->
+                        val item = pagingItems[index]
+                        item?.let {
+                            SavedListItemRow(
+                                itemUi = item,
+                                onCountClick = contract::onListClick
+                            )
+                        }
+                    }
                 }
             }
+
+            ListFAB(contract::onFabClick)
 
             AddListBottomSheet(
                 addListInteractions = contract,
@@ -151,39 +170,30 @@ private fun Content(
 }
 
 @Composable
-private fun ScreenScaffold(
-    onFabClick: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
+fun BoxScope.ListFAB(
+    onFabClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        content()
-
-        onFabClick?.let {
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 116.dp, end = 16.dp),
-                onClick = onFabClick,
-                isLoadingIcon = false,
-                isDisabledIcon = false,
-                isDefaultIcon = true
-            )
-        }
-    }
+    FloatingActionButton(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(bottom = 16.dp, end = 16.dp),
+        onClick = onFabClick,
+        isLoadingIcon = false,
+        isDisabledIcon = false,
+        isDefaultIcon = true
+    )
 }
 
 @Composable
-private fun SavedListComponent(
-    movieList: MovieList,
-    onListClick: (Int) -> Unit
+private fun SavedListItemRow(
+    itemUi: MovieList,
+    onCountClick: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onListClick(movieList.id) }
+            .clickable { onCountClick(itemUi.id) }
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -194,21 +204,23 @@ private fun SavedListComponent(
             .zIndex(2f)
     ) {
         Text(
-            text = movieList.name,
-            modifier = Modifier.weight(1f),
+            text = itemUi.name,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
         )
-
         ItemCount(
-            count = movieList.moviesCount,
+            itemUi = itemUi,
         )
     }
 }
 
 @Composable
-private fun ItemCount(count: Int) {
+private fun ItemCount(
+    itemUi: MovieList,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -218,7 +230,7 @@ private fun ItemCount(count: Int) {
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = count.toLocalizedNumbers(),
+            text = itemUi.moviesCount.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.primary,
         )
@@ -235,38 +247,45 @@ private fun EmptyList(
     contract: ListContract,
     addListSheetState: AddSheetState
 ) {
-    ScreenScaffold(onFabClick = contract::onFabClick) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            EmptyLayout(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .align(Alignment.Center),
-                text = stringResource(R.string.no_saved_list),
-                imageContent = {
-                    BlurredImage(imageId = R.drawable.ic_no_saved_list_yet)
-                },
-            )
-        }
-
-        AddListBottomSheet(
-            addListInteractions = contract,
-            addListSheetState = addListSheetState
+    Box(modifier = Modifier.fillMaxSize()) {
+        TopBar(
+            title = R.string.saved_list_title.string,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
         )
+
+        EmptyLayout(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .align(Alignment.Center)
+                .verticalScroll(rememberScrollState()),
+            text = stringResource(R.string.no_saved_list),
+            imageContent = {
+                BlurredImage(imageId = R.drawable.ic_no_saved_list_yet)
+            },
+        )
+
+        ListFAB(contract::onFabClick)
     }
+
+    AddListBottomSheet(
+        addListInteractions = contract,
+        addListSheetState = addListSheetState
+    )
 }
 
 @Composable
-private fun LoginPromptForList(
+private fun NoListFoundAsGuest(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        TopBar(
+            title = R.string.saved_list_title.string,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+        )
+
         EmptyLayout(
             modifier = modifier
                 .padding(horizontal = 16.dp)
@@ -318,7 +337,6 @@ private fun BlurredImage(@DrawableRes imageId: Int) {
                 contentDescription = null
             )
         }
-        
         Image(
             painter = imageId.painter,
             contentDescription = "List Image",
