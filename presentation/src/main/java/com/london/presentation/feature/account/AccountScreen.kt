@@ -23,7 +23,7 @@ import com.london.presentation.feature.account.bottomsheet.LanguageBottomSheet
 import com.london.presentation.feature.account.bottomsheet.LogoutBottomSheet
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.navBarBottomPadding

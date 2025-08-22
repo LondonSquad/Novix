@@ -32,7 +32,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.CategoriesItem
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.genre.MovieGenreUi

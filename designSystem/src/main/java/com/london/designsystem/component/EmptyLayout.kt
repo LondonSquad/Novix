@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Center
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,31 +27,38 @@ fun EmptyLayout(
     modifier: Modifier = Modifier,
     @DrawableRes image: Int? = null
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface),
-        horizontalAlignment = CenterHorizontally,
-        verticalArrangement = Center
-    ) {
-        image?.let {
-            Image(
-                painter = painterResource(id = it),
-                contentDescription = "Search Icon",
-                modifier = Modifier
-                    .size(128.dp)
-                    .align(CenterHorizontally),
-                contentScale = ContentScale.Fit
+    Box {
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+        )
+
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = Center
+        ) {
+            image?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = "Search Icon",
+                    modifier = Modifier
+                        .size(128.dp)
+                        .align(CenterHorizontally),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            Text(
+                text = text,
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
-
-        Text(
-            text = text,
-            style = NovixTheme.typography.body.small,
-            color = NovixTheme.colors.body,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 

@@ -19,6 +19,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.component.BackgroundGradient
 
 @Composable
 fun NetworkErrorScreen(
@@ -30,6 +31,11 @@ fun NetworkErrorScreen(
         modifier
             .padding(horizontal = 16.dp)
     ) {
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+        )
+
         if (onBack != null) {
             TopBar(
                 onBackClick = onBack,
