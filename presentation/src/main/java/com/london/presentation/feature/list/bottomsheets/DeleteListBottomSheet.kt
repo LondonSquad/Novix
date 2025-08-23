@@ -139,7 +139,7 @@ private fun Content(
 
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
-            text = R.string.btn_delete.string,
+            text = R.string.delete.string,
             hasLabel = true,
             hasIcon = false,
             isLoading = false,

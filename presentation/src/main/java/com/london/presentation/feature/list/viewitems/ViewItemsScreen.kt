@@ -121,7 +121,7 @@ private fun Content(
 
         if (state.isMovieSnackBarSuccessVisible) {
             snackBarController.showMessage(
-                message = R.string.movie_removed_successfully.string,
+                message = R.string.list_delete_movie_success.string,
                 snackBarType = SnackBarType.Success,
                 onComplete = contract::resetMovieSnackBarSuccessState,
                 icon = com.london.designsystem.R.drawable.ic_success,

@@ -102,7 +102,7 @@ fun TrendingSection(
             )
 
             CategoryCard(
-                title = stringResource(R.string.actors),
+                title = stringResource(R.string.celebrities),
                 icon = painterResource(id = R.drawable.icon_actor),
                 startColor = NovixTheme.colors.tealBlue,
                 endColor = NovixTheme.colors.oceanDark,
