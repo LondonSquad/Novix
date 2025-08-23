@@ -229,5 +229,8 @@
     <!-- Network & Error States -->
     <string name="network_error">تحقق من اتصالك بالإنترنت</string>
     <string name="something_went_wrong">حدث خطأ ما</string>
+    <string name="no_internet">لا يوجد انترنت</string>
+    <string name="you_are_offline">يبدو انك غير متصل بالانترنت</string>
+    <string name="check_your_connection">تحقق من اتصالك وحاول مرة أخرى، سننتظرك مع أفلامك والفشار</string>
 
 </resources>
