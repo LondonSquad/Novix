@@ -34550,5 +34550,42 @@
       "deletions": 43,
       "changed_files": 18
     }
+  },
+  {
+    "pr_number": 723,
+    "url": "https://github.com/LondonSquad/Novix/pull/723",
+    "title": "Refactor: Improve String resources",
+    "opened_at": "2025-08-23T18:49:10Z",
+    "head_ref": "refactor/string-resources",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 477,
+      "deletions": 362,
+      "changed_files": 53
+    }
   }
 ]
