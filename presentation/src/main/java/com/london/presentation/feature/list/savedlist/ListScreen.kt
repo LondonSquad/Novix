@@ -122,7 +122,7 @@ private fun Content(
 
                 stickyHeader {
                     TopBar(
-                        title = stringResource(R.string.lists_saved),
+                        title = stringResource(R.string.my_saved_lists),
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
                 }

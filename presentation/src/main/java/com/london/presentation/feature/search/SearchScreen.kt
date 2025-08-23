@@ -588,7 +588,7 @@ private fun RecentSearchSection(
     onRemoveClick: (RecentSearch) -> Unit
 ) {
     SectionHeader(
-        text = stringResource(R.string.recent_search),
+        text = stringResource(R.string.recent_searches),
         hasGetAll = true,
         hasIcon = false,
         getAllText = stringResource(R.string.clear_all),

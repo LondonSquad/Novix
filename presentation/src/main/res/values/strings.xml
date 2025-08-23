@@ -3,16 +3,16 @@
 
     <!-- Essentials -->
 
-    <string name="Movies">Movies</string>
-    <string name="TV_Shows">TV Shows</string>
-    <string name="Actors">Actors</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV Shows</string>
+    <string name="actors">Actors</string>
 
     <!-- Home -->
 
-    <string name="What_you_want_to_watch">What you want to watch?</string>
+    <string name="what_to_watch">What you want to watch?</string>
     <string name="app_name_description">Born from Nova, Made for Flix.</string>
     <string name="celebrities">Celebrities</string>
-    <string name="top_rated">Top rated</string>
+    <string name="top_rated">Top Rated</string>
     <string name="continue_watch">Continue Watching</string>
     <string name="upcoming">Upcoming</string>
 
@@ -21,75 +21,75 @@
     <string name="trending_movies">Trending Movies</string>
     <string name="trending_tv_shows">Trending TV Shows</string>
     <string name="trending_people">Trending People</string>
-    <string name="no_trending_people">Looks like none has been trending lately!</string>
+    <string name="no_trending_people">No one\'s trending right now</string>
 
     <!-- Search -->
 
     <string name="search">Search</string>
     <string name="search_placeholder">Search…</string>
 
-    <string name="recent_viewed">Recent Viewed</string>
-    <string name="recent_search">Recent Search</string>
-    <string name="start_exploring">Start exploring! Search for your favorite movies, series and shows</string>
-    <string name="no_search_result">No search result, please try with another keyword!</string>
+    <string name="recent_viewed">Recently Viewed</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="start_exploring">Start exploring! Search for your favorite movies and shows</string>
+    <string name="no_search_result">No results found, try different keywords</string>
 
     <!-- Bookmarks -->
 
-    <string name="lists">My Lists</string>
-    <string name="lists_saved">My Lists</string>
+    <string name="my_lists">My Lists</string>
+    <string name="my_saved_lists">My Lists</string>
 
-    <string name="list_title">List title</string>
-    <string name="list_edit">Edit list</string>
-    <string name="list_create_new">Create new list</string>
-    <string name="list_add_new">Add new list</string>
-    <string name="list_empty">A blank canvas for your collection. What will you add first?</string>
+    <string name="list_title">List Title</string>
+    <string name="list_edit">Edit List</string>
+    <string name="list_create_new">Create New List</string>
+    <string name="list_add_new">Add New List</string>
+    <string name="list_empty">Your collection awaits its first addition</string>
 
-    <string name="list_delete_confirm">Deleting the saved list will remove all items it contains. Are you sure you want to proceed?</string>
-    <string name="list_delete">Delete list</string>
-    <string name="list_delete_success">Deleted list successfully</string>
-    <string name="list_delete_failed">List deletion failed</string>
+    <string name="list_delete_confirm">Deleting this list will remove all its items. Continue?</string>
+    <string name="list_delete">Delete List</string>
+    <string name="list_delete_success">List deleted successfully</string>
+    <string name="list_delete_fail">Failed to delete list</string>
     <string name="list_add_success">List created successfully</string>
     <string name="list_add_fail">Failed to create list</string>
 
-    <string name="item_add_success">Added successfully!</string>
-    <string name="item_add_fail">Couldn\'t add item, please try again</string>
-    <string name="item_delete_success">Removed from list</string>
-    <string name="item_delete_fail">Couldn\'t remove item</string>
+    <string name="item_add_success">Added successfully</string>
+    <string name="item_add_fail">Failed to add item</string>
+    <string name="item_delete_fail">Failed to remove item</string>
+    <string name="item_delete_success">Removed successfully</string>
 
     <string name="n_items">%1$d items</string>
-    <string name="save_to_list">Save to list</string>
+    <string name="save_to_list">Save to List</string>
 
-    <string name="no_lists">There is no saved list yet, click on + button to add a new list!</string>
-    <string name="no_lists_available">No lists available for this item!\nCreate a new one now.</string>
+    <string name="no_lists">No saved lists yet, tap + to create one</string>
+    <string name="no_lists_available">No lists available for this item\nCreate one now</string>
 
-    <string name="login_to_create_list">Please login to create lists and add your favorite items to it!</string>
-    <string name="login_to_add_list">Please login to save to list</string>
+    <string name="login_to_create_list">Please log in to create and manage your lists</string>
+    <string name="login_to_add_list">Please log in to save to lists</string>
 
     <!-- Movie/Shows/Actor Details -->
 
-    <string name="top_movies_picks">Top movies picks</string>
-    <string name="top_tv_shows_picks">Top tv shows picks</string>
+    <string name="top_movies_picks">Top Movie Picks</string>
+    <string name="top_tv_shows_picks">Top TV Show Picks</string>
 
     <string name="overview">Overview</string>
-    <string name="guests_of_honor">Guests of honor</string>
+    <string name="featured_guests">Featured Guests</string>
     <string name="cast">Cast</string>
-    <string name="release_year">Released Year</string>
+    <string name="release_year">Release Year</string>
 
     <string name="reviews">Reviews</string>
-    <string name="view_reviews">View reviews</string>
+    <string name="view_reviews">View Reviews</string>
 
-    <string name="read_more">Read more</string>
-    <string name="read_less">Read less</string>
+    <string name="read_more">Read More</string>
+    <string name="read_less">Read Less</string>
 
-    <string name="more_like_this">More like this</string>
-    <string name="play_trailer">Play trailer</string>
+    <string name="more_like_this">More Like This</string>
+    <string name="play_trailer">Play Trailer</string>
 
-    <string name="no_actor_details">No actor details available</string>
+    <string name="no_actor_details">No details available for this actor</string>
     <string name="biography">Biography</string>
     <string name="gallery">Gallery</string>
 
     <string name="actor_images">Actor Photos</string>
-    <string name="reviewer_image">Author profile</string>
+    <string name="reviewer_avatar">Reviewer Avatar</string>
     <string name="tv_show_image">TV Show Image</string>
 
     <!-- Welcome -->
@@ -99,48 +99,49 @@
 
     <!-- Onboarding -->
 
-    <string name="first_onboarding_title">Discover best movies and series</string>
+    <string name="first_onboarding_title">Discover the Best Movies and Series</string>
     <string name="first_onboarding_description">Browse the latest releases, trends, and content tailored to your taste — all in one place.</string>
-    <string name="second_onboarding_title">Search easily… and watch to your taste</string>
+    <string name="second_onboarding_title">Search Easily… and Watch to Your Taste</string>
     <string name="second_onboarding_description">Use smart search to find exactly what you love — action, drama, crime, anime and more!</string>
-    <string name="third_onboarding_title">Rate, save, and create your own lists.</string>
+    <string name="third_onboarding_title">Rate, Save, and Create Your Own Lists</string>
     <string name="third_onboarding_description">Rate movies, track your viewing history, and easily save your favorite lists.</string>
     <string name="skip">Skip</string>
 
     <!-- Login -->
 
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="username">Username</string>
-    <string name="login_to_your_account">Login to your account</string>
-    <string name="continue_as_guest">Continue as guest</string>
+    <string name="login_to_your_account">Log in to your account</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <!-- FIX: Remove backslash -->
     <string name="no_account">Don\'t have an account?</string>
-    <string name="create_account">Create account</string>
+    <string name="create_account">Create Account</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
-    <string name="guest_login_failed">Guest login failed.</string>
+    <string name="guest_login_failed">Failed to continue as guest</string>
 
-    <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
-    <string name="no_reviews">There is no review!</string>
+    <string name="no_recent_history">You haven\'t browsed anything yet\nExplore the app and come back later</string>
+    <string name="no_reviews">No reviews yet</string>
 
     <!-- Account -->
 
-    <string name="my_account">My account</string>
-    <string name="please_login_to_access">Please login to access your account details and other features!</string>
+    <string name="my_account">My Account</string>
+    <string name="please_login_to_access">Please log in to access your account details and features</string>
 
-    <string name="watching_history">Watching history</string>
-    <string name="user_profile">User profile</string>
-    <string name="change_password">Change password</string>
+    <string name="watching_history">Watching History</string>
+    <string name="user_profile">User Profile</string>
+    <string name="change_password">Change Password</string>
 
-    <string name="logout">Logout</string>
-    <string name="are_you_sure">Are you sure you want to continue?</string>
+    <string name="logout">Log Out</string>
+    <string name="confirm_action">Are you sure you want to continue?</string>
 
     <!-- Ratings -->
 
-    <string name="my_ratings">My ratings</string>
-    <string name="no_ratings">There are no ratings!</string>
-    <string name="rating_delete_success">Rating removed</string>
-    <string name="rating_delete_fail">Couldn\'t delete rating</string>
+    <string name="my_ratings">My Ratings</string>
+    <string name="no_ratings">You haven\'t rated anything yet</string>
+    <string name="rating_delete_fail">Failed to delete rating</string>
+    <string name="rating_delete_success">Rating deleted successfully</string>
 
     <!-- Theme -->
 
@@ -158,11 +159,11 @@
 
     <string name="content_restriction">Content Restriction</string>
     <string name="strict">Strict</string>
-    <string name="strict_description">Blurs all sensitive content.</string>
+    <string name="strict_description">Blurs all sensitive content</string>
     <string name="moderate">Moderate</string>
-    <string name="moderate_description">Blurs explicit scenes only.</string>
+    <string name="moderate_description">Blurs explicit scenes only</string>
     <string name="off">Off</string>
-    <string name="off_description">No content is blurred.</string>
+    <string name="off_description">No content is blurred</string>
 
     <!-- Categories & Genres -->
 
@@ -203,32 +204,34 @@
 
     <string name="app_name">Novix</string>
     <string name="clear">Clear</string>
-    <string name="clear_all">Clear all</string>
+    <string name="clear_all">Clear All</string>
     <string name="save">Save</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
-    <string name="close">close</string>
+    <string name="close">Close</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
-    <string name="network_error">Check your internet connection</string>
-
 
     <!-- Empty Content -->
 
-    <string name="no_movies_in_genre">No movies found in this genre.</string>
-    <string name="no_shows_in_genre">No tv shows found in this genre.</string>
-    <string name="no_items_in_genre">Nothing here yet… maybe soon?</string>
+    <string name="no_movies_in_genre">No movies in this genre yet</string>
+    <string name="no_shows_in_genre">No shows in this genre yet</string>
+    <string name="no_items_in_genre">No items in this genre</string>
 
     <!-- Content Description -->
 
-    <string name="calendar">calendar</string>
-    <string name="separator">separator</string>
-    <string name="dot">dot</string>
+    <string name="calendar">Calendar</string>
+    <string name="separator">Separator</string>
+    <string name="dot">Dot</string>
     <string name="clock">Clock</string>
-    <string name="time_icon">time_icon</string>
+    <string name="time_icon">Time Icon</string>
     <string name="novix_icon">Novix Icon</string>
     <string name="app_icon">App Icon</string>
     <string name="star">Rating star icon</string>
-    <string name="tv_icon">Tv icon</string>
+    <string name="tv_icon">Tv Shows icon</string>
+
+    <!-- Network & Error States -->
+    <string name="network_error">Check your internet connection</string>
+    <string name="something_went_wrong">Something went wrong</string>
 
 </resources>
