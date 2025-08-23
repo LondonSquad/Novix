@@ -5,7 +5,7 @@
 
     <string name="Movies">افلام</string>
     <string name="TV_Shows">مسلسلات</string>
-    <string name="Actors">ممثلين</string>
+    <string name="Actors">ممثلون</string>
 
     <!-- Home -->
 
@@ -31,7 +31,7 @@
     <string name="recent_viewed">شوهد مؤخرًا</string>
     <string name="recent_search">عمليات البحث الأخيرة</string>
     <string name="start_exploring">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
-    <string name="no_search_result">لا توجد نتائج، جرّب كلمة بحث أخرى!</string>
+    <string name="no_search_result">لم نعثر على شيء… جرب كلمات أخرى؟</string>
 
     <!-- Bookmarks -->
 
@@ -48,13 +48,13 @@
     <string name="list_delete">حذف القائمة</string>
     <string name="list_delete_success">تم حذف القائمة بنجاح</string>
     <string name="list_delete_failed">فشل حذف القائمة، يُرجي المحاولة مرة أخري.</string>
-    <string name="list_add_success">تم إضافه القائمه بنجاح</string>
-    <string name="list_add_fail">حدث خطأ ما، فشل الإضافه للقائمه</string>
+    <string name="list_add_success">تم إنشاء القائمة بنجاح</string>
+    <string name="list_add_fail">فشل في إنشاء القائمة، حاول مرة أخرى</string>
 
-    <string name="item_add_success">تم الإضافة إلى القائمة بنجاح</string>
-    <string name="item_add_fail">حدث خطأ ما، فشل إضافة العنصر</string>
-    <string name="item_delete_fail">فشل الحذف</string>
-    <string name="item_delete_success">تم حذف الفيلم بنجاح</string>
+    <string name="item_add_success">تمت الإضافة بنجاح!</string>
+    <string name="item_add_fail">عذراً، لم نتمكن من الإضافة</string>
+    <string name="item_delete_success">تم الحذف</string>
+    <string name="item_delete_fail">لم نتمكن من الحذف</string>
 
     <string name="n_items">%1$d عناصر</string>
     <string name="save_to_list">أضف إلى قائمة</string>
@@ -139,8 +139,8 @@
 
     <string name="my_ratings">تقييماتي</string>
     <string name="no_ratings">لا توجد تقييمات!</string>
-    <string name="rating_delete_fail">حدث خطأ ما، فشل حذف التقييم!</string>
-    <string name="rating_delete_success">تم حذف التقييم بنجاح</string>
+    <string name="rating_delete_success">تم حذف التقييم</string>
+    <string name="rating_delete_fail">فشل حذف التقييم</string>
 
     <!-- Theme -->
 
@@ -210,6 +210,7 @@
     <string name="close">غلق</string>
     <string name="retry">حاول مجددًا</string>
     <string name="cancel">إلغاء</string>
+    <string name="network_error">تعذر الإتصال بالإنترنت</string>
 
     <!-- Empty Content -->
 

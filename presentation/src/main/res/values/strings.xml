@@ -48,13 +48,13 @@
     <string name="list_delete">Delete list</string>
     <string name="list_delete_success">Deleted list successfully</string>
     <string name="list_delete_failed">List deletion failed</string>
-    <string name="list_add_success">List added successfully</string>
-    <string name="list_add_fail">Something went wrong, can not add list</string>
+    <string name="list_add_success">List created successfully</string>
+    <string name="list_add_fail">Failed to create list</string>
 
-    <string name="item_add_success">Added to list successfully</string>
-    <string name="item_add_fail">Something went wrong, item addition failed</string>
-    <string name="item_delete_fail">Deletion failed</string>
-    <string name="item_delete_success">Movie removed successfully</string>
+    <string name="item_add_success">Added successfully!</string>
+    <string name="item_add_fail">Couldn\'t add item, please try again</string>
+    <string name="item_delete_success">Removed from list</string>
+    <string name="item_delete_fail">Couldn\'t remove item</string>
 
     <string name="n_items">%1$d items</string>
     <string name="save_to_list">Save to list</string>
@@ -95,7 +95,7 @@
     <!-- Welcome -->
 
     <string name="welcome_title">Welcome to Novix</string>
-    <string name="welcome_description">Discover the world's greatest movies and series. Search, watch, and save your favorites all in one place.</string>
+    <string name="welcome_description">Discover the world\'s greatest movies and series. Search, watch, and save your favorites all in one place.</string>
 
     <!-- Onboarding -->
 
@@ -139,8 +139,8 @@
 
     <string name="my_ratings">My ratings</string>
     <string name="no_ratings">There are no ratings!</string>
-    <string name="rating_delete_fail">Something went wrong, could not delete rating</string>
-    <string name="rating_delete_success">Rating deleted successfully</string>
+    <string name="rating_delete_success">Rating removed</string>
+    <string name="rating_delete_fail">Couldn\'t delete rating</string>
 
     <!-- Theme -->
 
@@ -210,12 +210,14 @@
     <string name="close">close</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
+    <string name="network_error">Check your internet connection</string>
+
 
     <!-- Empty Content -->
 
     <string name="no_movies_in_genre">No movies found in this genre.</string>
     <string name="no_shows_in_genre">No tv shows found in this genre.</string>
-    <string name="no_items_in_genre">There is no items for this genre!</string>
+    <string name="no_items_in_genre">Nothing here yet… maybe soon?</string>
 
     <!-- Content Description -->
 
