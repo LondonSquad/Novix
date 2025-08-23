@@ -5,7 +5,7 @@
 
     <string name="Movies">افلام</string>
     <string name="TV_Shows">مسلسلات</string>
-    <string name="Actors">"ممثلين</string>
+    <string name="Actors">ممثلين</string>
 
     <!-- Home -->
 
@@ -14,7 +14,7 @@
     <string name="celebrities">مشاهير</string>
     <string name="top_rated">الأعلى تقييمًا</string>
     <string name="continue_watch">تابع المشاهدة</string>
-    <string name="upcoming">قريبًا</string>">
+    <string name="upcoming">قريبًا</string>
 
     <!-- Trending -->
 
@@ -139,7 +139,7 @@
 
     <string name="my_ratings">تقييماتي</string>
     <string name="no_ratings">لا توجد تقييمات!</string>
-    <string name="rating_delete_fail">حدث خطأ ما، فشل حذف التقييم!</string>">
+    <string name="rating_delete_fail">حدث خطأ ما، فشل حذف التقييم!</string>
     <string name="rating_delete_success">تم حذف التقييم بنجاح</string>
 
     <!-- Theme -->
@@ -213,8 +213,8 @@
 
     <!-- Empty Content -->
 
-    <string name="no_movies_in_genre">لا يوجد أفلام في هذا التصنيف حاليًا</string>
-    <string name="no_shows_in_genre">لا يوجد مسلسلات في هذا التصنيف حاليًا</string>
+    <string name="no_movies_in_genre">هذا النوع فارغ حالياً… ربما قريباً؟</string>
+    <string name="no_shows_in_genre">لا توجد مسلسلات هنا بعد، تابع معنا!</string>
     <string name="no_items_in_genre">لا يوجد عناصر لهذا النوع!</string>
 
     <!-- Content Description -->
