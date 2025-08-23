@@ -84,7 +84,7 @@ private fun Content(
                 onRetry = listItems::refresh,
                 isLoading = state.isLoading,
                 isError = state.error == ErrorState.NoInternet,
-                emptyLayoutMessage = R.string.no_items_found,
+                emptyLayoutMessage = R.string.list_empty,
                 emptyLayoutImage = R.drawable.img_no_result,
                 pagingFlow = listItems,
             ) {
@@ -112,7 +112,7 @@ private fun Content(
 
         if (state.isSnackBarErrorVisible) {
             snackBarController.showMessage(
-                message = R.string.deletion_failed.string,
+                message = R.string.item_delete_fail.string,
                 snackBarType = SnackBarType.Error,
                 onComplete = contract::resetSnackBarErrorState,
                 icon = null,
@@ -121,7 +121,7 @@ private fun Content(
 
         if (state.isMovieSnackBarSuccessVisible) {
             snackBarController.showMessage(
-                message = R.string.list_delete_movie_success.string,
+                message = R.string.item_delete_success.string,
                 snackBarType = SnackBarType.Success,
                 onComplete = contract::resetMovieSnackBarSuccessState,
                 icon = com.london.designsystem.R.drawable.ic_success,
@@ -130,7 +130,7 @@ private fun Content(
 
         if (state.isListSnackBarSuccess) {
             snackBarController.showMessage(
-                message = R.string.list_removed_successfully.string,
+                message = R.string.list_delete_success.string,
                 snackBarType = SnackBarType.Success,
                 onComplete = contract::resetListSnackBarSuccessState,
                 icon = com.london.designsystem.R.drawable.ic_success,

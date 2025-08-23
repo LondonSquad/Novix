@@ -90,7 +90,7 @@ private fun Content(
         ) {
 
             Text(
-                text = R.string.delete_list.string,
+                text = R.string.list_delete.string,
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
             )
@@ -112,7 +112,7 @@ private fun Content(
                         .padding(8.dp)
                         .size(16.dp),
                     painter = com.london.designsystem.R.drawable.cancel.painter,
-                    contentDescription = R.string.cancel_list_deletion.string,
+                    contentDescription = R.string.cancel.string,
                     tint = NovixTheme.colors.title
                 )
             }
@@ -126,11 +126,11 @@ private fun Content(
             Image(
                 modifier = Modifier.size(100.dp),
                 painter = if (NovixTheme.isThemeDark) R.drawable.ic_trash_dark.painter else R.drawable.ic_trash_light.painter,
-                contentDescription = R.string.delete_list.string,
+                contentDescription = R.string.list_delete.string,
             )
 
             Text(
-                text = R.string.cancel_list_deletion.string,
+                text = R.string.list_delete_confirm.string,
                 style = NovixTheme.typography.body.medium,
                 color = NovixTheme.colors.body,
                 textAlign = TextAlign.Center

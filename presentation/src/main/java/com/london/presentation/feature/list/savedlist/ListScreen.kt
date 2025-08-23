@@ -122,7 +122,7 @@ private fun Content(
 
                 stickyHeader {
                     TopBar(
-                        title = stringResource(R.string.saved_list_title),
+                        title = stringResource(R.string.lists_saved),
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
                 }
@@ -148,7 +148,7 @@ private fun Content(
 
             if (state.error != null) {
                 snackBarController.showMessage(
-                    message = R.string.list_added_fail.string,
+                    message = R.string.list_add_fail.string,
                     snackBarType = SnackBarType.Error,
                     onComplete = contract::resetSnackBarErrorState,
                     icon = null,
@@ -157,7 +157,7 @@ private fun Content(
 
             if (state.isSnackBarSuccessVisible) {
                 snackBarController.showMessage(
-                    message = R.string.list_added_success.string,
+                    message = R.string.list_add_success.string,
                     snackBarType = SnackBarType.Success,
                     onComplete = contract::resetSnackBarSuccessState,
                     icon = com.london.designsystem.R.drawable.ic_success,
@@ -268,7 +268,7 @@ private fun EmptyList(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .align(Alignment.Center),
-                text = stringResource(R.string.no_saved_list),
+                text = stringResource(R.string.no_lists),
                 imageContent = {
                     BlurredImage(imageId = R.drawable.ic_no_saved_list_yet)
                 },

@@ -9,11 +9,12 @@
 
     <!-- Home -->
 
-    <string name="celebrities">مشاهير</string>
     <string name="What_you_want_to_watch">ماذا تريد أن تشاهد؟</string>
-    <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
+    <string name="app_name_description">مشتق من نوڤا، مُصمم من أجل الأفلام</string>
+    <string name="celebrities">مشاهير</string>
     <string name="top_rated">الأعلى تقييمًا</string>
     <string name="continue_watch">تابع المشاهدة</string>
+    <string name="upcoming">قريبًا</string>">
 
     <!-- Trending -->
 
@@ -26,75 +27,74 @@
 
     <string name="search">بحث</string>
     <string name="search_placeholder">ابحث…</string>
-    <string name="filter">تصفية</string>
 
     <string name="recent_viewed">شوهد مؤخرًا</string>
     <string name="recent_search">عمليات البحث الأخيرة</string>
     <string name="start_exploring">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
     <string name="no_search_result">لا توجد نتائج، جرّب كلمة بحث أخرى!</string>
 
-
     <!-- Bookmarks -->
 
-    <string name="my_lists">قوائمي</string>
-    <string name="rating_delete_success">تم حذف القائمة بنجاح</string>
-    <string name="can_not_delete_list">حدث خطأ ما لا يمكن اضافه القائمه</string>
-    <string name="list_added_successfully">تم اضافه القائمه بنجاح</string>
-    <string name="list_removed_successfully">تم حذف القائمة بنجاح</string>
-    <string name="cancel_list_deletion">حذف القائمة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
-    <string name="delete_list">حذف القائمة</string>
-    <string name="list_deletion_success">تم حذف القائمة</string>
-    <string name="list_deletion_failed">فشل حذف القائمة</string>
-    <string name="list_added_success">تم اضافه القائمه بنجاح</string>
-    <string name="list_added_fail">حدث خطأ ما، فشل الإضافه للقائمه</string>
-    <string name="login_to_add_list">يرجى تسجيل الدخول للتمكن من الإضافة إالي قائمة</string>
-    <string name="no_lists_available">لا يوجد قوائم متاحة لهذا الفيلم!\nقم بإنشاء واحدة جديدة الآن.</string>
-    <string name="item_added_success">تمت الإضافة إلى القائمة بنجاح</string>
-    <string name="item_added_fail">حدث خطأ ما، فشل إضافة العنصر</string>
-    <string name="deletion_failed">فشل الحذف</string>
-    <string name="edit_list">تعديل القائمة</string>
+    <string name="lists">قوائمي</string>
+    <string name="lists_saved">القوائم المحفوظة</string>
+
     <string name="list_title">عنوان القائمة</string>
-    <string name="no_items_found">لا يوجد محتوى</string>
-    <string name="save_to_list">أضف إلى قائمة</string>
-    <string name="cancel_addition_to_list">ألغي الإضافة إلي قائمة</string>
-    <string name="create_new_list">انشئ قائمة جديدة</string>
+    <string name="list_edit">تعديل القائمة</string>
+    <string name="list_create_new">انشئ قائمة جديدة</string>
+    <string name="list_add_new">إضافة قائمة جديدة</string>
+    <string name="list_empty">لوحة بيضاء لمجموعتك. ماذا ستضيف أولاً؟</string>
+
+    <string name="list_delete_confirm">حذف القائمة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="list_delete">حذف القائمة</string>
+    <string name="list_delete_success">تم حذف القائمة بنجاح</string>
+    <string name="list_delete_failed">فشل حذف القائمة، يُرجي المحاولة مرة أخري.</string>
+    <string name="list_add_success">تم إضافه القائمه بنجاح</string>
+    <string name="list_add_fail">حدث خطأ ما، فشل الإضافه للقائمه</string>
+
+    <string name="item_add_success">تم الإضافة إلى القائمة بنجاح</string>
+    <string name="item_add_fail">حدث خطأ ما، فشل إضافة العنصر</string>
+    <string name="item_delete_fail">فشل الحذف</string>
+    <string name="item_delete_success">تم حذف الفيلم بنجاح</string>
+
     <string name="n_items">%1$d عناصر</string>
-    <string name="saved_list_title">القوائم المحفوظة</string>
-    <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
+    <string name="save_to_list">أضف إلى قائمة</string>
+
+    <string name="no_lists">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
+    <string name="no_lists_available">لا يوجد قوائم متاحة لهذا الفيلم!\nقم بإنشاء واحدة جديدة الآن.</string>
+
     <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
-    <string name="add_new_list">اضافة قائمة جديدة</string>
-    <string name="list_delete_movie_success">تم حذف الفيلم بنجاح</string>
-
-
-
+    <string name="login_to_add_list">يرجى تسجيل الدخول للتمكن من الإضافة إالي قائمة</string>
 
     <!-- Movie/Shows/Actor Details -->
 
     <string name="top_movies_picks">أفضل الأفلام المختارة</string>
     <string name="top_tv_shows_picks">أفضل المسلسلات المختارة</string>
-    <string name="guests_of_honor">ضيوف الشرف</string>
-    <string name="release_year">عام الإصدار</string>
+
     <string name="overview">نظرة عامة</string>
-    <string name="more_like_this">المزيد مثل هذا</string>
-    <string name="play_trailer">عرض الإعلان</string>
-    <string name="read_more">اقرأ المزيد</string>
-    <string name="read_less">اقرأ أقل</string>
+    <string name="guests_of_honor">ضيوف الشرف</string>
     <string name="cast">طاقم العمل</string>
-    <string name="biography">السيرة</string>
-    <string name="gallery">المعرض</string>
-    <string name="no_actor_details">لا توجد تفاصيل متاحة للممثل</string>
+    <string name="release_year">عام الإصدار</string>
+
     <string name="reviews">المراجعات</string>
     <string name="view_reviews">عرض المراجعات</string>
 
+    <string name="read_more">اقرأ المزيد</string>
+    <string name="read_less">اقرأ أقل</string>
+
+    <string name="more_like_this">المزيد مثل هذا</string>
+    <string name="play_trailer">عرض الإعلان</string>
+
+    <string name="no_actor_details">لا توجد تفاصيل متاحة للممثل</string>
+    <string name="biography">السيرة</string>
+    <string name="gallery">المعرض</string>
 
     <string name="actor_images">صور الممثلين</string>
     <string name="reviewer_image">صورة المراجع</string>
     <string name="tv_show_image">صور مسلسلات</string>
-    <string name="upcoming">القادم</string>">
 
     <!-- Welcome -->
 
-    <string name="welcome_title">مرحبًا بك في Novix</string>
+    <string name="welcome_title">مرحبًا بك في نوڤيكس</string>
     <string name="welcome_description">اكتشف أعظم الأفلام والمسلسلات في العالم. ابحث، شاهد، واحفظ مفضلاتك كلها في مكان واحد.</string>
 
     <!-- Onboarding -->
@@ -120,44 +120,49 @@
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
 
-
     <string name="no_recent_history">لم تتفقد أي شيء بعد.\nخذ جولة في التطبيق ثم عُدّ مجددًا!</string>
-    <string name="no_tv_shows_found">لا يوجد مسلسلات في هذا التصنيف حاليا</string>
     <string name="no_reviews">لا يوجد مراجعات!</string>
 
     <!-- Account -->
 
     <string name="my_account">حسابي</string>
+    <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
+
     <string name="watching_history">سجل المشاهدة</string>
+    <string name="user_profile">الملف الشخصي</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+
+    <string name="logout">تسجيل الخروج</string>
+    <string name="are_you_sure">هل متأكد أنك تريد المتابعة؟</string>
+
+    <!-- Ratings -->
 
     <string name="my_ratings">تقييماتي</string>
     <string name="no_ratings">لا توجد تقييمات!</string>
     <string name="rating_delete_fail">حدث خطأ ما، فشل حذف التقييم!</string>">
+    <string name="rating_delete_success">تم حذف التقييم بنجاح</string>
 
-    <string name="change_password">تغيير كلمة المرور</string>
-    <string name="user_profile">الملف الشخصي</string>
-    <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
-    <string name="there_is_no_items_for_this_genre">لا يوجد عناصر لهذا النوع!</string>
-
-    <string name="logout">تسجيل الخروج</string>
-    <string name="are_you_sure">هل متأكد أنك تريد المتابعة؟</string>
+    <!-- Theme -->
 
     <string name="appearance">المظهر</string>
     <string name="dark">مظلم</string>
     <string name="light">فاتح</string>
 
+    <!-- Language -->
+
     <string name="language">اللغة</string>
-    <string name="english">الانجليزية</string>
+    <string name="english">الإنجليزية</string>
     <string name="arabic">العربية</string>
+
+    <!-- Moderation -->
 
     <string name="content_restriction">تقييد المحتوى</string>
     <string name="strict">صارم</string>
+    <string name="strict_description">يتم تمويه جميع المحتويات الحساسة.</string>
     <string name="moderate">متوسط</string>
+    <string name="moderate_description">يتم تمويه المشاهد الصريحة فقط.</string>
     <string name="off">إيقاف</string>
-    <string name="blurs_all_sensitive_content">يتم تمويه جميع المحتويات الحساسة.</string>
-    <string name="blurs_explicit_scenes_only">يتم تمويه المشاهد الصريحة فقط.</string>
-    <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
-
+    <string name="off_description">لا يتم تمويه أي محتوى.</string>
 
     <!-- Categories & Genres -->
 
@@ -195,7 +200,8 @@
     <string name="unknown">غير معروف</string>
 
     <!-- Miscellaneous -->
-    <string name="app_name">نوفيكس</string>
+
+    <string name="app_name">نوڤيكس</string>
     <string name="clear">مسح</string>
     <string name="clear_all">مسح الكل</string>
     <string name="save">حفظ</string>
@@ -203,22 +209,24 @@
     <string name="delete">حذف</string>
     <string name="close">غلق</string>
     <string name="retry">حاول مجددًا</string>
+    <string name="cancel">إلغاء</string>
+
+    <!-- Empty Content -->
 
     <string name="no_movies_in_genre">لا يوجد أفلام في هذا التصنيف حاليًا</string>
     <string name="no_shows_in_genre">لا يوجد مسلسلات في هذا التصنيف حاليًا</string>
-
-
+    <string name="no_items_in_genre">لا يوجد عناصر لهذا النوع!</string>
 
     <!-- Content Description -->
+
     <string name="calendar">التقويم</string>
     <string name="separator">فاصل</string>
     <string name="dot">نقطة</string>
     <string name="clock">الساعة</string>
     <string name="time_icon">أيقونة الوقت</string>
-    <string name="novix_icon">أيقونة نوفيكس</string>
+    <string name="novix_icon">أيقونة نوڤيكس</string>
     <string name="app_icon">أيقونة التطبيق</string>
     <string name="star">نجمة تقييم</string>
     <string name="tv_icon">أيقونة المسلسلات</string>
-
 
 </resources>
