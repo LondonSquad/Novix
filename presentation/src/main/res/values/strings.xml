@@ -77,6 +77,7 @@
 
     <string name="reviews">Reviews</string>
     <string name="view_reviews">View Reviews</string>
+    <string name="no_reviews">No reviews yet</string>
 
     <string name="read_more">Read More</string>
     <string name="read_less">Read Less</string>
@@ -113,16 +114,15 @@
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="username">Username</string>
+
     <string name="login_to_your_account">Log in to your account</string>
     <string name="continue_as_guest">Continue as Guest</string>
-    <!-- FIX: Remove backslash -->
+
     <string name="no_account">Don\'t have an account?</string>
     <string name="create_account">Create Account</string>
+
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Failed to continue as guest</string>
-
-    <string name="no_recent_history">You haven\'t browsed anything yet\nExplore the app and come back later</string>
-    <string name="no_reviews">No reviews yet</string>
 
     <!-- Account -->
 
@@ -217,6 +217,7 @@
     <string name="no_movies_in_genre">No movies in this genre yet</string>
     <string name="no_shows_in_genre">No shows in this genre yet</string>
     <string name="no_items_in_genre">No items in this genre</string>
+    <string name="no_recent_history">You haven\'t browsed anything yet\nExplore the app and come back later</string>
 
     <!-- Content Description -->
 

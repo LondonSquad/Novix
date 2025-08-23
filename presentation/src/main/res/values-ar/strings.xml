@@ -75,6 +75,7 @@
 
     <string name="reviews">المراجعات</string>
     <string name="view_reviews">عرض المراجعات</string>
+    <string name="no_reviews">لا توجد مراجعات حتى الآن</string>
 
     <string name="read_more">اقرأ المزيد</string>
     <string name="read_less">اقرأ أقل</string>
@@ -117,9 +118,6 @@
     <string name="create_account">إنشاء حساب</string>
     <string name="login_failed">فشل تسجيل الدخول. تحقق من بياناتك</string>
     <string name="guest_login_failed">فشل في المتابعة كزائر</string>
-
-    <string name="no_recent_history">لم تستعرض أي شيء بعد\nتجول في التطبيق ثم عُد لاحقاً</string>
-    <string name="no_reviews">لا توجد مراجعات حتى الآن</string>
 
     <!-- Account -->
 
@@ -214,6 +212,7 @@
     <string name="no_movies_in_genre">لا توجد أفلام في هذا النوع حالياً</string>
     <string name="no_shows_in_genre">لا توجد مسلسلات في هذا النوع حالياً</string>
     <string name="no_items_in_genre">لا توجد عناصر لهذا النوع</string>
+    <string name="no_recent_history">لم تستعرض أي شيء بعد\nتجول في التطبيق ثم عُد لاحقاً</string>
 
     <!-- Content Description -->
 
