@@ -109,7 +109,7 @@ fun NavBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 7.dp),
+                .padding(vertical = NavBarDimens.verticalPadding),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
