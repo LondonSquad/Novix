@@ -8,14 +8,11 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +40,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
@@ -66,6 +64,17 @@ data class NavBarColors(
     val topBorderColor: Color
 )
 
+private object NavBarDimens {
+    val itemWidth = 60.dp
+    val itemHeight = 56.dp
+    val iconSize = 24.dp
+    val clickableAreaSize = 42.dp
+    val dotSize = 4.dp
+    val verticalPadding = 7.dp
+    val dotOffsetFromBottom = 2.dp
+    val borderWidth = 1.dp
+}
+
 @SuppressLint("RestrictedApi")
 @Composable
 fun NavBar(
@@ -80,35 +89,85 @@ fun NavBar(
         topBorderColor = NovixTheme.colors.stroke
     )
 ) {
+    val selectedIndex = navDestinations.indexOfFirst { item ->
+        navBackStackEntry?.destination?.hasRoute(item.destination::class) == true
+    }.takeIf { it >= 0 } ?: 0
+
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .background(color = navBarColors.backgroundColor)
             .navigationBarsPadding()
-            .clickable(
-                enabled = false,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }) {}
+            .fillMaxWidth()
+            .topBorder(color = navBarColors.topBorderColor, width = NavBarDimens.borderWidth)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .topBorder(navBarColors.topBorderColor, 1.dp)
                 .padding(vertical = 7.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            navDestinations.forEach { item ->
+            navDestinations.forEachIndexed { index, item ->
                 NavBarItem(
                     item = item,
                     selectedIconColor = navBarColors.selectedIconColor,
-                idleIconColor = navBarColors.idleIconColor,
-                onClick = { onNavDestinationClicked(item.destination) },
-                screen = item.destination,
-                    backStackEntry = navBackStackEntry
+                    idleIconColor = navBarColors.idleIconColor,
+                    onClick = { onNavDestinationClicked(item.destination) },
+                    screen = item.destination,
+                    backStackEntry = navBackStackEntry,
+                    showBlur = index == selectedIndex
                 )
             }
         }
+
+        MovingDotIndicator(
+            selectedIndex = selectedIndex,
+            itemCount = navDestinations.size,
+            selectedIconColor = navBarColors.selectedIconColor
+        )
+    }
+}
+
+
+@Composable
+private fun MovingDotIndicator(
+    selectedIndex: Int,
+    itemCount: Int,
+    selectedIconColor: Color
+) {
+    val screenWidth = LocalDensity.current.run {
+        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp.dp
+    }
+
+    val totalItemsWidth = NavBarDimens.itemWidth * itemCount
+    val remainingSpace = screenWidth - totalItemsWidth
+    val spaceBetweenItems = if (itemCount > 1) remainingSpace / (itemCount + 1) else 0.dp
+
+    val itemCenterOffset = spaceBetweenItems + (NavBarDimens.itemWidth / 2)
+    val spacingBetweenCenters = NavBarDimens.itemWidth + spaceBetweenItems
+
+    val offsetX by animateDpAsState(
+        targetValue = itemCenterOffset + (spacingBetweenCenters * selectedIndex) - (NavBarDimens.dotSize / 2),
+        animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+        label = "dotOffset"
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = NavBarDimens.verticalPadding)
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(NavBarDimens.dotSize)
+                .offset(
+                    x = offsetX,
+                    y = NavBarDimens.itemHeight - NavBarDimens.dotSize - NavBarDimens.dotOffsetFromBottom
+                ),
+            painter = painterResource(R.drawable.ellipse_selected_dot),
+            contentDescription = null,
+            tint = selectedIconColor
+        )
     }
 }
 
@@ -119,16 +178,17 @@ private fun <T> NavBarItem(
     backStackEntry: NavBackStackEntry?,
     selectedIconColor: Color,
     idleIconColor: Color,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    showBlur: Boolean = false
 ) {
     val isSelected = backStackEntry?.destination?.hasRoute(screen::class) == true
     Box(
-        modifier = Modifier.size(width = 60.dp, height = 56.dp),
+        modifier = Modifier.size(width = NavBarDimens.itemWidth, height = NavBarDimens.itemHeight),
         contentAlignment = Alignment.Center
     ) {
         AnimatedBackgroundBlur(
             modifier = Modifier.align(Alignment.BottomCenter),
-            isVisible = isSelected,
+            isVisible = showBlur,
             selectedIconColor = selectedIconColor
         )
 
@@ -161,7 +221,7 @@ private fun AnimatedBackgroundBlur(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Icon(
                 modifier = Modifier
-                    .width(60.dp)
+                    .width(NavBarDimens.itemWidth)
                     .height(16.dp)
                     .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
                 painter = painterResource(R.drawable.ellipse_blur_filled),
@@ -188,7 +248,7 @@ private fun <T> ClickableIconContainer(
 ) {
     Box(
         modifier = Modifier
-            .size(42.dp)
+            .size(NavBarDimens.clickableAreaSize)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -200,12 +260,6 @@ private fun <T> ClickableIconContainer(
             isSelected = isSelected,
             selectedIconColor = selectedIconColor,
             idleIconColor = idleIconColor
-        )
-
-        AnimatedSelectionDot(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            isVisible = isSelected,
-            selectedIconColor = selectedIconColor
         )
     }
 }
@@ -225,7 +279,7 @@ private fun <T> AnimatedNavIcon(
         Icon(
             painter = if (selected) item.selectedIcon else item.idleIcon,
             modifier = Modifier
-                .size(24.dp)
+                .size(NavBarDimens.iconSize)
                 .animateContentSize(
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -234,34 +288,6 @@ private fun <T> AnimatedNavIcon(
                 ),
             contentDescription = null,
             tint = if (selected) selectedIconColor else idleIconColor
-        )
-    }
-}
-
-@Composable
-private fun AnimatedSelectionDot(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    selectedIconColor: Color
-) {
-    AnimatedVisibility(
-        modifier = modifier
-            .offset(y = 2.dp),
-        visible = isVisible,
-        enter = slideInVertically(
-            animationSpec = tween(450, easing = FastOutSlowInEasing),
-            initialOffsetY = { it * 2 }
-        ) + fadeIn(),
-        exit = slideOutVertically(
-            animationSpec = tween(250, easing = FastOutLinearInEasing),
-            targetOffsetY = { it * 2 }
-        ) + fadeOut()
-    ) {
-        Icon(
-            modifier = Modifier.size(4.dp),
-            painter = painterResource(R.drawable.ellipse_selected_dot),
-            contentDescription = null,
-            tint = selectedIconColor
         )
     }
 }
