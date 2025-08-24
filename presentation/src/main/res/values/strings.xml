@@ -233,9 +233,9 @@
 
     <!-- Network & Error States -->
     <string name="network_error">Check your internet connection</string>
-    <string name="something_went_wrong">Something went wrong</string>
-    <string name="no_internet">No internet </string>
-    <string name="you_are_offline">Oops! It looks like you’re offline.</string>
-    <string name="check_your_connection">Check your connection and try again, we’ll be \n waiting with your movies and popcorn</string>
+    <string name="something_went_wrong">Something went wrong. Please try again.</string>
+    <string name="no_internet">No internet</string>
+    <string name="offline_title">Oops! It looks like you’re offline.</string>
+    <string name="offline_description">Check your connection and try again, we’ll be \n waiting with your movies and popcorn</string>
 
 </resources>

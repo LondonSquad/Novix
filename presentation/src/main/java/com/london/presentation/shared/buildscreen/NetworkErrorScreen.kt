@@ -51,7 +51,7 @@ fun NetworkErrorScreen(
             )
 
             Text(
-                text = stringResource(R.string.you_are_offline),
+                text = stringResource(R.string.offline_title),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title,
                 textAlign = TextAlign.Center,
@@ -59,7 +59,7 @@ fun NetworkErrorScreen(
             )
 
             Text(
-                text = stringResource(R.string.check_your_connection),
+                text = stringResource(R.string.offline_description),
                 style = NovixTheme.typography.body.small,
                 color = NovixTheme.colors.body,
                 textAlign = TextAlign.Center

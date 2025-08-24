@@ -7,6 +7,8 @@
     <string name="tv_shows">مسلسلات</string>
     <string name="actors">ممثلون</string>
 
+    <!-- Home -->
+
     <string name="what_to_watch">ماذا تريد أن تشاهد؟</string>
     <string name="app_name_description">مُشتق من نوڤا، مُصمم من أجل الأفلام</string>
     <string name="celebrities">مشاهير</string>
@@ -112,10 +114,13 @@
     <string name="password">كلمة المرور</string>
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="username">اسم المستخدم</string>
+
     <string name="login_to_your_account">سجل دخولك إلى حسابك</string>
     <string name="continue_as_guest">المتابعة بدون تسجيل</string>
+
     <string name="no_account">ليس لديك حساب؟</string>
     <string name="create_account">إنشاء حساب</string>
+
     <string name="login_failed">فشل تسجيل الدخول. تحقق من بياناتك</string>
     <string name="guest_login_failed">فشل في المتابعة كزائر</string>
 
@@ -228,9 +233,9 @@
 
     <!-- Network & Error States -->
     <string name="network_error">تحقق من اتصالك بالإنترنت</string>
-    <string name="something_went_wrong">حدث خطأ ما</string>
-    <string name="no_internet">لا يوجد انترنت</string>
-    <string name="you_are_offline">يبدو انك غير متصل بالانترنت</string>
-    <string name="check_your_connection">تحقق من اتصالك وحاول مرة أخرى، سننتظرك مع أفلامك والفشار</string>
+    <string name="something_went_wrong">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
+    <string name="no_internet">لا يوجد إنترنت</string>
+    <string name="offline_title">أوه! يبدو انك غير متصل بالإنترنت</string>
+    <string name="offline_description">تحقق من اتصالك وحاول مرة أخرى، سننتظرك مع أفلامك والفشار</string>
 
 </resources>
