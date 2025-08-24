@@ -67,6 +67,17 @@ data class NavBarColors(
     val topBorderColor: Color
 )
 
+object NavBarDefaults {
+
+    @Composable
+    fun navBarColors() = NavBarColors(
+        backgroundColor = NovixTheme.colors.surface,
+        selectedIconColor = NovixTheme.colors.primary,
+        idleIconColor = NovixTheme.colors.hint,
+        topBorderColor = NovixTheme.colors.stroke
+    )
+}
+
 private object NavBarDimens {
     val itemWidth = 60.dp
     val itemHeight = 56.dp
@@ -84,12 +95,7 @@ fun NavBar(
     navDestinations: List<NavigationTab<Any>>,
     onNavDestinationClicked: (Any) -> Unit,
     navBackStackEntry: NavBackStackEntry? = null,
-    navBarColors: NavBarColors = NavBarColors(
-        backgroundColor = NovixTheme.colors.surface,
-        selectedIconColor = NovixTheme.colors.primary,
-        idleIconColor = NovixTheme.colors.hint,
-        topBorderColor = NovixTheme.colors.stroke
-    )
+    navBarColors: NavBarColors = NavBarDefaults.navBarColors()
 ) {
 
     val checkIfSelected: (Any) -> Boolean = { destination ->
