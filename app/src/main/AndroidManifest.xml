@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:allowBackup="true"
         android:name="com.london.app.NovixApplication"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -12,15 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Novix"
-        tools:targetApi="31">
+        tools:targetApi="36">
 
         <activity
             android:name="com.london.app.MainActivity"
-            android:screenOrientation="user"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Novix"
-            tools:ignore="DiscouragedApi">
+            android:theme="@style/Theme.Novix">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,7 +40,9 @@
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <meta-data android:name="androidx.work.WorkManagerInitializer" tools:node="remove" />
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                tools:node="remove" />
         </provider>
     </application>
 
