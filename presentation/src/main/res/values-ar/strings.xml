@@ -232,6 +232,7 @@
     <string name="tv_icon">أيقونة المسلسلات</string>
 
     <!-- Network & Error States -->
+
     <string name="network_error">تحقق من اتصالك بالإنترنت</string>
     <string name="something_went_wrong">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
     <string name="no_internet">لا يوجد إنترنت</string>
