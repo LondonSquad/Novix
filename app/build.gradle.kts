@@ -43,8 +43,8 @@ android {
     }
 
     buildTypes {
-        debug {
-        }
+        debug {}
+
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
@@ -62,9 +62,10 @@ android {
             splits {
                 abi {
                     isEnable = true
+                    isUniversalApk = true
+                    exclude("mips", "mips64", "armeabi", "riscv64")
                 }
             }
-
         }
     }
 
@@ -72,9 +73,11 @@ android {
         sourceCompatibility = AppConfig.Version.JVM
         targetCompatibility = AppConfig.Version.JVM
     }
+
     kotlinOptions {
         jvmTarget = AppConfig.Version.JVM.toString()
     }
+
     buildFeatures {
         compose = true
     }
@@ -101,12 +104,11 @@ dependencies {
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
 
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.bundles.hilt.runtime)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.hilt.common)
-
-    ksp(libs.bundles.hilt.ksp)
-    implementation(libs.bundles.hilt.runtime)
 
     implementation(libs.bundles.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
