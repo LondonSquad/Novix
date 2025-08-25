@@ -34597,5 +34597,42 @@
       "deletions": 408,
       "changed_files": 58
     }
+  },
+  {
+    "pr_number": 724,
+    "url": "https://github.com/LondonSquad/Novix/pull/724",
+    "title": "Feature: APK Naming",
+    "opened_at": "2025-08-25T09:19:28Z",
+    "head_ref": "feature/apk-name",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W35",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 28,
+      "deletions": 83,
+      "changed_files": 13
+    }
   }
 ]
