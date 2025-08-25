@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Novix"
-        tools:targetApi="36">
+        tools:targetApi="31">
 
         <activity
             android:name="com.london.app.MainActivity"
