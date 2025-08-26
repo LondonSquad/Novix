@@ -64,7 +64,7 @@ private fun Content(
         isLoading = moviesLazyList.isLoading(),
         isError = moviesLazyList.loadState.refresh is LoadState.Error,
         onRetry = moviesLazyList::refresh,
-        emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
+        emptyLayoutMessage = R.string.no_movies_in_genre,
         emptyLayoutImage = R.drawable.empty
     ) {
         Box(

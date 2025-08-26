@@ -108,7 +108,7 @@ private fun Content(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.add_new_list),
+                text = stringResource(R.string.list_add_new),
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
             )
@@ -129,7 +129,7 @@ private fun Content(
                     )
                     .padding(8.dp),
                 painter = com.london.designsystem.R.drawable.cancel.painter,
-                contentDescription = R.string.cancel_addition_to_list.string,
+                contentDescription = R.string.cancel.string,
                 tint = NovixTheme.colors.title
             )
         }

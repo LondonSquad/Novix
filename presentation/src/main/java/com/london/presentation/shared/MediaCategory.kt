@@ -6,10 +6,10 @@ import com.london.presentation.R
 enum class MediaCategory : Tabbable {
     Movies {
         override val tabTextResId: Int
-            get() = R.string.Movies
+            get() = R.string.movies
     },
     TvShows {
         override val tabTextResId: Int
-            get() = R.string.TV_Shows
+            get() = R.string.tv_shows
     }
 }

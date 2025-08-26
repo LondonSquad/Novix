@@ -68,7 +68,7 @@ private fun Content(
         isLoading = state.isLoading,
         isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
         onBack = contract::onBackClick,
-        emptyLayoutMessage = R.string.no_trending_shows_in_genre,
+        emptyLayoutMessage = R.string.no_shows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
         Box(

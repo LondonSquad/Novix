@@ -53,7 +53,7 @@ fun TrendingSection(
     ) {
         if (!isLoading)
             Text(
-                text = stringResource(R.string.What_you_want_to_watch),
+                text = stringResource(R.string.what_to_watch),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
                 modifier = Modifier
@@ -80,7 +80,7 @@ fun TrendingSection(
             verticalAlignment = Alignment.Bottom
         ) {
             CategoryCard(
-                title = stringResource(R.string.Movies),
+                title = stringResource(R.string.movies),
                 icon = painterResource(id = R.drawable.icon_movie),
                 startColor = NovixTheme.colors.primary,
                 endColor = NovixTheme.colors.darkCocoa,
@@ -91,7 +91,7 @@ fun TrendingSection(
             )
 
             CategoryCard(
-                title = stringResource(R.string.TV_Shows),
+                title = stringResource(R.string.tv_shows),
                 icon = painterResource(id = R.drawable.icon_tvshow),
                 startColor = NovixTheme.colors.secondary,
                 endColor = NovixTheme.colors.deepCrimson,
@@ -102,7 +102,7 @@ fun TrendingSection(
             )
 
             CategoryCard(
-                title = stringResource(R.string.actors),
+                title = stringResource(R.string.celebrities),
                 icon = painterResource(id = R.drawable.icon_actor),
                 startColor = NovixTheme.colors.tealBlue,
                 endColor = NovixTheme.colors.oceanDark,

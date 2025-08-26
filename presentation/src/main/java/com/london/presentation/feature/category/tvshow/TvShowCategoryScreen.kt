@@ -62,7 +62,7 @@ private fun Content(
         isLoading = tvShowLazyList.isLoading(),
         isError = tvShowLazyList.loadState.refresh is LoadState.Error,
         onRetry = tvShowLazyList::refresh,
-        emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
+        emptyLayoutMessage = R.string.no_shows_in_genre,
         emptyLayoutImage = R.drawable.empty
     ) {
         Box(

@@ -171,7 +171,7 @@ private fun BookmarkBottomSheetContent(
 
     if (state.isSuccessSnackBarVisible) {
         snackBarController.showMessage(
-            message = R.string.item_added_success.string,
+            message = R.string.item_add_success.string,
             icon = com.london.designsystem.R.drawable.ic_success,
             snackBarType = SnackBarType.Success,
             onComplete = contract::onSnackBarShown
@@ -180,7 +180,7 @@ private fun BookmarkBottomSheetContent(
 
     if (state.isErrorSnackBarVisible) {
         snackBarController.showMessage(
-            message = R.string.item_added_fail.string,
+            message = R.string.item_add_fail.string,
             icon = com.london.designsystem.R.drawable.ic_failed,
             snackBarType = SnackBarType.Error,
             onComplete = contract::onSnackBarShown
@@ -217,7 +217,7 @@ private fun SheetHeader(
                 .clickable(onClick = hideSheet)
                 .padding(8.dp),
             painter = com.london.designsystem.R.drawable.cancel.painter,
-            contentDescription = R.string.cancel_addition_to_list.string,
+            contentDescription = R.string.cancel.string,
             tint = NovixTheme.colors.title
         )
     }
@@ -307,7 +307,7 @@ private fun UserActions(
             modifier = Modifier
                 .fillMaxWidth()
                 .requiredHeight(48.dp),
-            text = R.string.create_new_list.string,
+            text = R.string.list_create_new.string,
             onClick = contract::onCreateNewList,
             hasLabel = true,
             icon = null,

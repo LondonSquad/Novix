@@ -5,6 +5,6 @@ import com.london.presentation.R
 
 enum class RatingCategory(@StringRes val title: Int) {
     All(R.string.all),
-    Movies(R.string.Movies),
-    TvShows(R.string.TV_Shows)
+    Movies(R.string.movies),
+    TvShows(R.string.tv_shows)
 }

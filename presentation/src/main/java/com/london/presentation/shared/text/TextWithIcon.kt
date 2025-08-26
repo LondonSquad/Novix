@@ -51,7 +51,7 @@ fun TextWithIcon(
 
             Icon(
                 painter = icon,
-                contentDescription = stringResource(R.string.image_dot),
+                contentDescription = stringResource(R.string.dot),
                 tint = tint,
                 modifier = Modifier.size(baseIconSize * scale)
             )

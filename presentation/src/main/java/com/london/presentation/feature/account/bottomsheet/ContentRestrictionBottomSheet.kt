@@ -47,7 +47,7 @@ fun ContentRestrictionBottomSheet(
         ContentRestrictionOption(
             level = ContentRestrictionLevel.STRICT,
             title = stringResource(R.string.strict),
-            description = stringResource(R.string.blurs_all_sensitive_content),
+            description = stringResource(R.string.strict_description),
             isSelected = selectedLevel == ContentRestrictionLevel.STRICT,
             onSelected = { selectedLevel = it },
             modifier = Modifier.padding(top = 24.dp)
@@ -56,7 +56,7 @@ fun ContentRestrictionBottomSheet(
         ContentRestrictionOption(
             level = ContentRestrictionLevel.MODERATE,
             title = stringResource(R.string.moderate),
-            description = stringResource(R.string.blurs_explicit_scenes_only),
+            description = stringResource(R.string.moderate_description),
             isSelected = selectedLevel == ContentRestrictionLevel.MODERATE,
             onSelected = { selectedLevel = it },
             modifier = Modifier.padding(top = 16.dp)
@@ -65,7 +65,7 @@ fun ContentRestrictionBottomSheet(
         ContentRestrictionOption(
             level = ContentRestrictionLevel.OFF,
             title = stringResource(R.string.off),
-            description = stringResource(R.string.no_content_is_blurred),
+            description = stringResource(R.string.off_description),
             isSelected = selectedLevel == ContentRestrictionLevel.OFF,
             onSelected = { selectedLevel = it },
             modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
