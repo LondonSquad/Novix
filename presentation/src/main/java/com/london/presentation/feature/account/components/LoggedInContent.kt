@@ -15,7 +15,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.account.AccountContract
 import com.london.presentation.feature.account.AccountUiState
-import com.london.designsystem.R as dsR
 
 @Composable
 fun LoggedInContent(
@@ -46,15 +45,15 @@ fun LoggedInContent(
         AccountMenuDivider()
 
         AccountMenuItem(
-            icon = painterResource(dsR.drawable.star_square),
-            title = stringResource(R.string.my_rating),
+            icon = painterResource(R.drawable.star_square),
+            title = stringResource(R.string.my_ratings),
             onClick = accountContract::onMyRatingClick,
         )
 
         AccountMenuDivider()
 
         AccountMenuItem(
-            icon = painterResource(dsR.drawable.shield_energy),
+            icon = painterResource(R.drawable.shield_energy),
             title = stringResource(R.string.content_restriction),
             onClick = accountContract::onContentRestrictionClick
         )
@@ -62,7 +61,7 @@ fun LoggedInContent(
         AccountMenuDivider()
 
         AccountMenuItem(
-            icon = painterResource(dsR.drawable.lock_key),
+            icon = painterResource(R.drawable.lock_key),
             title = stringResource(R.string.change_password),
             onClick = accountContract::onChangePasswordClick
         )
@@ -70,7 +69,7 @@ fun LoggedInContent(
         AccountMenuDivider()
 
         AccountMenuItem(
-            icon = painterResource(dsR.drawable.moon),
+            icon = painterResource(R.drawable.moon),
             title = stringResource(R.string.appearance),
             endText = uiState.currentAppearance,
             onClick = accountContract::onAppearanceClick
@@ -79,7 +78,7 @@ fun LoggedInContent(
         AccountMenuDivider()
 
         AccountMenuItem(
-            icon = painterResource(dsR.drawable.language_circle),
+            icon = painterResource(R.drawable.language_circle),
             title = stringResource(R.string.language),
             endText = uiState.currentLanguage,
             onClick = accountContract::onLanguageClick

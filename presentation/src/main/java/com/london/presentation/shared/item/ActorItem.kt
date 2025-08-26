@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.UnSuitableEye
@@ -63,8 +62,7 @@ private fun ActorImage(
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
-        bottomStart = 12.dp,
-        bottomEnd = 0.dp
+        bottomStart = 12.dp
     )
 
     Box {
@@ -179,12 +177,12 @@ private fun TextSection(
 
 @ThemePreviews
 @Composable
-private fun ActorItemPreview() {
+private fun Preview() {
     NovixTheme {
         ActorItem(
             actorName = "Lee Jung-jae",
             characterName = "Character name",
-            imageRes = R.drawable.frame1597883073,
+            imageRes = "https://image.tmdb.org/t/p/w500/lx8oiTXL9lIx78KOXlrlvNfoz43.jpg",
             modifier = Modifier.padding(16.dp),
             onClick = {}
         )

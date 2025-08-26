@@ -47,7 +47,7 @@ enum class TvShowGenreUi(
         backgroundResId = R.drawable.img_fantasy_background
     ),
     Soap(stringResId = R.string.soap, backgroundResId = R.drawable.img_soap_background),
-    Talk(stringResId = R.string.talk, backgroundResId = R.drawable.img_talk_background),
+    Talk(stringResId = R.string.talk_show, backgroundResId = R.drawable.img_talk_background),
     WarPolitics(
         stringResId = R.string.war_politics,
         backgroundResId = R.drawable.img_war_background

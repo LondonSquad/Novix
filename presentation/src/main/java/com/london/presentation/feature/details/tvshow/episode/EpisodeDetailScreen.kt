@@ -156,7 +156,7 @@ private fun Content(
                 if (guestStars.isNotEmpty()) {
                     item {
                         Text(
-                            text = stringResource(R.string.guests_of_honor),
+                            text = stringResource(R.string.featured_guests),
                             style = NovixTheme.typography.title.medium,
                             color = NovixTheme.colors.title,
                             modifier = Modifier

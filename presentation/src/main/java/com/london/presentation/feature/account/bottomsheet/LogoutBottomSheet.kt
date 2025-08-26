@@ -31,7 +31,7 @@ fun LogoutBottomSheet(
         )
     ) {
         Text(
-            text = stringResource(R.string.are_you_sure_to_continue),
+            text = stringResource(R.string.confirm_action),
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.body,
             modifier = Modifier.padding(top = 24.dp, bottom = 24.dp)

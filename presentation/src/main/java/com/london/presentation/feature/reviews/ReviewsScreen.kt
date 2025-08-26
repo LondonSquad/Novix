@@ -305,7 +305,7 @@ private fun AuthorProfileImage(
     ) {
         ImageView(
             model = profileUrl,
-            contentDescription = stringResource(R.string.author_profile),
+            contentDescription = stringResource(R.string.reviewer_avatar),
             contentScale = ContentScale.Crop,
             loadingContent = { CircularLoading() },
             errorContent = { ErrorImage() },
