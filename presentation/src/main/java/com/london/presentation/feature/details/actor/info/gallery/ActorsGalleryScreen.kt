@@ -113,7 +113,7 @@ private fun GalleryContent(
         items(uiState.images) { imageUrl ->
             ImageView(
                 model = imageUrl,
-                contentDescription = stringResource(R.string.actor_photos),
+                contentDescription = stringResource(R.string.actor_images),
                 modifier = Modifier
                     .size(width = 104.dp, height = 101.dp)
                     .border(

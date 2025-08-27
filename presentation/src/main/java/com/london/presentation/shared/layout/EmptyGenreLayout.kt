@@ -20,7 +20,7 @@ import com.london.presentation.R
 @Composable
 fun EmptyGenreLayout(
     modifier: Modifier = Modifier,
-    message: String = stringResource(R.string.there_is_no_items_for_this_genre),
+    message: String = stringResource(R.string.no_items_in_genre),
 ) {
     Column(
         modifier = modifier
@@ -32,7 +32,7 @@ fun EmptyGenreLayout(
 
         Image(
             painter = painterResource(id = R.drawable.empty),
-            contentDescription = stringResource(R.string.there_is_no_items_for_this_genre),
+            contentDescription = stringResource(R.string.no_items_in_genre),
             modifier = Modifier.size(128.dp)
         )
 

@@ -37,8 +37,8 @@ fun <T : Any> MediaLazyGridWithTabs(
 ) {
 
     val tabs = listOf(
-        TabbableItem(R.string.Movies),
-        TabbableItem(R.string.TV_Shows)
+        TabbableItem(R.string.movies),
+        TabbableItem(R.string.tv_shows)
     )
 
     val selectedTab = tabs.getOrNull(tabSelected)
@@ -87,8 +87,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     topBar: @Composable (() -> Unit)? = null,
 ) {
     val tabs = listOf(
-        TabbableItem(R.string.Movies),
-        TabbableItem(R.string.TV_Shows)
+        TabbableItem(R.string.movies),
+        TabbableItem(R.string.tv_shows)
     )
 
     val selectedTab = tabs.getOrNull(tabSelected)

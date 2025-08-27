@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.london.presentation.R
 
 enum class SearchCategory(@StringRes val title: Int) {
-    Movies(R.string.Movies),
-    TvShows(R.string.TV_Shows),
-    Actors(R.string.Actors),
+    Movies(R.string.movies),
+    TvShows(R.string.tv_shows),
+    Actors(R.string.actors),
 }

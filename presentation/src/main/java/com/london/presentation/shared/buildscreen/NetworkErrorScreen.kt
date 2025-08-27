@@ -14,11 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R
 
 @Composable
 fun NetworkErrorScreen(
@@ -51,7 +51,7 @@ fun NetworkErrorScreen(
             )
 
             Text(
-                text = stringResource(R.string.you_are_offline),
+                text = stringResource(R.string.offline_title),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title,
                 textAlign = TextAlign.Center,
@@ -59,7 +59,7 @@ fun NetworkErrorScreen(
             )
 
             Text(
-                text = stringResource(R.string.check_your_connection),
+                text = stringResource(R.string.offline_description),
                 style = NovixTheme.typography.body.small,
                 color = NovixTheme.colors.body,
                 textAlign = TextAlign.Center

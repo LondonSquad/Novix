@@ -98,7 +98,7 @@ private fun Content(
             ) {
                 TopBar(
                     modifier = Modifier.detailsTopBar(1f),
-                    title = stringResource(R.string.my_rating),
+                    title = stringResource(R.string.my_ratings),
                     onBackClick = contract::onBackClick
                 )
 
@@ -110,7 +110,7 @@ private fun Content(
 
                 if (items.isEmpty()) {
                     EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
+                        message = stringResource(R.string.no_ratings),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {

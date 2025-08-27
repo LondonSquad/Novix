@@ -15,9 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NavHostGraph
 import com.london.data.local.preference.readLanguageCode
@@ -52,6 +51,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
 
         setContent {
@@ -84,7 +85,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Suppress("DEPRECATION")
 @Composable
 private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
     val view = LocalView.current
@@ -98,10 +98,7 @@ private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
         insetsController.isAppearanceLightNavigationBars = !useDarkTheme
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.navigationBarColor = Color.Transparent.toArgb()
             window.isNavigationBarContrastEnforced = false
-        } else {
-            window.navigationBarColor = Color.Transparent.toArgb()
         }
     }
 }
