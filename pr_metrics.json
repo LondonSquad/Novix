@@ -34652,5 +34652,42 @@
       "deletions": 83,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 725,
+    "url": "https://github.com/LondonSquad/Novix/pull/725",
+    "title": "Fix: Update System Bar Theme Handling",
+    "opened_at": "2025-08-27T15:05:45Z",
+    "head_ref": "fix/sys-bars-color",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W35",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 3,
+      "deletions": 6,
+      "changed_files": 1
+    }
   }
 ]
