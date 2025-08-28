@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -85,6 +86,7 @@ private fun Content(
     contract: ListContract,
 ) {
     val pagingItems = state.items.collectAsLazyPagingItems()
+    val snackBarController = LocalSnackbarController.current
 
     Box(
         modifier = Modifier
@@ -98,7 +100,7 @@ private fun Content(
             isError = state.error is ErrorState.NoInternet,
             pagingFlow = pagingItems,
             isGuest = state.isGuest,
-            guestContent = { NoListFoundAsGuest(onLoginClick = contract::onLoginClick) },
+            guestContent = { GuestContent(onLoginClick = contract::onLoginClick) },
             emptyContent = {
                 EmptyList(
                     contract = contract,
@@ -127,14 +129,8 @@ private fun Content(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
-                    items(pagingItems.itemCount) { index ->
-                        val item = pagingItems[index]
-                        item?.let {
-                            SavedListItemRow(
-                                itemUi = item,
-                                onCountClick = contract::onListClick
-                            )
-                        }
+                    items(pagingItems.itemSnapshotList) { item ->
+                        item?.let { MovieListCard(movieList = item, onListClick = contract::onListClick) }
                     }
                 }
             }
@@ -146,9 +142,7 @@ private fun Content(
                 addListSheetState = state.addListSheetState
             )
 
-            val snackBarController = LocalSnackbarController.current
-
-            if (state.error != null) {
+            if (state.isSnackBarErrorVisible) {
                 snackBarController.showMessage(
                     message = R.string.list_add_fail.string,
                     snackBarType = SnackBarType.Error,
@@ -185,15 +179,15 @@ fun BoxScope.ListFAB(
 }
 
 @Composable
-private fun SavedListItemRow(
-    itemUi: MovieList,
-    onCountClick: (Int) -> Unit
+private fun MovieListCard(
+    movieList: MovieList,
+    onListClick: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCountClick(itemUi.id) }
+            .clickable { onListClick(movieList.id) }
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -204,23 +198,18 @@ private fun SavedListItemRow(
             .zIndex(2f)
     ) {
         Text(
-            text = itemUi.name,
+            text = movieList.name,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             maxLines = 1,
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
         )
-        ItemCount(
-            itemUi = itemUi,
-        )
+        ItemCount(count = movieList.moviesCount)
     }
 }
 
 @Composable
-private fun ItemCount(
-    itemUi: MovieList,
-) {
+private fun ItemCount(count: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -230,7 +219,7 @@ private fun ItemCount(
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = itemUi.moviesCount.toLocalizedNumbers(),
+            text = count.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.primary,
         )
@@ -274,7 +263,7 @@ private fun EmptyList(
 }
 
 @Composable
-private fun NoListFoundAsGuest(
+private fun GuestContent(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -330,7 +319,7 @@ private fun BlurredImage(@DrawableRes imageId: Int) {
         } else {
             Image(
                 modifier = Modifier
-                    .scale(2.1f)
+                    .scale(2f)
                     .size(23.dp)
                     .align(Alignment.BottomCenter),
                 painter = R.drawable.ellipse_pre_blurred.painter,
