@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewitems
+package com.london.presentation.feature.list.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,18 +29,18 @@ import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
-fun ViewListItemsScreen(
+fun MovieListDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
-    viewModel: ViewItemsViewModel = hiltViewModel()
+    viewModel: MovieListDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            ViewItemsEffect.NavigateBack -> onNavigateBack()
-            is ViewItemsEffect.NavigationMovieDetails ->
+            MovieListEffect.NavigateBack -> onNavigateBack()
+            is MovieListEffect.NavigationMovieDetails ->
                 onNavigateToMovieDetails(currentEffect.id)
         }
     }
@@ -53,8 +53,8 @@ fun ViewListItemsScreen(
 
 @Composable
 private fun Content(
-    state: ViewItemsUiState,
-    contract: ViewListItemsContract,
+    state: MovieListUiState,
+    contract: MovieListDetailsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
 
@@ -144,8 +144,8 @@ private fun Content(
 private fun Preview() {
     NovixTheme {
         Content(
-            state = ViewItemsUiState(),
-            contract = object : ViewListItemsContract {
+            state = MovieListUiState(),
+            contract = object : MovieListDetailsContract {
                 override fun onBackClick() {}
                 override fun onRetryClick() {}
                 override fun onDeleteClick() {}
