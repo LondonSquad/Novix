@@ -69,23 +69,30 @@ fun EmptyLayout(
     imageContent: (@Composable () -> Unit)? = null,
     additionalContent: (@Composable () -> Unit)? = null
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(NovixTheme.colors.surface),
-        horizontalAlignment = CenterHorizontally,
-        verticalArrangement = Center
-    ) {
-        imageContent?.let { it() }
-
-        Text(
-            text = text,
-            style = NovixTheme.typography.body.small,
-            color = NovixTheme.colors.body,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 48.dp, vertical = 12.dp)
+    Box {
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
         )
 
-        additionalContent?.let { it() }
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(NovixTheme.colors.surface),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = Center
+        ) {
+            imageContent?.invoke()
+
+            Text(
+                text = text,
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 12.dp)
+            )
+
+            additionalContent?.invoke()
+        }
     }
 }
