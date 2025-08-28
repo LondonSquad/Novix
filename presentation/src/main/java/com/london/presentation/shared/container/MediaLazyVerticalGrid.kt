@@ -94,16 +94,7 @@ fun <T : Any> MediaLazyVerticalGrid(
         modifier = modifier,
         topBar = topBar,
     ) {
-        items(
-            count = pagingItems.itemCount,
-            key = { index ->
-                when (val item = pagingItems[index]) {
-                    is Movie -> item.id
-                    is TvShow -> item.id
-                    else -> index
-                }
-            }
-        ) { index ->
+        items(pagingItems.itemCount) { index ->
             RenderPagingGridItem(
                 index = index,
                 pagingItems = pagingItems,
