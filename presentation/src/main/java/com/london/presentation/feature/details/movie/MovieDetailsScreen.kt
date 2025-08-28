@@ -63,17 +63,17 @@ import com.london.presentation.R.drawable
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.shared.ActorItem
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
-import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.item.ActorItem
+import com.london.presentation.shared.section.FooterSection
+import com.london.presentation.shared.text.ConditionalText
+import com.london.presentation.shared.text.TextWithIcon
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.getLocalizedTimeUnit
@@ -87,11 +87,11 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, MediaType) -> Unit,
-    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
+    onNavigateToLogin: (movieId: Int) -> Unit,
+    onNavigateToMovie: (movieId: Int) -> Unit,
+    onNavigateToActor: (movieId: Int) -> Unit,
+    onNavigateToReviews: (movieId: Int, mediaType: MediaType) -> Unit,
+    onNavigateToMovieCategory: (genre: MovieGenreUi) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -108,7 +108,7 @@ fun MovieDetailsScreen(
                 currentEffect.mediaType
             )
 
-            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin()
+            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin(currentEffect.movieId)
         }
     }
 
@@ -381,7 +381,7 @@ private fun BottomSheetsHandler(
     )
     else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
         onDismissClick = movieDetailsContract::onRateBottomSheetClick,
-        onLoginClick = movieDetailsContract::onLoginClick,
+        onLoginClick = { movieDetailsContract.onLoginClick(uiState.movieId) },
     )
 }
 
@@ -399,8 +399,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
-                tint = NovixTheme.colors.yellowAccent,
-                hasInitialDot = false
+                tint = NovixTheme.colors.yellowAccent
             )
         }
 
@@ -415,6 +414,7 @@ private fun RatingAndMetaRow(
             TextWithIcon(
                 icon = painterResource(drawable.time_04),
                 text = text,
+                hasInitialDot = false
             )
 
             if (!date.isNullOrBlank()) {

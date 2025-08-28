@@ -62,17 +62,17 @@ import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.episode.Episodes
-import com.london.presentation.shared.ActorItem
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.FooterSection
-import com.london.presentation.shared.ImageView
-import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.item.ActorItem
+import com.london.presentation.shared.item.ImageView
+import com.london.presentation.shared.item.RatingItem
+import com.london.presentation.shared.section.FooterSection
+import com.london.presentation.shared.text.ConditionalText
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.detailsTopBar
@@ -84,9 +84,9 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun TvShowsDetailsScreen(
-    onNavigateToLogin: () -> Unit,
-    onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateToTvShowCategory: (TvShowGenreUi) -> Unit,
+    onNavigateToLogin: (tvShowId: Int) -> Unit,
+    onNavigateToActorDetails: (tvShowId: Int) -> Unit,
+    onNavigateToTvShowCategory: (genre: TvShowGenreUi) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
@@ -116,7 +116,7 @@ fun TvShowsDetailsScreen(
                 currentEffect.category
             )
 
-            is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
+            is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin(currentEffect.tvShowId)
         }
     }
 
@@ -318,7 +318,7 @@ private fun Content(
         )
         else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
             onDismissClick = tvShowDetailsContract::onRateBottomSheetClick,
-            onLoginClick = tvShowDetailsContract::onLoginClick,
+            onLoginClick = { tvShowDetailsContract.onLoginClick(uiState.id) },
         )
     }
 

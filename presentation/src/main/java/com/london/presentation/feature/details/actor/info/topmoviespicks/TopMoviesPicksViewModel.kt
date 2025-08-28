@@ -32,9 +32,8 @@ class TopMoviesPicksViewModel @Inject constructor(
         emitEffect(TopMoviesPicksEffect.MovieDetailsNavigation(movieId))
     }
 
-    override fun onBackClick() {
-        emitEffect(TopMoviesPicksEffect.BackNavigation)
-    }
+    override fun onBackClick() = emitEffect(TopMoviesPicksEffect.BackNavigation)
+
 
     override fun onManageBookmarkClicked(movieId: Int) {
         updateState {
@@ -63,5 +62,4 @@ class TopMoviesPicksViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
-
 }

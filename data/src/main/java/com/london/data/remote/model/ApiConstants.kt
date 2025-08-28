@@ -31,7 +31,7 @@ object ApiConstants {
     const val ACTOR_TV_SHOWS = "person/{person_id}/tv_credits"
     const val RATED_TV_SHOWS_PATH = "account/{account_id}/rated/tv"
     const val ADD_TV_SHOW_RATING_PATH = "tv/{series_id}/rating"
-    const val DELETE_TV_SHOW_RATING_PATH = "/tv/{series_id}/rating"
+    const val DELETE_TV_SHOW_RATING_PATH = "tv/{series_id}/rating"
     const val GET_TV_SHOW_REVIEW_PATH = "tv/{tv_id}/reviews"
     const val GET_TOP_RATED_TV_SHOWS_PATH = "tv/top_rated"
     const val GET_ACTOR_DETAILS_PATH = "person/{person_id}"

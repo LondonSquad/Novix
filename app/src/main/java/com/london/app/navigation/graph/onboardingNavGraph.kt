@@ -24,7 +24,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     composable<OnBoarding.Welcome> {
         WelcomeScreen(
             onNavigateLogin = navController::navigateToAuthGraph,
-            onNavigateContinue = navController::navigateToMainGraph
+            onNavigateAsGuest = navController::navigateToMainGraph
         )
     }
 }

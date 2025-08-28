@@ -89,7 +89,7 @@ private fun PreviewPrimaryNormal() {
             enabled = false,
             hasIcon = false,
             hasLabel = true,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
         )
     }
 }
@@ -137,7 +137,7 @@ private fun PreviewPrimaryWithTextAndIcon() {
             enabled = false,
             hasIcon = true,
             hasLabel = true,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
         )
     }
 }
@@ -153,7 +153,7 @@ private fun PreviewPrimaryWithIcon() {
             enabled = false,
             hasIcon = true,
             hasLabel = false,
-            icon = R.drawable.icon_add
+            icon = R.drawable.add_icon
 
         )
     }

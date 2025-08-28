@@ -36,6 +36,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.BackgroundGradient
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
@@ -50,7 +51,6 @@ import com.london.designsystem.utils.string
 import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
-import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -118,7 +118,7 @@ private fun Content(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TopBar(
-                    title = stringResource(R.string.saved_list_title),
+                    title = stringResource(R.string.my_saved_lists),
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
 
@@ -150,7 +150,7 @@ private fun Content(
 
             if (state.error != null) {
                 snackBarController.showMessage(
-                    message = R.string.list_added_fail.string,
+                    message = R.string.list_add_fail.string,
                     snackBarType = SnackBarType.Error,
                     onComplete = contract::resetSnackBarErrorState,
                     icon = null,
@@ -159,7 +159,7 @@ private fun Content(
 
             if (state.isSnackBarSuccessVisible) {
                 snackBarController.showMessage(
-                    message = R.string.list_added_success.string,
+                    message = R.string.list_add_success.string,
                     snackBarType = SnackBarType.Success,
                     onComplete = contract::resetSnackBarSuccessState,
                     icon = com.london.designsystem.R.drawable.ic_success,
@@ -249,7 +249,7 @@ private fun EmptyList(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = R.string.saved_list_title.string,
+            title = R.string.my_saved_lists.string,
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
         )
 
@@ -258,7 +258,7 @@ private fun EmptyList(
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
                 .verticalScroll(rememberScrollState()),
-            text = stringResource(R.string.no_saved_list),
+            text = stringResource(R.string.list_empty),
             imageContent = {
                 BlurredImage(imageId = R.drawable.ic_no_saved_list_yet)
             },
@@ -282,7 +282,7 @@ private fun NoListFoundAsGuest(
         modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
-            title = R.string.saved_list_title.string,
+            title = R.string.my_lists.string,
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
         )
 

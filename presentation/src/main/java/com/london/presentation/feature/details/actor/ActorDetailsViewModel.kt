@@ -5,6 +5,7 @@ import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -27,29 +28,26 @@ class ActorDetailsViewModel @Inject constructor(
         getActorInformation()
     }
 
-    override fun onBackClick() {
-        emitEffect(ActorEffect.BackNavigation)
-    }
+    override fun onBackClick() = emitEffect(ActorEffect.BackNavigation)
 
-    override fun onActorGalleryClick(actorId: Int) {
-        emitEffect(ActorEffect.GalleryNavigation(actorId))
-    }
+    override fun onActorGalleryClick(actorId: Int) = emitEffect(ActorEffect.GalleryNavigation(actorId))
 
-    override fun onTopMoviePicksClick(actorId: Int) {
+
+    override fun onTopMoviePicksClick(actorId: Int) =
         emitEffect(ActorEffect.TopMoviePicksNavigation(actorId))
-    }
 
-    override fun onMovieScreenClick(movieId: Int) {
+
+    override fun onMovieScreenClick(movieId: Int) =
         emitEffect(ActorEffect.MovieScreenNavigation(movieId))
-    }
 
-    override fun onTopTvShowPicksClick(actorId: Int) {
+
+    override fun onTopTvShowPicksClick(actorId: Int) =
         emitEffect(ActorEffect.TopTvShowPicksNavigation(actorId))
-    }
 
-    override fun onTvShowScreenClick(tvShowId: Int) {
+
+    override fun onTvShowScreenClick(tvShowId: Int) =
         emitEffect(ActorEffect.TvShowScreenNavigation(tvShowId))
-    }
+
 
     override fun onManageBookmarkClicked(movieId: Int) {
         updateState {
@@ -78,50 +76,44 @@ class ActorDetailsViewModel @Inject constructor(
 
     private fun getActorImage() {
         tryToExecute(
-            block = {
-                getActorUseCase.getActorImagesById(actorId ?: 0)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { getActorUseCase.getActorImagesById(actorId ?: 0) },
+            onStart = { setLoadingState(true) },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
     private fun getActorDetails() {
         tryToExecute(
-            block = {
-                getActorUseCase.getActorDetailsById(actorId ?: 0)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { getActorUseCase.getActorDetailsById(actorId ?: 0) },
+            onStart = { setLoadingState(true) },
             onSuccess = { actorDetails -> updateState { copy(actorDetails = actorDetails) } },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
     private fun getActorMovieDetails() {
         tryToExecute(
-            block = {
-                getActorUseCase.getActorMoviePicksById(actorId ?: 0)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { getActorUseCase.getActorMoviePicksById(actorId ?: 0) },
+            onStart = { setLoadingState(true) },
             onSuccess = { movieDetails -> updateState { copy(actorMovieDetails = movieDetails) } },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
     private fun getActorTvShowDetails() {
         tryToExecute(
-            block = {
-                getActorUseCase.getActorTvShowPicksById(actorId ?: 0)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { getActorUseCase.getActorTvShowPicksById(actorId ?: 0) },
+            onStart = { setLoadingState(true) },
             onSuccess = { tvShows -> updateState { copy(actorTvShowDetails = tvShows) } },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
+    private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
+    private fun setErrorState(errorState: ErrorState) = updateState { copy(error = errorState) }
 }

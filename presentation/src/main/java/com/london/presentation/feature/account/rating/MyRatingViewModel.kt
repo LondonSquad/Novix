@@ -47,14 +47,6 @@ class MyRatingViewModel @Inject constructor(
         )
     }
 
-    override fun onItemClick(id: Int) {
-        tryToExecute(
-            block = { manageRatingUseCase.getRatedMediaById(id) },
-            onSuccess = { ratedMedia -> handleRatedMediaNavigation(ratedMedia, id) },
-            onError = { errorState -> updateState { copy(errorState = errorState) } }
-        )
-    }
-
     override fun onRatingCategorySelected(category: RatingCategory) =
         updateState { copy(selectedRatingCategory = category) }
 
@@ -85,15 +77,4 @@ class MyRatingViewModel @Inject constructor(
             )
         }
     }
-
-    private fun handleRatedMediaNavigation(ratedMedia: RatedMedia?, id: Int) {
-        ratedMedia?.let { rated ->
-            val effect = when (rated.mediaType) {
-                MediaType.Movie -> MyRatingEffect.MovieDetailsNavigation(id)
-                MediaType.TvShow -> MyRatingEffect.TvShowDetailsNavigation(id)
-            }
-            emitEffect(effect)
-        }
-    }
-
 }

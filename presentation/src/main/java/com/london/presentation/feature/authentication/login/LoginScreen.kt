@@ -1,6 +1,5 @@
 package com.london.presentation.feature.authentication.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -94,14 +92,6 @@ private fun Content(
                 .zIndex(1f)
         )
 
-        Image(
-            painter = painterResource(dsR.drawable.polygon1),
-            contentDescription = stringResource(R.string.app_icon),
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .offset(y = (-60).dp, x = (-20).dp)
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -153,7 +143,7 @@ private fun Content(
                 passwordHiddenIcon = painterResource(id = dsR.drawable.icon_hide_password),
                 interactionSource = interactionSourcePassword,
                 leadingIcon = if (uiState.password.text.isNotEmpty()) {
-                    painterResource(dsR.drawable.lock_key)
+                    painterResource(R.drawable.lock_key)
                 } else {
                     painterResource(dsR.drawable.light_lock_key)
                 },
@@ -195,7 +185,7 @@ private fun Content(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    stringResource(R.string.don_t_have_an_account),
+                    stringResource(R.string.no_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
                     modifier = Modifier.padding(end = 4.dp)

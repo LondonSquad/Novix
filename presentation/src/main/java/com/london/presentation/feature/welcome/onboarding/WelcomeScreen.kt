@@ -38,7 +38,7 @@ import com.london.presentation.R
 @Composable
 fun WelcomeScreen(
     onNavigateLogin: () -> Unit,
-    onNavigateContinue: () -> Unit,
+    onNavigateAsGuest: () -> Unit,
 ) {
 
     val screenHeight = with(LocalDensity.current) {
@@ -62,14 +62,14 @@ fun WelcomeScreen(
     }
     Content(
         onNavigateLogin = onNavigateLogin,
-        onNavigateContinue = onNavigateContinue
+        onNavigateAsGuest = onNavigateAsGuest
     )
 }
 
 @Composable
 private fun Content(
     onNavigateLogin: () -> Unit,
-    onNavigateContinue: () -> Unit,
+    onNavigateAsGuest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -118,7 +118,7 @@ private fun Content(
 
         OutlineButton(
             text = stringResource(R.string.continue_as_guest),
-            onClick = onNavigateContinue,
+            onClick = onNavigateAsGuest,
             modifier = Modifier.fillMaxWidth(),
             hasLabel = true,
             icon = null,
@@ -171,7 +171,7 @@ private fun WelcomePoster(modifier: Modifier = Modifier) {
 @Composable
 private fun PreviewWelcomeScreen() {
     WelcomeScreen(
-        onNavigateContinue = {},
+        onNavigateAsGuest = {},
         onNavigateLogin = {}
     )
 }

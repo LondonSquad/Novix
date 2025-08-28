@@ -44,16 +44,16 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.ActorItem
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.FooterSection
-import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
-import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.item.ActorItem
+import com.london.presentation.shared.item.RatingItem
+import com.london.presentation.shared.section.FooterSection
+import com.london.presentation.shared.text.ConditionalText
+import com.london.presentation.shared.text.TextWithIcon
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.headerDetailsCard
@@ -65,7 +65,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: (tvShowId: Int, seasonNumber: Int, episodeNumber: Int) -> Unit,
     onNavigateToActorDetails: (Int) -> Unit,
     viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
@@ -76,7 +76,11 @@ fun EpisodeDetailsScreen(
         when (currentEffect) {
             EpisodeDetailsEffect.BackNavigation -> onNavigateBack()
             is EpisodeDetailsEffect.CastNavigation -> onNavigateToActorDetails(currentEffect.episodeId)
-            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin()
+            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin(
+                currentEffect.tvShowId,
+                currentEffect.seasonNumber,
+                currentEffect.episodeNumber
+            )
         }
     }
 
@@ -84,7 +88,7 @@ fun EpisodeDetailsScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error == ErrorState.NoInternet,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,
@@ -124,7 +128,9 @@ private fun Content(
     ) {
 
         BackgroundGradient(
-            modifier = Modifier.align(Alignment.TopStart).zIndex(2f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .zIndex(2f)
         )
 
         TopBar(
@@ -150,7 +156,7 @@ private fun Content(
                 if (guestStars.isNotEmpty()) {
                     item {
                         Text(
-                            text = stringResource(R.string.guests_of_honor),
+                            text = stringResource(R.string.featured_guests),
                             style = NovixTheme.typography.title.medium,
                             color = NovixTheme.colors.title,
                             modifier = Modifier
@@ -190,7 +196,15 @@ private fun Content(
         )
         if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
             onDismissClick = contract::onRateEpisodeClick,
-            onLoginClick = contract::onLoginClick,
+            onLoginClick = {
+                uiState.episode?.let {
+                    contract.onLoginClick(
+                        tvShowId = it.tvShowId,
+                        episodeNumber = it.id,
+                        seasonNumber = it.seasonNumber
+                    )
+                }
+            },
         )
     }
 

@@ -22,14 +22,15 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.string
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
+import com.london.presentation.shared.layout.EmptyGenreLayout
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.toLocalizedNumbers
@@ -97,7 +98,7 @@ private fun Content(
             ) {
                 TopBar(
                     modifier = Modifier.detailsTopBar(1f),
-                    title = stringResource(R.string.my_rating),
+                    title = stringResource(R.string.my_ratings),
                     onBackClick = contract::onBackClick
                 )
 
@@ -109,7 +110,7 @@ private fun Content(
 
                 if (items.isEmpty()) {
                     EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
+                        message = stringResource(R.string.no_ratings),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
@@ -145,11 +146,11 @@ private fun RatingSnackBar(state: MyRatingUiState) {
     if (!state.isSnackBarVisible) return
 
     if (state.errorState is ErrorState.RequestFailed) {
-        SnackBarAnimation(state.errorState.message)
+        SnackBarAnimation(message = R.string.rating_delete_fail.string)
     } else {
         SnackBarAnimation(
-            stringResource(R.string.delete_list_successfully),
-            dsR.drawable.ic_success
+            message = R.string.rating_delete_success.string,
+            icon = dsR.drawable.ic_success
         )
     }
 }

@@ -8,8 +8,8 @@ object AppConfig {
 
     object Version {
         const val MIN_SDK = 26
-        const val TARGET_SDK = 34
-        const val COMPILE_SDK = 35
+        const val TARGET_SDK = 36
+        const val COMPILE_SDK = 36
         val JVM = JavaVersion.VERSION_17
         const val BUILD_TOOLS = "35.0.0"
     }

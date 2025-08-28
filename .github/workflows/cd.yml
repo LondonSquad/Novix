@@ -107,7 +107,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.ACCOUNT_SERVICE_JSON }}
           groups: testers
-          file: apks/app-${{ matrix.abi }}-release.apk
+          file: apks/Novix-${{ needs.build.outputs.version_name }}-${{ matrix.abi }}-release.apk
           releaseNotes: |
             📦 Split APK Build
             🔧 ABI: ${{ matrix.abi }}

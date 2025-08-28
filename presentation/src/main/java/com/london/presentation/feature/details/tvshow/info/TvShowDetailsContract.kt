@@ -4,7 +4,7 @@ import com.london.domain.entity.shared.MediaType
 import com.london.presentation.shared.genre.TvShowGenreUi
 
 interface TvShowDetailsContract {
-    fun onLoginClick()
+    fun onLoginClick(tvShowId: Int)
     fun onBackClicked()
     fun onRateBottomSheetClick()
     fun onCastClicked(tvShowId: Int)

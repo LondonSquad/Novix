@@ -25,10 +25,10 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
+import com.london.presentation.shared.genre.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 
@@ -69,7 +69,7 @@ private fun Content(
         isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
         onBack = contract::onBackClick,
         onRetry = contract::onRetryClick,
-        emptyLayoutMessage = R.string.no_trending_movies_in_genre,
+        emptyLayoutMessage = R.string.no_movies_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
         Box(

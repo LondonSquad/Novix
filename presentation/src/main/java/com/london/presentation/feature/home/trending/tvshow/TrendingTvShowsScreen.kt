@@ -25,9 +25,9 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.designsystem.component.BackgroundGradient
-import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
+import com.london.presentation.shared.genre.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 
@@ -68,7 +68,7 @@ private fun Content(
         isLoading = state.isLoading,
         isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
         onBack = contract::onBackClick,
-        emptyLayoutMessage = R.string.no_trending_shows_in_genre,
+        emptyLayoutMessage = R.string.no_shows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
         Box(

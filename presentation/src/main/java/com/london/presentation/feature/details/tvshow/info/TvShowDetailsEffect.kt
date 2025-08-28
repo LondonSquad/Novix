@@ -11,7 +11,7 @@ sealed interface TvShowDetailsEffect {
     ) : TvShowDetailsEffect
 
     data object NavigateBack : TvShowDetailsEffect
-    data object OnLoginNavigation : TvShowDetailsEffect
+    data class OnLoginNavigation(val tvShowId: Int) : TvShowDetailsEffect
     data class NavigateToCast(val tvShowId: Int) : TvShowDetailsEffect
     data class NavigateToTvShowsByCategoryId(val category: TvShowGenreUi) : TvShowDetailsEffect
     data class NavigateToReviews(val tvShowId: Int, val mediaType: MediaType) : TvShowDetailsEffect

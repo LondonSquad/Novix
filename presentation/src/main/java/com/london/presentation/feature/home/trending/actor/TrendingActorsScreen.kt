@@ -63,7 +63,7 @@ private fun Content(
         isError = actorsLazyItems.loadState.refresh is LoadState.Error,
         onBack = contract::onBackClick,
         onRetry = contract::onRetryClick,
-        emptyLayoutMessage = R.string.no_trending_actors_in_genre,
+        emptyLayoutMessage = R.string.no_trending_people,
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = actorsLazyItems
     ) {

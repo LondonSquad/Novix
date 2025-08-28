@@ -30,7 +30,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
-import com.london.presentation.shared.ImageView
+import com.london.presentation.shared.item.ImageView
 import com.london.designsystem.R as dsR
 
 @Composable
@@ -94,7 +94,7 @@ private fun UserProfileIcon(avatarPath: String? = null) {
                 contentRestrictionLevel = ContentRestrictionLevel.OFF,
                 loadingContent = {
                     Icon(
-                        painter = painterResource(dsR.drawable.user),
+                        painter = painterResource(R.drawable.user),
                         contentDescription = stringResource(R.string.user_profile),
                         modifier = Modifier.size(28.dp),
                         tint = NovixTheme.colors.title
@@ -102,7 +102,7 @@ private fun UserProfileIcon(avatarPath: String? = null) {
                 },
                 errorContent = {
                     Icon(
-                        painter = painterResource(dsR.drawable.user),
+                        painter = painterResource(R.drawable.user),
                         contentDescription = stringResource(R.string.user_profile),
                         modifier = Modifier.size(28.dp),
                         tint = NovixTheme.colors.title
@@ -111,7 +111,7 @@ private fun UserProfileIcon(avatarPath: String? = null) {
             )
         } else {
             Icon(
-                painter = painterResource(dsR.drawable.user),
+                painter = painterResource(R.drawable.user),
                 contentDescription = stringResource(R.string.user_profile),
                 modifier = Modifier.size(28.dp),
                 tint = NovixTheme.colors.title

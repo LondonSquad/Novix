@@ -71,7 +71,6 @@ import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.navBarBottomPadding
-import com.london.presentation.utils.toRecentViewed
 
 @Composable
 fun SearchScreen(
@@ -306,7 +305,7 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.no_search_result_msg),
+                        text = stringResource(R.string.no_search_result),
                         image = R.drawable.img_no_search_result,
                         modifier = Modifier
                             .fillMaxSize()
@@ -342,7 +341,7 @@ private fun <T : Any> MediaSearchContent(
             emptyContent = {
                 if (!isLoading) {
                     EmptyLayout(
-                        text = stringResource(R.string.no_search_result_msg),
+                        text = stringResource(R.string.no_search_result),
                         image = R.drawable.img_no_search_result,
                         modifier = Modifier
                             .fillMaxSize()
@@ -481,7 +480,7 @@ private fun RecentSection(
         otherItems = state.recentViewed,
         emptyContent = {
             EmptyLayout(
-                text = stringResource(R.string.start_exploring_msg),
+                text = stringResource(R.string.start_exploring),
                 image = R.drawable.imge_explore,
                 modifier = modifier.padding(horizontal = 16.dp)
             )
@@ -589,7 +588,7 @@ private fun RecentSearchSection(
     onRemoveClick: (RecentSearch) -> Unit
 ) {
     SectionHeader(
-        text = stringResource(R.string.recent_search),
+        text = stringResource(R.string.recent_searches),
         hasGetAll = true,
         hasIcon = false,
         getAllText = stringResource(R.string.clear_all),
