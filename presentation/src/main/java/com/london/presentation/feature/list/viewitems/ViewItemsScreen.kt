@@ -15,8 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.snackbar.LocalSnackbarController
 import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
@@ -57,6 +57,7 @@ private fun Content(
     contract: ViewListItemsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
+    val snackBarController = rememberSnackBarController()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -108,14 +109,12 @@ private fun Content(
             contract = contract,
         )
 
-        val snackBarController = LocalSnackbarController.current
 
         if (state.isSnackBarErrorVisible) {
             snackBarController.showMessage(
                 message = R.string.item_delete_fail.string,
                 snackBarType = SnackBarType.Error,
                 onComplete = contract::resetSnackBarErrorState,
-                icon = null,
             )
         }
 
@@ -124,7 +123,6 @@ private fun Content(
                 message = R.string.item_delete_success.string,
                 snackBarType = SnackBarType.Success,
                 onComplete = contract::resetMovieSnackBarSuccessState,
-                icon = com.london.designsystem.R.drawable.ic_success,
             )
         }
 
@@ -133,7 +131,6 @@ private fun Content(
                 message = R.string.list_delete_success.string,
                 snackBarType = SnackBarType.Success,
                 onComplete = contract::resetListSnackBarSuccessState,
-                icon = com.london.designsystem.R.drawable.ic_success,
             )
         }
     }

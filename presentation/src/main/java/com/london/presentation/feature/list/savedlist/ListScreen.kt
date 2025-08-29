@@ -44,6 +44,7 @@ import com.london.designsystem.component.button.FloatingActionButton
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.snackbar.LocalSnackbarController
 import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
@@ -86,6 +87,7 @@ private fun Content(
     contract: ListContract,
 ) {
     val pagingItems = state.items.collectAsLazyPagingItems()
+    val snackBarController = rememberSnackBarController()
 
     Box(
         modifier = Modifier
@@ -144,14 +146,11 @@ private fun Content(
                 addListSheetState = state.addListSheetState
             )
 
-            val snackBarController = LocalSnackbarController.current
-
             if (state.error != null) {
                 snackBarController.showMessage(
                     message = R.string.list_add_fail.string,
                     snackBarType = SnackBarType.Error,
                     onComplete = contract::resetSnackBarErrorState,
-                    icon = null,
                 )
             }
 
@@ -160,7 +159,6 @@ private fun Content(
                     message = R.string.list_add_success.string,
                     snackBarType = SnackBarType.Success,
                     onComplete = contract::resetSnackBarSuccessState,
-                    icon = com.london.designsystem.R.drawable.ic_success,
                 )
             }
         }
