@@ -34724,10 +34724,20 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-29T01:50:49Z",
+        "commit_id": "246909e98b077afd70b815fc6c0c034befad57cb"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-29T01:50:49Z",
+    "time_to_first_approval_minutes": 2008.5,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
