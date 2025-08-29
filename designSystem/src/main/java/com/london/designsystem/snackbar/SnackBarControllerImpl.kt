@@ -38,10 +38,11 @@ class SnackBarControllerImpl(
     }
 
     private fun processNextMessage() {
-        if (messageQueue.isEmpty()) return
-
-        val nextMessage = messageQueue.removeFirst()
         currentJob = coroutineScope.launch {
+            val nextMessage = queueMutex.withLock {
+                messageQueue.removeFirstOrNull()
+            } ?: return@launch
+
             _state.value = SnackBarState(data = nextMessage, isVisible = true)
             delay(nextMessage.snackbarDuration.toMillis())
             _state.value = _state.value.copy(isVisible = false)

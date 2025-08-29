@@ -62,12 +62,12 @@ fun ScaffoldWithSnackBar(
             Box(modifier = Modifier.fillMaxSize()) {
                 content(innerPadding)
 
-                currentSnackbarData.data?.let { data ->
-                    AnimatedVisibility(
-                        visible = currentSnackbarData.isVisible,
-                        enter = animationConfig.enterAnimation,
-                        exit = animationConfig.exitAnimation
-                    ) {
+                AnimatedVisibility(
+                    visible = currentSnackbarData.isVisible,
+                    enter = animationConfig.enterAnimation,
+                    exit = animationConfig.exitAnimation
+                ) {
+                    currentSnackbarData.data?.let { data ->
                         snackBar(data)
                     }
                 }
