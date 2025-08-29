@@ -6,6 +6,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 data class SnackBarState(
     val data: SnackBarData? = null,
@@ -21,12 +23,17 @@ class SnackBarControllerImpl(
 
     private var currentJob: Job? = null
     private val messageQueue = ArrayDeque<SnackBarData>()
+    private val queueMutex = Mutex()
 
     override fun showSnackBar(snackBarData: SnackBarData) {
-        messageQueue.add(snackBarData)
+        coroutineScope.launch {
+            queueMutex.withLock {
+                messageQueue.add(snackBarData)
+            }
 
-        if (currentJob?.isActive != true) {
-            processNextMessage()
+            if (currentJob?.isActive != true) {
+                processNextMessage()
+            }
         }
     }
 
