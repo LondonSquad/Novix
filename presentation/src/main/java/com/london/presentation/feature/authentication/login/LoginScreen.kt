@@ -36,10 +36,13 @@ import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
+import com.london.designsystem.snackbar.SnackBarData
+import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.utils.Listen
 import com.london.designsystem.R as dsR
@@ -78,6 +81,7 @@ private fun Content(
     val interactionSourcePassword = remember { MutableInteractionSource() }
     val isLoadingGeneral = uiState.isLoading || uiState.isGuestLoginLoading
     val scrollState = rememberScrollState()
+    val snackBarController = rememberSnackBarController()
 
     Box(
         modifier = Modifier
@@ -203,9 +207,14 @@ private fun Content(
                     })
             }
         }
+
         if (uiState.error is ErrorState.RequestFailed) {
-            val message = uiState.error.message
-            SnackBarAnimation(message)
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.login_failed.string,
+                    snackBarType = SnackBarType.Error,
+                )
+            )
         }
     }
 }
