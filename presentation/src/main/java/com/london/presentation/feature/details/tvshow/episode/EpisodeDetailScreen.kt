@@ -42,11 +42,14 @@ import com.london.designsystem.component.GuestUserLoginBottomSheet
 import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.snackbar.SnackBarData
+import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.item.ActorItem
@@ -106,6 +109,7 @@ private fun Content(
 ) {
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
+    val snackBarController = rememberSnackBarController()
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemScrollOffset > 40f ||
@@ -210,14 +214,18 @@ private fun Content(
 
     uiState.isSuccessfullyRated?.let { isRateAddedSuccessfully ->
         if (isRateAddedSuccessfully) {
-            SnackBarAnimation(
-                message = stringResource(Res.string.rated_successfully),
-                icon = Res.drawable.ic_success
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = Res.string.rated_successfully.string,
+                    snackBarType = SnackBarType.Success,
+                )
             )
         } else {
-            SnackBarAnimation(
-                message = stringResource(Res.string.rated_fail),
-                icon = Res.drawable.ic_failed
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = Res.string.rated_fail.string,
+                    snackBarType = SnackBarType.Error,
+                )
             )
         }
     }
