@@ -20,13 +20,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.snackbar.SnackBarData
+import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.BackgroundGradient
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
@@ -34,7 +36,6 @@ import com.london.presentation.shared.layout.EmptyGenreLayout
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.detailsTopBar
 import com.london.presentation.utils.toLocalizedNumbers
-import com.london.designsystem.R as dsR
 
 @Composable
 fun MyRatingScreen(
@@ -145,12 +146,21 @@ private fun Content(
 private fun RatingSnackBar(state: MyRatingUiState) {
     if (!state.isSnackBarVisible) return
 
+    val snackBarController = rememberSnackBarController()
+
     if (state.errorState is ErrorState.RequestFailed) {
-        SnackBarAnimation(message = R.string.rating_delete_fail.string)
+        snackBarController.showSnackBar(
+            SnackBarData(
+                message = R.string.rating_delete_fail.string,
+                snackBarType = SnackBarType.Error,
+            )
+        )
     } else {
-        SnackBarAnimation(
-            message = R.string.rating_delete_success.string,
-            icon = dsR.drawable.ic_success
+        snackBarController.showSnackBar(
+            SnackBarData(
+                message = R.string.rating_delete_success.string,
+                snackBarType = SnackBarType.Success,
+            )
         )
     }
 }
