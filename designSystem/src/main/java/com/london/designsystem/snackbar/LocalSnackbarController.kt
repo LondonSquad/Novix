@@ -8,6 +8,4 @@ val LocalSnackbarController = compositionLocalOf<SnackBarController> {
 }
 
 @Composable
-fun rememberSnackBarController(): SnackBarController {
-    return LocalSnackbarController.current
-}
+fun rememberSnackBarController(): SnackBarController = LocalSnackbarController.current

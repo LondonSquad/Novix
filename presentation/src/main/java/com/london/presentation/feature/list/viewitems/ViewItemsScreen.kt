@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.snackbar.SnackBarData
 import com.london.designsystem.snackbar.SnackBarType
 import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
@@ -111,26 +112,32 @@ private fun Content(
 
 
         if (state.isSnackBarErrorVisible) {
-            snackBarController.showMessage(
-                message = R.string.item_delete_fail.string,
-                snackBarType = SnackBarType.Error,
-                onComplete = contract::resetSnackBarErrorState,
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.item_delete_fail.string,
+                    snackBarType = SnackBarType.Error,
+                    onComplete = contract::resetSnackBarErrorState,
+                )
             )
         }
 
         if (state.isMovieSnackBarSuccessVisible) {
-            snackBarController.showMessage(
-                message = R.string.item_delete_success.string,
-                snackBarType = SnackBarType.Success,
-                onComplete = contract::resetMovieSnackBarSuccessState,
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.item_delete_success.string,
+                    snackBarType = SnackBarType.Success,
+                    onComplete = contract::resetMovieSnackBarSuccessState,
+                )
             )
         }
 
         if (state.isListSnackBarSuccess) {
-            snackBarController.showMessage(
-                message = R.string.list_delete_success.string,
-                snackBarType = SnackBarType.Success,
-                onComplete = contract::resetListSnackBarSuccessState,
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.list_delete_success.string,
+                    snackBarType = SnackBarType.Success,
+                    onComplete = contract::resetListSnackBarSuccessState,
+                )
             )
         }
     }
