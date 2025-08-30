@@ -39,7 +39,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
@@ -146,9 +146,7 @@ private fun MovingDotIndicator(
     itemCount: Int,
     selectedIconColor: Color
 ) {
-    val screenWidth = LocalDensity.current.run {
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp.dp
-    }
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
     val totalItemsWidth = NavBarDimens.itemWidth * itemCount
     val remainingSpace = screenWidth - totalItemsWidth
@@ -297,7 +295,6 @@ private fun AnimatedNavIcon(
 @Composable
 private fun NavBarPreview() {
     data class MockDestination(val name: String)
-
     var currentSelectedDestination by remember { mutableStateOf(MockDestination("home")) }
 
     NovixTheme {
