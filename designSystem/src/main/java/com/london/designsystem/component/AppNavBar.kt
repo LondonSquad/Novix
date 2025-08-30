@@ -1,6 +1,5 @@
 package com.london.designsystem.component
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -8,14 +7,11 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +39,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
@@ -54,9 +51,13 @@ import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.topBorder
 
 data class NavigationTab<out T>(
-    val idleIcon: Painter,
-    val selectedIcon: Painter,
+    val tabIcons: TabIcons,
     val destination: T,
+)
+
+data class TabIcons(
+    val idleIcon: Painter,
+    val selectedIcon: Painter
 )
 
 data class NavBarColors(
@@ -66,64 +67,129 @@ data class NavBarColors(
     val topBorderColor: Color
 )
 
-@SuppressLint("RestrictedApi")
+object NavBarDefaults {
+
+    @Composable
+    fun navBarColors() = NavBarColors(
+        backgroundColor = NovixTheme.colors.surface,
+        selectedIconColor = NovixTheme.colors.primary,
+        idleIconColor = NovixTheme.colors.hint,
+        topBorderColor = NovixTheme.colors.stroke
+    )
+}
+
+private object NavBarDimens {
+    val itemWidth = 60.dp
+    val itemHeight = 56.dp
+    val iconSize = 24.dp
+    val clickableAreaSize = 42.dp
+    val dotSize = 4.dp
+    val verticalPadding = 7.dp
+    val dotOffsetFromBottom = 2.dp
+    val borderWidth = 1.dp
+}
+
 @Composable
 fun NavBar(
     modifier: Modifier = Modifier,
     navDestinations: List<NavigationTab<Any>>,
     onNavDestinationClicked: (Any) -> Unit,
     navBackStackEntry: NavBackStackEntry? = null,
-    navBarColors: NavBarColors = NavBarColors(
-        backgroundColor = NovixTheme.colors.surface,
-        selectedIconColor = NovixTheme.colors.primary,
-        idleIconColor = NovixTheme.colors.hint,
-        topBorderColor = NovixTheme.colors.stroke
-    )
+    navBarColors: NavBarColors = NavBarDefaults.navBarColors()
 ) {
+
+    val checkIfSelected: (Any) -> Boolean = { destination ->
+        navBackStackEntry?.destination?.hasRoute(destination::class) == true
+    }
+
+    val selectedIndex =
+        navDestinations.indexOfFirst { item -> checkIfSelected(item.destination) }.takeIf { it >= 0 } ?: 0
+
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .background(color = navBarColors.backgroundColor)
             .navigationBarsPadding()
-            .clickable(
-                enabled = false,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }) {}
+            .fillMaxWidth()
+            .topBorder(color = navBarColors.topBorderColor, width = NavBarDimens.borderWidth)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .topBorder(navBarColors.topBorderColor, 1.dp)
-                .padding(vertical = 7.dp),
+                .padding(vertical = NavBarDimens.verticalPadding),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            navDestinations.forEach { item ->
+            navDestinations.forEachIndexed { index, item ->
                 NavBarItem(
-                    item = item,
+                    tabIcons = item.tabIcons,
                     selectedIconColor = navBarColors.selectedIconColor,
-                idleIconColor = navBarColors.idleIconColor,
-                onClick = { onNavDestinationClicked(item.destination) },
-                screen = item.destination,
-                    backStackEntry = navBackStackEntry
+                    idleIconColor = navBarColors.idleIconColor,
+                    onClick = { onNavDestinationClicked(item.destination) },
+                    isSelected = checkIfSelected(item.destination)
                 )
             }
         }
+
+        MovingDotIndicator(
+            selectedIndex = selectedIndex,
+            itemCount = navDestinations.size,
+            selectedIconColor = navBarColors.selectedIconColor
+        )
     }
 }
 
 @Composable
-private fun <T> NavBarItem(
-    item: NavigationTab<T>,
-    screen: Any,
-    backStackEntry: NavBackStackEntry?,
+private fun MovingDotIndicator(
+    selectedIndex: Int,
+    itemCount: Int,
+    selectedIconColor: Color
+) {
+    val screenWidth = LocalDensity.current.run {
+        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp.dp
+    }
+
+    val totalItemsWidth = NavBarDimens.itemWidth * itemCount
+    val remainingSpace = screenWidth - totalItemsWidth
+    val spaceBetweenItems = if (itemCount > 1) remainingSpace / (itemCount + 1) else 0.dp
+
+    val itemCenterOffset = spaceBetweenItems + (NavBarDimens.itemWidth / 2)
+    val spacingBetweenCenters = NavBarDimens.itemWidth + spaceBetweenItems
+
+    val offsetX by animateDpAsState(
+        targetValue = itemCenterOffset + (spacingBetweenCenters * selectedIndex) - (NavBarDimens.dotSize / 2),
+        animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+        label = "dotOffset"
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = NavBarDimens.verticalPadding)
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(NavBarDimens.dotSize)
+                .offset(
+                    x = offsetX,
+                    y = NavBarDimens.itemHeight - NavBarDimens.dotSize - NavBarDimens.dotOffsetFromBottom
+                ),
+            painter = painterResource(R.drawable.ellipse_selected_dot),
+            contentDescription = null,
+            tint = selectedIconColor
+        )
+    }
+}
+
+@Composable
+private fun NavBarItem(
+    tabIcons: TabIcons,
+    isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color,
     onClick: () -> Unit
 ) {
-    val isSelected = backStackEntry?.destination?.hasRoute(screen::class) == true
     Box(
-        modifier = Modifier.size(width = 60.dp, height = 56.dp),
+        modifier = Modifier.size(width = NavBarDimens.itemWidth, height = NavBarDimens.itemHeight),
         contentAlignment = Alignment.Center
     ) {
         AnimatedBackgroundBlur(
@@ -133,7 +199,7 @@ private fun <T> NavBarItem(
         )
 
         ClickableIconContainer(
-            item = item,
+            tabIcons = tabIcons,
             isSelected = isSelected,
             selectedIconColor = selectedIconColor,
             idleIconColor = idleIconColor,
@@ -151,17 +217,13 @@ private fun AnimatedBackgroundBlur(
     AnimatedVisibility(
         modifier = modifier,
         visible = isVisible,
-        enter = scaleIn(
-            animationSpec = tween(400, easing = FastOutSlowInEasing),
-        ),
-        exit = scaleOut(
-            animationSpec = tween(300, easing = FastOutLinearInEasing),
-        )
+        enter = scaleIn(animationSpec = tween(400, easing = FastOutSlowInEasing)),
+        exit = scaleOut(animationSpec = tween(300, easing = FastOutLinearInEasing))
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Icon(
                 modifier = Modifier
-                    .width(60.dp)
+                    .width(NavBarDimens.itemWidth)
                     .height(16.dp)
                     .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
                 painter = painterResource(R.drawable.ellipse_blur_filled),
@@ -179,8 +241,8 @@ private fun AnimatedBackgroundBlur(
 }
 
 @Composable
-private fun <T> ClickableIconContainer(
-    item: NavigationTab<T>,
+private fun ClickableIconContainer(
+    tabIcons: TabIcons,
     isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color,
@@ -188,7 +250,7 @@ private fun <T> ClickableIconContainer(
 ) {
     Box(
         modifier = Modifier
-            .size(42.dp)
+            .size(NavBarDimens.clickableAreaSize)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -196,23 +258,17 @@ private fun <T> ClickableIconContainer(
         contentAlignment = Alignment.Center
     ) {
         AnimatedNavIcon(
-            item = item,
+            tabIcons = tabIcons,
             isSelected = isSelected,
             selectedIconColor = selectedIconColor,
             idleIconColor = idleIconColor
-        )
-
-        AnimatedSelectionDot(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            isVisible = isSelected,
-            selectedIconColor = selectedIconColor
         )
     }
 }
 
 @Composable
-private fun <T> AnimatedNavIcon(
-    item: NavigationTab<T>,
+private fun AnimatedNavIcon(
+    tabIcons: TabIcons,
     isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color
@@ -223,9 +279,9 @@ private fun <T> AnimatedNavIcon(
         label = "iconCrossfade"
     ) { selected ->
         Icon(
-            painter = if (selected) item.selectedIcon else item.idleIcon,
+            painter = if (selected) tabIcons.selectedIcon else tabIcons.idleIcon,
             modifier = Modifier
-                .size(24.dp)
+                .size(NavBarDimens.iconSize)
                 .animateContentSize(
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -234,34 +290,6 @@ private fun <T> AnimatedNavIcon(
                 ),
             contentDescription = null,
             tint = if (selected) selectedIconColor else idleIconColor
-        )
-    }
-}
-
-@Composable
-private fun AnimatedSelectionDot(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    selectedIconColor: Color
-) {
-    AnimatedVisibility(
-        modifier = modifier
-            .offset(y = 2.dp),
-        visible = isVisible,
-        enter = slideInVertically(
-            animationSpec = tween(450, easing = FastOutSlowInEasing),
-            initialOffsetY = { it * 2 }
-        ) + fadeIn(),
-        exit = slideOutVertically(
-            animationSpec = tween(250, easing = FastOutLinearInEasing),
-            targetOffsetY = { it * 2 }
-        ) + fadeOut()
-    ) {
-        Icon(
-            modifier = Modifier.size(4.dp),
-            painter = painterResource(R.drawable.ellipse_selected_dot),
-            contentDescription = null,
-            tint = selectedIconColor
         )
     }
 }
@@ -277,28 +305,39 @@ private fun NavBarPreview() {
         NavBar(
             navDestinations = listOf(
                 NavigationTab(
-                    idleIcon = R.drawable.icon_home.painter,
-                    selectedIcon = R.drawable.icon_home_filled.painter,
+                    TabIcons(
+                        idleIcon = R.drawable.icon_home.painter,
+                        selectedIcon = R.drawable.icon_home_filled.painter
+                    ),
                     destination = MockDestination("home"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_search.painter,
-                    selectedIcon = R.drawable.icon_search_filled.painter,
+                    TabIcons(
+                        idleIcon = R.drawable.icon_search.painter,
+                        selectedIcon = R.drawable.icon_search_filled.painter
+                    ),
                     destination = MockDestination("search"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_masks.painter,
-                    selectedIcon = R.drawable.icon_masks_filled.painter,
+                    TabIcons(
+                        idleIcon = R.drawable.icon_masks.painter,
+                        selectedIcon = R.drawable.icon_masks_filled.painter,
+                    ),
+
                     destination = MockDestination("categories"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_bookmark.painter,
-                    selectedIcon = R.drawable.icon_bookmark_filled.painter,
+                    TabIcons(
+                        idleIcon = R.drawable.icon_bookmark.painter,
+                        selectedIcon = R.drawable.icon_bookmark_filled.painter,
+                    ),
                     destination = MockDestination("bookmarks"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_user.painter,
-                    selectedIcon = R.drawable.icon_user_filled.painter,
+                    TabIcons(
+                        idleIcon = R.drawable.icon_user.painter,
+                        selectedIcon = R.drawable.icon_user_filled.painter
+                    ),
                     destination = MockDestination("account"),
                 )
             ),
