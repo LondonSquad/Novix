@@ -85,7 +85,7 @@ private object NavBarDimens {
     val clickableAreaSize = 42.dp
     val dotSize = 4.dp
     val verticalPadding = 7.dp
-    val dotOffsetFromBottom = 2.dp
+    val dotPaddingFromBottom = 12.dp
     val borderWidth = 1.dp
 }
 
@@ -133,13 +133,15 @@ fun NavBar(
         MovingDotIndicator(
             selectedIndex = selectedIndex,
             itemCount = navDestinations.size,
-            selectedIconColor = navBarColors.selectedIconColor
+            selectedIconColor = navBarColors.selectedIconColor,
+            modifier = Modifier.align(Alignment.BottomStart)
         )
     }
 }
 
 @Composable
 private fun MovingDotIndicator(
+    modifier: Modifier = Modifier,
     selectedIndex: Int,
     itemCount: Int,
     selectedIconColor: Color
@@ -162,17 +164,14 @@ private fun MovingDotIndicator(
     )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = NavBarDimens.verticalPadding)
+            .padding(bottom = NavBarDimens.dotPaddingFromBottom)
     ) {
         Icon(
             modifier = Modifier
                 .size(NavBarDimens.dotSize)
-                .offset(
-                    x = offsetX,
-                    y = NavBarDimens.itemHeight - NavBarDimens.dotSize - NavBarDimens.dotOffsetFromBottom
-                ),
+                .offset(x = offsetX),
             painter = painterResource(R.drawable.ellipse_selected_dot),
             contentDescription = null,
             tint = selectedIconColor
