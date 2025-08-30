@@ -34939,5 +34939,42 @@
       "deletions": 104,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 727,
+    "url": "https://github.com/LondonSquad/Novix/pull/727",
+    "title": "Refactor: Snackbar Manager",
+    "opened_at": "2025-08-30T11:23:49Z",
+    "head_ref": "refactor/snackbar-manager",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W35",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 255,
+      "deletions": 199,
+      "changed_files": 17
+    }
   }
 ]
