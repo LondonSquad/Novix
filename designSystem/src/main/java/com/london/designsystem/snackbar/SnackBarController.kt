@@ -26,14 +26,14 @@ enum class SnackBarType {
 }
 
 enum class SnackbarDuration {
-    Short,
+    Brief,
     Medium,
     Extensive,
     Indefinite;
 
     fun toMillis(): Long {
         return when (this) {
-            Short -> 1500
+            Brief -> 1500
             Medium -> 3000
             Extensive -> 5000
             Indefinite -> Long.MAX_VALUE
