@@ -34024,13 +34024,22 @@
         },
         "submitted_at": "2025-08-20T08:45:43Z",
         "commit_id": "cbaa0826f4470c54e129631cb9842a64809d264e"
+      },
+      {
+        "reviewer": {
+          "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-20T08:46:05Z",
+        "commit_id": "cbaa0826f4470c54e129631cb9842a64809d264e"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-20T08:45:43Z",
     "time_to_first_approval_minutes": 72.03333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-20T08:46:05Z",
+    "time_to_required_approvals_minutes": 72.4,
     "closed_at": "2025-08-20T08:46:06Z",
     "merged_at": "2025-08-20T08:46:06Z",
     "merged_by": {
@@ -34270,12 +34279,31 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-20T12:55:45Z",
+        "commit_id": "9d6d152ce66a07613ff127e6b872a820023ee286"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-20T12:56:02Z",
+        "commit_id": "9d6d152ce66a07613ff127e6b872a820023ee286"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-20T12:55:45Z",
+    "time_to_first_approval_minutes": 3.966666666666667,
+    "required_approvals_met_at": "2025-08-20T12:56:02Z",
+    "time_to_required_approvals_minutes": 4.25,
     "closed_at": "2025-08-20T13:04:06Z",
     "merged_at": "2025-08-20T13:04:06Z",
     "merged_by": {
@@ -34289,6 +34317,66 @@
       "additions": 92,
       "deletions": 56,
       "changed_files": 11
+    }
+  },
+  {
+    "pr_number": 717,
+    "url": "https://github.com/LondonSquad/Novix/pull/717",
+    "title": "Refactor delete old composable",
+    "opened_at": "2025-08-20T14:27:17Z",
+    "head_ref": "refactor/delete-old-composable",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "assignees": [
+      {
+        "login": "AsmaaKhaledGomaa",
+        "id": 117874933,
+        "url": "https://github.com/AsmaaKhaledGomaa"
+      }
+    ],
+    "comments": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-20T18:07:27Z",
+        "commit_id": "16da64c6c5240b6f1092fe65986592e547c0e002"
+      },
+      {
+        "reviewer": {
+          "login": "aabukmail",
+          "id": 189210092,
+          "url": "https://github.com/aabukmail"
+        },
+        "submitted_at": "2025-08-20T18:08:05Z",
+        "commit_id": "16da64c6c5240b6f1092fe65986592e547c0e002"
+      }
+    ],
+    "required_approvals": 2,
+    "first_approved_at": "2025-08-20T18:07:27Z",
+    "time_to_first_approval_minutes": 220.16666666666666,
+    "required_approvals_met_at": "2025-08-20T18:08:05Z",
+    "time_to_required_approvals_minutes": 220.8,
+    "closed_at": "2025-08-20T18:08:49Z",
+    "merged_at": "2025-08-20T18:08:49Z",
+    "merged_by": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "week": "2025-W34",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 543,
+      "deletions": 975,
+      "changed_files": 42
     }
   },
   {
@@ -34391,13 +34479,22 @@
         },
         "submitted_at": "2025-08-21T18:12:28Z",
         "commit_id": "3bfbf5e8870de5fd3f43b4647ddd7e2aa1ee098c"
+      },
+      {
+        "reviewer": {
+          "login": "Abdulrahman-Ragab-01",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman-Ragab-01"
+        },
+        "submitted_at": "2025-08-21T18:13:08Z",
+        "commit_id": "3bfbf5e8870de5fd3f43b4647ddd7e2aa1ee098c"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-21T18:12:28Z",
     "time_to_first_approval_minutes": 1310.4833333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-21T18:13:08Z",
+    "time_to_required_approvals_minutes": 1311.15,
     "closed_at": "2025-08-21T18:13:09Z",
     "merged_at": "2025-08-21T18:13:09Z",
     "merged_by": {
@@ -34552,6 +34649,85 @@
     }
   },
   {
+    "pr_number": 722,
+    "url": "https://github.com/LondonSquad/Novix/pull/722",
+    "title": "hotfix/dot-and-rate-navigation",
+    "opened_at": "2025-08-21T22:50:36Z",
+    "head_ref": "hotfix/dot-and-rate-navigation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "assignees": [
+      {
+        "login": "yusufnasserdev",
+        "id": 43588217,
+        "url": "https://github.com/yusufnasserdev"
+      },
+      {
+        "login": "Al-Taie",
+        "id": 68463985,
+        "url": "https://github.com/Al-Taie"
+      },
+      {
+        "login": "BassantM",
+        "id": 102248144,
+        "url": "https://github.com/BassantM"
+      }
+    ],
+    "comments": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-22T08:24:34Z",
+        "commit_id": "159319ea0f2635e7c678a98a04328b81243fb4fc"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-22T08:25:02Z",
+        "commit_id": "159319ea0f2635e7c678a98a04328b81243fb4fc"
+      },
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-22T08:25:12Z",
+        "commit_id": "159319ea0f2635e7c678a98a04328b81243fb4fc"
+      }
+    ],
+    "required_approvals": 2,
+    "first_approved_at": "2025-08-22T08:24:34Z",
+    "time_to_first_approval_minutes": 573.9666666666667,
+    "required_approvals_met_at": "2025-08-22T08:25:02Z",
+    "time_to_required_approvals_minutes": 574.4333333333333,
+    "closed_at": "2025-08-22T08:25:04Z",
+    "merged_at": "2025-08-22T08:25:04Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W34",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 240,
+      "deletions": 194,
+      "changed_files": 27
+    }
+  },
+  {
     "pr_number": 723,
     "url": "https://github.com/LondonSquad/Novix/pull/723",
     "title": "Refactor: Improve String resources",
@@ -34580,13 +34756,22 @@
         },
         "submitted_at": "2025-08-24T15:01:02Z",
         "commit_id": "837d35ca7c4ca9600e226a9f898af63f8cf5c529"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-26T16:48:01Z",
+        "commit_id": "837d35ca7c4ca9600e226a9f898af63f8cf5c529"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-24T15:01:02Z",
     "time_to_first_approval_minutes": 1211.8666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-26T16:48:01Z",
+    "time_to_required_approvals_minutes": 4198.85,
     "closed_at": "2025-08-26T16:48:03Z",
     "merged_at": "2025-08-26T16:48:03Z",
     "merged_by": {
