@@ -40,8 +40,9 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
-import com.london.designsystem.snackbar.LocalSnackbarController
+import com.london.designsystem.snackbar.SnackBarData
 import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
@@ -139,6 +140,8 @@ private fun BookmarkBottomSheetContent(
     bookmarkedMovieId: Int,
     isContentReady: Boolean
 ) {
+    val snackBarController = rememberSnackBarController()
+
     Column(
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
@@ -167,23 +170,23 @@ private fun BookmarkBottomSheetContent(
         }
     }
 
-    val snackBarController = LocalSnackbarController.current
-
     if (state.isSuccessSnackBarVisible) {
-        snackBarController.showMessage(
-            message = R.string.item_add_success.string,
-            icon = com.london.designsystem.R.drawable.ic_success,
-            snackBarType = SnackBarType.Success,
-            onComplete = contract::onSnackBarShown
+        snackBarController.showSnackBar(
+            SnackBarData(
+                message = R.string.item_add_success.string,
+                snackBarType = SnackBarType.Success,
+                onComplete = contract::onSnackBarShown
+            )
         )
     }
 
     if (state.isErrorSnackBarVisible) {
-        snackBarController.showMessage(
-            message = R.string.item_add_fail.string,
-            icon = com.london.designsystem.R.drawable.ic_failed,
-            snackBarType = SnackBarType.Error,
-            onComplete = contract::onSnackBarShown
+        snackBarController.showSnackBar(
+            SnackBarData(
+                message = R.string.item_add_fail.string,
+                snackBarType = SnackBarType.Error,
+                onComplete = contract::onSnackBarShown
+            )
         )
     }
 }

@@ -17,7 +17,7 @@ import com.london.app.navigation.graph.mainNavGraph
 import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
-import com.london.designsystem.snackbar.CustomSnackBarUI
+import com.london.designsystem.snackbar.DefaultSnackBar
 import com.london.designsystem.snackbar.ScaffoldWithSnackBar
 import com.london.designsystem.snackbar.SnackBarData
 import com.london.designsystem.theme.NovixTheme
@@ -52,7 +52,7 @@ fun NavHostGraph() {
                 )
             }
         },
-        snackBar = { data: SnackBarData -> CustomSnackBarUI(data = data) }
+        snackBar = { data: SnackBarData -> DefaultSnackBar(data = data) }
     ) { innerPadding ->
         CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(

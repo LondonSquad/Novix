@@ -1,9 +1,7 @@
 package com.london.presentation.feature.authentication.login
 
-import android.app.Application
 import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.presentation.R
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +9,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val context: Application,
     private val authenticationUseCase: AuthenticationUseCase,
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
     LoginContract {
@@ -75,11 +72,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLoginAsGuestError() {
-        updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
+        updateState { copy(error = ErrorState.RequestFailed()) }
     }
 
     private fun handleLoginError() {
-        updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
+        updateState { copy(error = ErrorState.RequestFailed()) }
     }
 
     private fun checkLoginAsGuest(isSuccess: Boolean) {

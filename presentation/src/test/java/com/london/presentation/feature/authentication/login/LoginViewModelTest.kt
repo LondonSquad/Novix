@@ -23,17 +23,13 @@ class LoginViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    private lateinit var context: Application
     private lateinit var viewModel: LoginViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         authenticationUseCase = mockk()
-        context = mockk()
-        every { context.getString(R.string.login_failed) } returns "Login failed"
-        every { context.getString(R.string.guest_login_failed) } returns "Guest login failed"
-        viewModel = LoginViewModel(context, authenticationUseCase)
+        viewModel = LoginViewModel(authenticationUseCase)
     }
 
     @After
