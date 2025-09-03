@@ -9,7 +9,7 @@
 
     <!-- Home -->
 
-    <string name="what_to_watch">What you want to watch?</string>
+    <string name="what_to_watch">What to watch?</string>
     <string name="app_name_description">Born from Nova, Made for Flix.</string>
     <string name="celebrities">Celebrities</string>
     <string name="top_rated">Top Rated</string>
@@ -62,8 +62,8 @@
     <string name="no_lists">No saved lists yet, tap + to create one</string>
     <string name="no_lists_available">No lists available for this item\nCreate one now</string>
 
-    <string name="login_to_create_list">Please log in to create and manage your lists</string>
-    <string name="login_to_add_list">Please log in to save to lists</string>
+    <string name="login_to_create_list">Please login to create and manage your lists</string>
+    <string name="login_to_add_list">Please login to save to lists</string>
 
     <!-- Movie/Shows/Actor Details -->
 
@@ -110,12 +110,12 @@
 
     <!-- Login -->
 
-    <string name="login">Log In</string>
+    <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="username">Username</string>
 
-    <string name="login_to_your_account">Log in to your account</string>
+    <string name="login_to_your_account">Login to your account</string>
     <string name="continue_as_guest">Continue as Guest</string>
 
     <string name="no_account">Don\'t have an account?</string>
@@ -127,13 +127,13 @@
     <!-- Account -->
 
     <string name="my_account">My Account</string>
-    <string name="please_login_to_access">Please log in to access your account details and features</string>
+    <string name="please_login_to_access">Please login to access your account details and features</string>
 
     <string name="watching_history">Watching History</string>
     <string name="user_profile">User Profile</string>
     <string name="change_password">Change Password</string>
 
-    <string name="logout">Log Out</string>
+    <string name="logout">Logout</string>
     <string name="confirm_action">Are you sure you want to continue?</string>
 
     <!-- Ratings -->

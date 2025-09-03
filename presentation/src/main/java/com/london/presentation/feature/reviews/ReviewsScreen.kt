@@ -43,7 +43,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.review.Review
 import com.london.presentation.R
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.item.ImageView
 import com.london.presentation.shared.item.RatingItem

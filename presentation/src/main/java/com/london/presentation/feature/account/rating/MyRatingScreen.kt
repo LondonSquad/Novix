@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.component.BackgroundGradient
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.snackbar.SnackBarData
@@ -28,7 +29,6 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.domain.entity.shared.MediaType
 import com.london.presentation.R
-import com.london.presentation.shared.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid

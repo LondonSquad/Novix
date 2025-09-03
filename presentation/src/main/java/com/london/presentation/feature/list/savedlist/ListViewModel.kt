@@ -10,6 +10,7 @@ import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -33,9 +34,7 @@ class ListViewModel @Inject constructor(
         setAddListSheetVisible(args?.createList ?: false)
     }
 
-    override fun onRetry() =
-        fetchSavedLists()
-
+    override fun onRetry() = fetchSavedLists()
 
     override fun onFabClick() = setAddListSheetVisible(true)
 
@@ -49,28 +48,35 @@ class ListViewModel @Inject constructor(
     override fun onListNameChanged(listName: TextFieldValue) =
         updateState { copy(addListSheetState = addListSheetState.copy(listName = listName)) }
 
-    override fun resetSnackBarErrorState() = updateState { copy(error = null) }
+    override fun resetSnackBarErrorState() = updateState { copy(isSnackBarErrorVisible = false) }
 
     override fun resetSnackBarSuccessState() = updateState { copy(isSnackBarSuccessVisible = false) }
 
     override fun onAddList(listName: String) {
         tryToExecute(
-            onStart = { updateState { copy(isSnackBarSuccessVisible = false, isLoading = true) } },
+            onStart = { updateState { copy(isLoading = true) } },
             block = { manageMovieListUseCase.createMovieList(listName) },
-            onError = { updateState { copy(error = it, isLoading = false) } },
+            onError = { error -> handleAddListFail(error) },
             onSuccess = { handleAddListSuccess() }
         )
     }
 
+    private fun handleAddListFail(error: ErrorState) {
+        updateState {
+            copy(
+                error = error,
+                isLoading = false,
+                isSnackBarErrorVisible = true
+            )
+        }
+    }
+
     private fun handleAddListSuccess() {
-        setAddListSheetVisible(false)
         updateState {
             copy(
                 isSnackBarSuccessVisible = true,
                 isLoading = false,
-                addListSheetState = addListSheetState.copy(
-                    listName = TextFieldValue(""),
-                )
+                addListSheetState = AddSheetState()
             )
         }
         fetchSavedLists()
@@ -87,11 +93,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun createListsPagingSource(): Flow<PagingData<MovieList>> =
-        createPagingSourceFlow { _, pageNumber ->
-            manageGetMovieUseCase.getAllMovieLists(
-                pageNumber
-            )
-        }
+        createPagingSourceFlow { _, pageNumber -> manageGetMovieUseCase.getAllMovieLists(pageNumber) }
 
     private fun checkUserLoginStatus(onResult: (Boolean) -> Unit = {}) {
         tryToExecute(
