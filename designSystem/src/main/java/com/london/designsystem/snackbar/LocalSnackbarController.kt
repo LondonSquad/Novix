@@ -1,7 +1,11 @@
 package com.london.designsystem.snackbar
 
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 
-val LocalSnackbarController = staticCompositionLocalOf<SnackBarController> {
-    error("No SnackbarController provided.")
+val LocalSnackbarController = compositionLocalOf<SnackBarController> {
+    error("No SnackBarController provided")
 }
+
+@Composable
+fun rememberSnackBarController(): SnackBarController = LocalSnackbarController.current

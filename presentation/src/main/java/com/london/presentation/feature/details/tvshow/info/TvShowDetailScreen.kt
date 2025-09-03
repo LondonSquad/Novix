@@ -57,14 +57,17 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
+import com.london.designsystem.snackbar.SnackBarData
+import com.london.designsystem.snackbar.SnackBarType
+import com.london.designsystem.snackbar.rememberSnackBarController
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
+import com.london.designsystem.utils.string
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.episode.Episodes
 import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.genre.TvShowGenreUi
@@ -143,6 +146,7 @@ private fun Content(
     val lazyListState = rememberLazyListState()
     var footerHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+    val snackBarController = rememberSnackBarController()
 
     val shouldShowBackground by remember {
         derivedStateOf {
@@ -324,14 +328,18 @@ private fun Content(
 
     uiState.isSuccessfullyRated?.let { isSuccessful ->
         if (isSuccessful) {
-            SnackBarAnimation(
-                message = stringResource(R.string.rated_successfully),
-                icon = R.drawable.ic_success,
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.rated_successfully.string,
+                    snackBarType = SnackBarType.Error,
+                )
             )
         } else {
-            SnackBarAnimation(
-                message = stringResource(R.string.rated_fail),
-                icon = R.drawable.ic_failed
+            snackBarController.showSnackBar(
+                SnackBarData(
+                    message = R.string.rated_fail.string,
+                    snackBarType = SnackBarType.Error,
+                )
             )
         }
     }
