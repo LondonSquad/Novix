@@ -39,18 +39,34 @@ class SnackBarControllerImpl(
 
     private fun processNextMessage() {
         currentJob = coroutineScope.launch {
-            val nextMessage = queueMutex.withLock {
-                messageQueue.removeFirstOrNull()
-            } ?: return@launch
-
-            _state.value = SnackBarState(data = nextMessage, isVisible = true)
-            delay(nextMessage.snackbarDuration.toMillis())
-            _state.value = _state.value.copy(isVisible = false)
-            delay(animationConfig.durationMillis.toLong())
-            _state.value = SnackBarState()
-
-            nextMessage.onComplete()
-            processNextMessage()
+            val nextMessage = getNextMessageFromQueue() ?: return@launch
+            displaySnackBar(nextMessage)
+            hideSnackBar()
+            completeAndProceed(nextMessage)
         }
+    }
+
+    private suspend fun getNextMessageFromQueue(): SnackBarData? {
+        return queueMutex.withLock {
+            messageQueue.removeFirstOrNull()
+        }
+    }
+
+    private suspend fun displaySnackBar(data: SnackBarData) {
+        _state.value = SnackBarState(data = data, isVisible = true)
+        delay(data.snackbarDuration.toMillis())
+    }
+
+    private suspend fun hideSnackBar() {
+        _state.value = _state.value.copy(isVisible = false)
+        delay(animationConfig.durationMillis.toLong())
+        resetSnackBarState()
+    }
+
+    private fun resetSnackBarState() { _state.value = SnackBarState() }
+
+    private fun completeAndProceed(data: SnackBarData) {
+        data.onComplete()
+        processNextMessage()
     }
 }
