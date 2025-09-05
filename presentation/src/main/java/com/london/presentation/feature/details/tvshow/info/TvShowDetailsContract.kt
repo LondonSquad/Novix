@@ -12,4 +12,5 @@ interface TvShowDetailsContract {
     fun onGenreClicked(genre: TvShowGenreUi)
     fun onReviewsClicked(tvShowId: Int, mediaType: MediaType)
     fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int)
+    fun clearRatedState()
 }
