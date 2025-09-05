@@ -67,7 +67,7 @@ import com.london.presentation.R.drawable
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet

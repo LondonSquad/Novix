@@ -1,6 +1,6 @@
-package com.london.presentation.feature.list.viewitems
+package com.london.presentation.feature.list.details
 
-interface ViewListItemsContract {
+interface MovieListDetailsContract {
     fun onBackClick()
     fun onRetryClick()
     fun onDeleteClick()

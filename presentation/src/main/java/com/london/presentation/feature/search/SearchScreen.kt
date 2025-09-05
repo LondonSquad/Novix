@@ -60,7 +60,7 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.entity.shared.MediaType
 import com.london.domain.entity.shared.MediaType.Companion.isMovie
 import com.london.presentation.R
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet

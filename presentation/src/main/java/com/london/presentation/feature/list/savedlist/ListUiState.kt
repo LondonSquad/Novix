@@ -12,6 +12,7 @@ data class ListUiState(
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
     val isSnackBarSuccessVisible: Boolean = false,
+    val isSnackBarErrorVisible: Boolean = false,
     val items: Flow<PagingData<MovieList>> = flow {},
     val addListSheetState: AddSheetState = AddSheetState(),
 )

@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewitems
+package com.london.presentation.feature.list.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
@@ -15,13 +15,13 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewItemsViewModel @Inject constructor(
+class MovieListDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val manageGetMovieUseCase: ManageGetMovieUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     private val getMovieListNameUseCase: GetMovieListNameUseCase
-) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
-    ViewListItemsContract {
+) : BaseViewModel<MovieListUiState, MovieListEffect>(MovieListUiState()),
+    MovieListDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.ViewListItems>()
     private val listId = args?.listId ?: 0
@@ -36,7 +36,7 @@ class ViewItemsViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        emitEffect(ViewItemsEffect.NavigateBack)
+        emitEffect(MovieListEffect.NavigateBack)
     }
 
     override fun onRetryClick() {
@@ -44,9 +44,8 @@ class ViewItemsViewModel @Inject constructor(
         fetchMovieListDetails(listId)
     }
 
-    override fun onDeleteClick() {
-        updateState { copy(isDeleteBottomSheetVisible = true) }
-    }
+    override fun onDeleteClick() = updateState { copy(isDeleteBottomSheetVisible = true) }
+
 
     override fun onConfirmDelete() {
         tryToExecute(
@@ -55,7 +54,7 @@ class ViewItemsViewModel @Inject constructor(
             onCompleted = { updateState { copy(isDeleteBottomSheetVisible = false) } },
             onError = { updateState { copy(isSnackBarErrorVisible = true, error = it) } },
             onSuccess = {
-                emitEffect(ViewItemsEffect.NavigateBack)
+                emitEffect(MovieListEffect.NavigateBack)
                 updateState { copy(isListSnackBarSuccess = true) }
             }
         )
@@ -63,7 +62,7 @@ class ViewItemsViewModel @Inject constructor(
 
     override fun onMovieClick(id: Int) {
         resetSnackBarsState()
-        emitEffect(ViewItemsEffect.NavigationMovieDetails(id))
+        emitEffect(MovieListEffect.NavigationMovieDetails(id))
     }
 
     override fun onRemoveMovieClick(id: Int) {

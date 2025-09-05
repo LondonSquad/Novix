@@ -34,7 +34,7 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet

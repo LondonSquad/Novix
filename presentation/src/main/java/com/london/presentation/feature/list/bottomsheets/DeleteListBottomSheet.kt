@@ -30,13 +30,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
-import com.london.presentation.feature.list.viewitems.ViewListItemsContract
+import com.london.presentation.feature.list.details.MovieListDetailsContract
 import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteListBottomSheet(
     isSheetVisible: Boolean,
-    contract: ViewListItemsContract,
+    contract: MovieListDetailsContract,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {

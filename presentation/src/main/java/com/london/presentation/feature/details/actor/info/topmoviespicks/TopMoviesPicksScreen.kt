@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.TopBar
 import com.london.presentation.R
-import com.london.presentation.shared.BackgroundGradient
+import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.BuildScreen

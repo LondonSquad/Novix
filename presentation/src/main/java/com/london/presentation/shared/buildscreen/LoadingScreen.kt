@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.BackgroundGradient
 
 @Composable
 fun LoadingScreen() {
@@ -13,6 +14,11 @@ fun LoadingScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        BackgroundGradient(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+        )
+
         CircularLoading()
     }
 }
