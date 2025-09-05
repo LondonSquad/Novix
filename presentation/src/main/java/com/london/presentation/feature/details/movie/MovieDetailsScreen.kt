@@ -213,6 +213,7 @@ private fun Content(
                 SnackBarData(
                     message = R.string.rated_successfully.string,
                     snackBarType = SnackBarType.Success,
+                    onComplete = contract::clearRatedState
                 )
             )
         } else {
@@ -220,6 +221,7 @@ private fun Content(
                 SnackBarData(
                     message = R.string.rated_fail.string,
                     snackBarType = SnackBarType.Error,
+                    onComplete = contract::clearRatedState
                 )
             )
         }

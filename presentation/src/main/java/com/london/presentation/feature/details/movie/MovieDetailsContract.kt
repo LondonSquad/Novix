@@ -16,4 +16,5 @@ interface MovieDetailsContract {
     fun onReviewsClick(movieId: Int, mediaType: MediaType)
     fun onBookmarkSheetDismiss()
     fun onManageBookmarkClicked(movieId: Int)
+    fun clearRatedState()
 }

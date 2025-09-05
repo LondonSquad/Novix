@@ -67,22 +67,18 @@ class MovieDetailsViewModel @Inject constructor(
 
 
     override fun onMovieClick(movieId: Int) {
-        clearRatedState()
         emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
     }
 
     override fun onActorClick(actorId: Int) {
-        clearRatedState()
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
     override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
-        clearRatedState()
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
     }
 
     override fun onGenreClick(genre: MovieGenreUi) {
-        clearRatedState()
         emitEffect(MovieDetailsEffect.GenreNavigation(genre))
     }
 
@@ -94,11 +90,12 @@ class MovieDetailsViewModel @Inject constructor(
     override fun onLoginClick(movieId: Int) {
         emitEffect(MovieDetailsEffect.LoginNavigation(movieId))
     }
+
     override fun onRateBottomSheetClick() = checkUserAuthenticationForRating()
 
     override fun onSelectRatingClick(rating: Int) = submitMovieRating(rating)
 
-    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
+    override fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
 
     private fun handleRatingAuthenticationResult(isLoggedIn: Boolean) =
         if (isLoggedIn) showRatingBottomSheet() else showGuestUserBottomSheet()
