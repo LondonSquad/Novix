@@ -6,7 +6,7 @@ import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.CustomMovieListRepository
 import javax.inject.Inject
 
-class ManageGetMovieUseCase @Inject constructor(
+class ManageMovieListDetailsUseCase @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
     suspend fun getAllMovieLists(pageNumber: Int): PagedFetchResponse<MovieList> =

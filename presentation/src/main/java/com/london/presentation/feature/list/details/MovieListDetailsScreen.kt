@@ -14,6 +14,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.BackgroundGradient
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.snackbar.SnackBarData
 import com.london.designsystem.snackbar.SnackBarType
@@ -23,7 +24,6 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
-import com.london.designsystem.component.BackgroundGradient
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaLazyVerticalGrid
@@ -40,8 +40,8 @@ fun MovieListDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            MovieListEffect.NavigateBack -> onNavigateBack()
-            is MovieListEffect.NavigationMovieDetails ->
+            MovieListDetailsEffect.NavigateBack -> onNavigateBack()
+            is MovieListDetailsEffect.NavigationMovieDetails ->
                 onNavigateToMovieDetails(currentEffect.id)
         }
     }
@@ -54,7 +54,7 @@ fun MovieListDetailsScreen(
 
 @Composable
 private fun Content(
-    state: MovieListUiState,
+    state: MovieListDetailsUiState,
     contract: MovieListDetailsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
@@ -77,9 +77,8 @@ private fun Content(
                 option2Icon = R.drawable.ic_delete,
                 onClickOption2 = contract::onDeleteClick,
                 option2IconTint = NovixTheme.colors.redAccent,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
-
-                )
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+            )
 
             BuildScreen(
                 onBack = null,
@@ -95,10 +94,7 @@ private fun Content(
                     imageUrl = { it.posterUrl },
                     name = { it.id.toString() },
                     hasSaveIcon = true,
-                    onSaveClick = {
-                        contract.onRemoveMovieClick(it.id)
-                        contract.onRetryClick()
-                    },
+                    onSaveClick = { contract.onRemoveMovieClick(it.id) },
                     isItemSaved = { true },
                     onNavigateToMovie = { id -> contract.onMovieClick(id) },
                 )
@@ -148,7 +144,7 @@ private fun Content(
 private fun Preview() {
     NovixTheme {
         Content(
-            state = MovieListUiState(),
+            state = MovieListDetailsUiState(),
             contract = object : MovieListDetailsContract {
                 override fun onBackClick() {}
                 override fun onRetryClick() {}

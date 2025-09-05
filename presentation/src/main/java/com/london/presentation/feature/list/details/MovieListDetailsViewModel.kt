@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.london.domain.entity.movie.Movie
 import com.london.domain.usecase.movielist.GetMovieListNameUseCase
-import com.london.domain.usecase.movielist.ManageGetMovieUseCase
+import com.london.domain.usecase.movielist.ManageMovieListDetailsUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -17,26 +17,26 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieListDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val manageGetMovieUseCase: ManageGetMovieUseCase,
+    private val manageMovieListDetailsUseCase: ManageMovieListDetailsUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     private val getMovieListNameUseCase: GetMovieListNameUseCase
-) : BaseViewModel<MovieListUiState, MovieListEffect>(MovieListUiState()),
+) : BaseViewModel<MovieListDetailsUiState, MovieListDetailsEffect>(MovieListDetailsUiState()),
     MovieListDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.ViewListItems>()
     private val listId = args?.listId ?: 0
 
     init {
-        getMovieItemsInfo()
+        getMovieListInfo()
     }
 
-    private fun getMovieItemsInfo() {
+    private fun getMovieListInfo() {
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
 
     override fun onBackClick() {
-        emitEffect(MovieListEffect.NavigateBack)
+        emitEffect(MovieListDetailsEffect.NavigateBack)
     }
 
     override fun onRetryClick() {
@@ -54,7 +54,7 @@ class MovieListDetailsViewModel @Inject constructor(
             onCompleted = { updateState { copy(isDeleteBottomSheetVisible = false) } },
             onError = { updateState { copy(isSnackBarErrorVisible = true, error = it) } },
             onSuccess = {
-                emitEffect(MovieListEffect.NavigateBack)
+                emitEffect(MovieListDetailsEffect.NavigateBack)
                 updateState { copy(isListSnackBarSuccess = true) }
             }
         )
@@ -62,7 +62,7 @@ class MovieListDetailsViewModel @Inject constructor(
 
     override fun onMovieClick(id: Int) {
         resetSnackBarsState()
-        emitEffect(MovieListEffect.NavigationMovieDetails(id))
+        emitEffect(MovieListDetailsEffect.NavigationMovieDetails(id))
     }
 
     override fun onRemoveMovieClick(id: Int) {
@@ -70,7 +70,10 @@ class MovieListDetailsViewModel @Inject constructor(
             block = { manageMovieListUseCase.removeMovieFromList(listId = listId, movieId = id) },
             onStart = { resetSnackBarsState() },
             onError = { updateState { copy(isSnackBarErrorVisible = true, error = it) } },
-            onSuccess = { updateState { copy(isMovieSnackBarSuccessVisible = true) } }
+            onSuccess = {
+                updateState { copy(isMovieSnackBarSuccessVisible = true) }
+                fetchMovieListDetails(listId = listId)
+            }
         )
     }
 
@@ -108,7 +111,7 @@ class MovieListDetailsViewModel @Inject constructor(
 
     private fun createMoviesPagingSource(listId: Int): Flow<PagingData<Movie>> {
         return createPagingSourceFlow { _, pageNumber ->
-            manageGetMovieUseCase.getMovieListDetails(
+            manageMovieListDetailsUseCase.getMovieListDetails(
                 listId = listId,
                 pageNumber = pageNumber
             )

@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.london.domain.entity.movie.MovieList
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.movielist.ManageGetMovieUseCase
+import com.london.domain.usecase.movielist.ManageMovieListDetailsUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
 @HiltViewModel
 class ListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val manageGetMovieUseCase: ManageGetMovieUseCase,
+    private val manageMovieListDetailsUseCase: ManageMovieListDetailsUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase
 ) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
@@ -93,7 +93,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun createListsPagingSource(): Flow<PagingData<MovieList>> =
-        createPagingSourceFlow { _, pageNumber -> manageGetMovieUseCase.getAllMovieLists(pageNumber) }
+        createPagingSourceFlow { _, pageNumber -> manageMovieListDetailsUseCase.getAllMovieLists(pageNumber) }
 
     private fun checkUserLoginStatus(onResult: (Boolean) -> Unit = {}) {
         tryToExecute(

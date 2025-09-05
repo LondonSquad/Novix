@@ -14,12 +14,12 @@ import org.junit.jupiter.api.assertThrows
 class GetAllMovieListsUseCaseTest {
 
     private lateinit var customMovieListRepository: CustomMovieListRepository
-    private lateinit var getAllMovieListsUseCase: ManageGetMovieUseCase
+    private lateinit var getAllMovieListsUseCase: ManageMovieListDetailsUseCase
 
     @Before
     fun setUp() {
         customMovieListRepository = mockk()
-        getAllMovieListsUseCase = ManageGetMovieUseCase(customMovieListRepository)
+        getAllMovieListsUseCase = ManageMovieListDetailsUseCase(customMovieListRepository)
     }
 
     @Test
