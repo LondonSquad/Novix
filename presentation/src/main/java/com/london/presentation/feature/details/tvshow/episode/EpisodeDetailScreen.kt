@@ -140,8 +140,6 @@ private fun Content(
         TopBar(
             onBackClick = contract::onBackClick,
             modifier = Modifier.detailsTopBar(backgroundAlpha),
-            onClickOption1 = { /*todo on click on save*/ },
-            option1Icon = Res.drawable.icon_remove,
         )
 
         LazyColumn(
