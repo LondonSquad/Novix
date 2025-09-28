@@ -1,7 +1,6 @@
 package com.london.presentation.feature.list.details
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -64,41 +63,39 @@ private fun Content(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        BackgroundGradient(
-            modifier = Modifier
+        BackgroundGradient(modifier = Modifier
                 .align(Alignment.TopStart)
                 .zIndex(1f)
         )
 
-        Column {
-            TopBar(
-                title = state.listTitle,
-                onBackClick = contract::onBackClick,
-                option2Icon = R.drawable.ic_delete,
-                onClickOption2 = contract::onDeleteClick,
-                option2IconTint = NovixTheme.colors.redAccent,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+        BuildScreen(
+            onBack = null,
+            onRetry = listItems::refresh,
+            isLoading = state.isLoading,
+            isError = state.error == ErrorState.NoInternet,
+            emptyLayoutMessage = R.string.list_empty,
+            emptyLayoutImage = R.drawable.img_no_result,
+            pagingFlow = listItems,
+        ) {
+            MediaLazyVerticalGrid(
+                pagingItems = listItems,
+                imageUrl = { it.posterUrl },
+                name = { it.id.toString() },
+                hasSaveIcon = true,
+                onSaveClick = { contract.onRemoveMovieClick(it.id) },
+                isItemSaved = { true },
+                onNavigateToMovie = { id -> contract.onMovieClick(id) },
+                topBar = {
+                    TopBar(
+                        title = state.listTitle,
+                        onBackClick = contract::onBackClick,
+                        option2Icon = R.drawable.ic_delete,
+                        onClickOption2 = contract::onDeleteClick,
+                        option2IconTint = NovixTheme.colors.redAccent,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                    )
+                }
             )
-
-            BuildScreen(
-                onBack = null,
-                onRetry = listItems::refresh,
-                isLoading = state.isLoading,
-                isError = state.error == ErrorState.NoInternet,
-                emptyLayoutMessage = R.string.list_empty,
-                emptyLayoutImage = R.drawable.img_no_result,
-                pagingFlow = listItems,
-            ) {
-                MediaLazyVerticalGrid(
-                    pagingItems = listItems,
-                    imageUrl = { it.posterUrl },
-                    name = { it.id.toString() },
-                    hasSaveIcon = true,
-                    onSaveClick = { contract.onRemoveMovieClick(it.id) },
-                    isItemSaved = { true },
-                    onNavigateToMovie = { id -> contract.onMovieClick(id) },
-                )
-            }
         }
 
         DeleteListBottomSheet(
